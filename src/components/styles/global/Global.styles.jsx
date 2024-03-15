@@ -50,7 +50,7 @@ th, td {
     padding: 10px;
     text-align: center;
 }
-a{
+a {
   text-decoration: none;
   text-align: center;
 }
