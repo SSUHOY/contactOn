@@ -1,4 +1,4 @@
-import { Layout, Menu, Breadcrumb, theme } from "antd";
+import { Layout, Breadcrumb, theme } from "antd";
 import React from "react";
 import UserList from "../../components/UserList";
 import { Container } from "./mainPage.styled";
@@ -10,6 +10,7 @@ const MainPage = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
   return (
     <Layout>
       <Header style={{ display: "flex" }}>
