@@ -11,16 +11,30 @@ export const Wrapper = styled.div`
 export const PageContent = styled.div`
   display: flex;
   justify-content: center;
-  padding-top: 5%;
-  height: 100vh;
+`;
+
+export const ProfileImgContainer = styled.div`
+  border: 3px solid #f5f0ff;
+  margin-right: 20px;
+  border-radius: 100%;
+  width: 100%;
+  height: 100%;
+`;
+
+export const ProfileImg = styled.img`
+  border-radius: 100%;
+  width: 100%;
+  height: 100%;
 `;
 
 export const UserPageContainer = styled.div`
   display: flex;
-  max-width: 1440px;
+  flex-direction: row;
+  width: 864px;
+  padding: 20px;
   margin-bottom: 8px;
   background: #212121;
-  flex-direction: column;
+  justify-content: space-between;
   border-radius: 10px;
   box-shadow: 0 2px 5px 3px rgba(0, 0, 0, 0.3);
 `;
@@ -29,14 +43,6 @@ export const UserPageTitle = styled.h4`
   text-align: center;
   margin-top: 12px;
   font-size: 14px;
-`;
-
-export const UserPageImageBox = styled.div``;
-
-export const UserPageImage = styled.img``;
-
-export const UserPageContent = styled.div`
-  padding-top: 10px;
 `;
 
 export const StyledInput = styled(Input)`
@@ -63,7 +69,7 @@ export const StyledInput = styled(Input)`
 export const StyledTextArea = styled(TextArea)`
   background-color: #d9d9d9;
   color: black;
-  padding: 10px;
+  margin: 12px;
   height: auto;
   border-radius: 3px;
   width: 150px;

@@ -88,7 +88,6 @@ class UserStore {
   }
   saveUsersToLocalStorage() {
     localStorage.setItem("users", JSON.stringify(this.users));
-    console.log(this.users);
   }
   addNewUser(newUser) {
     this.users.push(newUser);

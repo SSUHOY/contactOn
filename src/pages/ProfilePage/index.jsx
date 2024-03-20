@@ -11,7 +11,7 @@ import { Content } from "../../components/Shared/Layout";
 import Burger from "../../components/BurgerMenu";
 import { Breadcrumb, Flex, theme } from "antd";
 import * as S from "../../components/Shared/Layout/index";
-import { Container } from "../MainPage/mainPage.styled";
+import { Container } from "../../components/Shared/Container/index";
 
 const UserProfile = observer(() => {
   const isAuth = userStore.isAuth;
@@ -25,16 +25,6 @@ const UserProfile = observer(() => {
   const onChange = (e) => {
     console.log("Change:", e.target.value);
   };
-
-  // useEffect(() => {
-  //   if (isAuth) {
-  //     const authUserData = localStorage.getItem("authorizedUser");
-  //     console.log(authUserData);
-  //     setUserIsAuth(true);
-  //   } else {
-  //     setUserIsAuth(false);
-  //   }
-  // });
 
   return (
     <S.SharedLayout style={{ background: colorBgContainer }}>

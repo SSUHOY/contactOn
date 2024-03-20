@@ -1,10 +1,10 @@
 import { Route, Routes } from "react-router";
-import NotFound from "./pages/NotFound";
-import MainPage from "./pages/MainPage";
-import AuthPage from "./pages/AuthPage";
+import NotFound from "./pages/notFound";
+import MainPage from "./pages/mainPage";
+import AuthPage from "./pages/authPage";
 import { ProtectedRoute } from "./components/protected-route";
-import AuthUserProfile from "./pages/AuthUserProfile";
-import UserProfile from "./pages/ProfilePage";
+import AuthUserProfile from "./pages/authPageProfile";
+import UserProfile from "./pages/profilePage";
 
 const AppRoutes = () => {
   return (

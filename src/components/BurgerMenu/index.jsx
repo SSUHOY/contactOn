@@ -7,7 +7,7 @@ import {
   UserOutlined,
   HomeOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import userStore from "../../store/users";
 
 function getItem(label, key, icon, children, type, onClick) {
@@ -25,11 +25,14 @@ const Burger = () => {
   const [collapsed, setCollapsed] = useState(false);
   const isAuth = userStore.isAuth;
 
+  const navigate = useNavigate();
+
   const handleLogOutUser = (e) => {
     if (e.key === "3") {
       userStore.theUserIsAuth(false);
       localStorage.clear("authorizedUser");
       toggleCollapsed();
+      navigate("/login");
     }
   };
 
