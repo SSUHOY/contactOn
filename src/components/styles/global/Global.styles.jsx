@@ -53,5 +53,9 @@ th, td {
 a {
   text-decoration: none;
   text-align: center;
+  color: black;
+  &:hover{
+    color: #666666;
+  }
 }
 `;
