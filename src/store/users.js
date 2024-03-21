@@ -77,6 +77,16 @@ class UserStore {
     this.saveUsersToLocalStorage();
     this.isAuth = true;
   }
+  saveNewUserData(userAuthData) {
+    localStorage.setItem("authorizedUser", JSON.stringify(userAuthData));
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let userIndex = this.users.findIndex((user) => user.id === userAuthData.id);
+    if (userIndex !== -1) {
+      this.users[userIndex] = { ...userAuthData };
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+    this.saveUsersToLocalStorage();
+  }
   loadUsersFromLocalStorage() {
     const usersFromStorage = localStorage.getItem("users");
     if (usersFromStorage) {
@@ -88,9 +98,6 @@ class UserStore {
   }
   saveUsersToLocalStorage() {
     localStorage.setItem("users", JSON.stringify(this.users));
-  }
-  addNewUser(newUser) {
-    this.users.push(newUser);
   }
   getUserById(id) {
     return this.users.find((user) => user.id === id);

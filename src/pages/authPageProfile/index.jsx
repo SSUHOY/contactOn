@@ -1,38 +1,20 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import userStore from "../../store/users";
-import {
-  PageContent,
-  ProfileImg,
-  ProfileImgContainer,
-  StyledInput,
-  StyledTextArea,
-  UserPageContainer,
-  Wrapper,
-} from "./userPage.styles";
+import * as S from "./userPage.styles";
 import { observer } from "mobx-react-lite";
-import { Content } from "../../components/Shared/Layout";
 import Burger from "../../components/BurgerMenu";
-import {
-  Breadcrumb,
-  Button,
-  Flex,
-  Form,
-  Input,
-  Select,
-  Space,
-  Tooltip,
-  Typography,
-  theme,
-} from "antd";
-import * as S from "../../components/Shared/Layout/index";
-import { Container } from "../../components/Shared/Container";
-import TextArea from "antd/es/input/TextArea";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { Breadcrumb, Button, Form, Space, theme } from "antd";
+import * as L from "../../components/Shared/Layout/index";
 
 const AuthUserProfile = observer(() => {
   const isAuth = userStore.isAuth;
-  const [userAuthData, setAuthUserData] = useState(null);
-  console.log("🚀 ~ AuthUserProfile ~ userAuthData:", userAuthData)
-  const [loading, setLoading] = useState(true);
+  const [userAuthData, setAuthUserData] = useState([]);
+  console.log(userAuthData);
+  const [error, setError] = useState("");
+  const [imgLoading, setImgLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState();
 
   const {
     token: { colorBgContainer },
@@ -42,128 +24,223 @@ const AuthUserProfile = observer(() => {
     setAuthUserData({ ...userAuthData, [e.target.name]: e.target.value });
   };
   const handlerSubmitUserData = () => {
-    localStorage.setItem("authorizedUser", JSON.stringify(userAuthData));
+    userStore.saveNewUserData(userAuthData);
   };
+
+  const getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => callback(reader.result));
+    reader.readAsDataURL(img);
+  };
+  const beforeUpload = (file) => {
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+    if (!isJpgOrPng) {
+      setError("You can only upload JPG/PNG file!");
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      setError("Image must smaller than 2MB!");
+    }
+    return isJpgOrPng && isLt2M;
+  };
+
+  const handleChange = (info, name) => {
+    if (info.file.status === "uploading") {
+      setImgLoading(true);
+      return;
+    }
+    if (info.file.status === "done") {
+      getBase64(info.file.originFileObj, (url) => {
+        setImgLoading(false);
+        setImageUrl(url);
+        setAuthUserData({ ...userAuthData, photo: url });
+      });
+    }
+  };
+
+  const uploadButton = (
+    <button
+      style={{
+        border: 0,
+        background: "none",
+      }}
+      type="button">
+      {imgLoading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div
+        style={{
+          marginTop: 8,
+        }}>
+        Upload
+      </div>
+    </button>
+  );
 
   useEffect(() => {
     const authProfileUserData = JSON.parse(
       localStorage.getItem("authorizedUser")
     );
     setAuthUserData(authProfileUserData);
-    setLoading(false);
+    setIsLoading(false);
   }, [isAuth]);
 
   return (
-    <S.SharedLayout style={{ background: colorBgContainer }}>
-      <S.SharedHeader
+    <L.SharedLayout style={{ background: colorBgContainer }}>
+      <L.SharedHeader
         style={{
           background: colorBgContainer,
         }}>
         <Burger />
-      </S.SharedHeader>
-      {loading ? (
+      </L.SharedHeader>
+      {isLoading ? (
         ""
       ) : (
-        <PageContent>
-          <UserPageContainer>
-            <ProfileImgContainer>
-              <ProfileImg src="" alt="" />
-            </ProfileImgContainer>
-            <Form
-              name="complex-form"
-              labelCol={{
-                span: 8,
-              }}
-              wrapperCol={{
-                span: 16,
-              }}
-              style={{
-                maxWidth: 600,
-              }}>
-              <Form.Item>
-                <Space>
-                  <Form.Item
-                    name="name"
-                    style={{
-                      marginBottom: 0,
-                      color: "white",
-                    }}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Username is required",
-                      },
-                    ]}>
-                    Name:
-                    <StyledInput
+        <S.PageContent>
+          <S.UserPageContainer>
+            <S.LeftContentBlock>
+              <S.ProfileImgContainer>
+                <S.ImgUploadWrapper
+                  name="photo"
+                  listType="picture-circle"
+                  className="avatar-uploader"
+                  showUploadList={false}
+                  action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                  beforeUpload={beforeUpload}
+                  onChange={handleChange}>
+                  {userAuthData.photo ? (
+                    <img
+                      src={userAuthData.photo ? userAuthData.photo : imageUrl}
+                      alt="avatar"
+                      style={{
+                        width: 350,
+                        height: 350,
+                        borderRadius: "100%",
+                      }}
+                    />
+                  ) : (
+                    uploadButton
+                  )}
+                </S.ImgUploadWrapper>
+                {error ? <S.Error>{error}</S.Error> : ""}
+              </S.ProfileImgContainer>
+            </S.LeftContentBlock>
+            <S.RightContentBlock>
+              <Form
+                name="complex-form"
+                labelCol={{
+                  span: 8,
+                }}
+                wrapperCol={{
+                  span: 16,
+                }}
+                style={{
+                  maxWidth: 600,
+                }}>
+                <Form.Item>
+                  <Space>
+                    <Form.Item
+                      name="name"
                       style={{
                         marginBottom: 0,
-                      }}
-                      placeholder="Your name"
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    name="year"
-                    style={{
-                      marginBottom: 0,
-                      color: "white",
-                    }}>
-                    Age:
-                    <StyledInput placeholder="Your age" />
-                  </Form.Item>
-                </Space>
-              </Form.Item>
-              <Form.Item
+                        color: "white",
+                      }}>
+                      Name:
+                      <S.StyledInput
+                        name="name"
+                        value={userAuthData?.name || ""}
+                        onChange={onChange}
+                        style={{
+                          marginBottom: 0,
+                        }}
+                        placeholder="Your name"
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      name="year"
+                      style={{
+                        marginBottom: 0,
+                        color: "white",
+                      }}>
+                      Age:
+                      <S.StyledInput
+                        name="age"
+                        placeholder="Your age"
+                        value={userAuthData?.age || ""}
+                        onChange={onChange}
+                      />
+                    </Form.Item>
+                  </Space>
+                </Form.Item>
+                <Form.Item
+                  style={{
+                    marginBottom: 0,
+                  }}>
+                  <Space>
+                    <Form.Item
+                      name="location"
+                      style={{
+                        color: "white",
+                      }}>
+                      Location:
+                      <S.StyledInput
+                        name="location"
+                        placeholder="Location"
+                        value={userAuthData?.location || ""}
+                        onChange={onChange}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      name="description"
+                      style={{
+                        display: "flex",
+                        color: "white",
+                        gap: 25,
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                      }}>
+                      Short description:
+                      <S.StyledInput
+                        name="description"
+                        placeholder="Short description"
+                        onChange={onChange}
+                        value={userAuthData?.description || ""}
+                      />
+                    </Form.Item>
+                  </Space>
+                </Form.Item>
+                <Form.Item
+                  name="interests"
+                  style={{
+                    display: "flex",
+                    color: "white",
+                  }}>
+                  Interests:
+                  <S.StyledTextArea
+                    placeholder="Your interests"
+                    value={userAuthData?.interests || ""}
+                    onChange={onChange}
+                    style={{ width: 406, resize: "none", height: 100 }}
+                    name="interests"
+                  />
+                </Form.Item>
+              </Form>
+              <Button
+                type="primary"
                 style={{
-                  marginBottom: 0,
-                }}>
-                <Space>
-                  <Form.Item
-                    name="Location"
-                    style={{
-                      color: "white",
-                    }}>
-                    Location:
-                    <StyledInput placeholder="Location" />
-                  </Form.Item>
-                  <Form.Item
-                    name="Description"
-                    style={{
-                      display: "flex",
-                      color: "white",
-                      gap: 25,
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                    }}>
-                    Short description:
-                    <StyledInput placeholder="Short description" />
-                  </Form.Item>
-                </Space>
-              </Form.Item>
-              <Form.Item
-                name="Interests"
-                style={{
-                  display: "flex",
+                  width: 200,
+                  marginTop: 8,
+                  position: "relative",
+                  right: 66,
                   color: "white",
-                }}>
-                Interests:
-                <StyledTextArea
-                  placeholder="Your interests"
-                  value={
-                    " Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod, possimus id! Sit commodi tempora, perferendis dolorum inventore labore fugiat exercitationem. Maxime ad deserunt unde distinctio cupiditate in ut ipsa harum sapiente. Facilis autem sunt harum quia, quam, animi molestias, error blanditiis porro tempore quos! Fugiat, voluptate incidunt vel ipsam quidem ab provident ex? Vero animi magni asperiores molestias ipsum sed provident. Delectus deserunt vel dignissimos animi totam, aut tempora, cum eligendi cupiditate aliquam et! Nisi laudantium voluptates soluta dolorum! Cumque magnam sunt distinctio quibusdam similique magni natus doloribus laborum possimus maxime reiciendis tempore, quam laudantium eum ipsam ex enim! Vel officia incidunt quos temporibus sed repellat dolorem labore? Tempora maxime esse ex incidunt cupiditate eveniet debitis delectus impedit provident corrupti officiis nisi nemo obcaecati ratione vel adipisci, dolores placeat laudantium! Quos maiores eius numquam eligendi veniam! Cumque, fuga eaque accusantium assumenda inventore ullam minus iure deserunt, repudiandae magnam soluta placeat laudantium repellendus totam alias corrupti sunt voluptas ducimus aliquam. Illum at vel id, natus aut perferendis deserunt delectus praesentium, iure, reiciendis similique odio! Beatae, officia nihil assumenda qui reiciendis perferendis praesentium blanditiis quidem accusantium esse quasi itaque! Dolorum quisquam neque hic maiores odit ullam sequi voluptatibus ut officiis molestiae fuga quibusdam deleniti, rem nulla enim omnis, sed reiciendis eligendi, eos distinctio laborum laudantium. Aliquid error dolores laborum molestias eius illum, aliquam perferendis mollitia quisquam eligendi dolor tempore similique! Dolorem provident hic adipisci molestiae."
-                  }
-                  style={{ width: 406, resize: "none", height: 100 }}
-                />
-              </Form.Item>
-
-              <Button type="primary" htmlType="submit">
+                }}
+                htmlType="submit"
+                onClick={handlerSubmitUserData}>
                 Submit
               </Button>
-            </Form>
-          </UserPageContainer>
-        </PageContent>
+            </S.RightContentBlock>
+          </S.UserPageContainer>
+        </S.PageContent>
       )}
-    </S.SharedLayout>
+    </L.SharedLayout>
   );
 });
 

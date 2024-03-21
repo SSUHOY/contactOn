@@ -87,7 +87,7 @@ const AuthPage = () => {
       userStore.addUser(newUser);
       setIsLoading(false);
       userStore.theUserIsAuth(true);
-      navigate(`/profile`, { state: { user: newUser } });
+      navigate(`/profile`, { replace: true });
     } else if (emailExists) {
       setError("Ошибка регистрации, данный пользователь уже есть в системе");
       console.log("Ошибка");
