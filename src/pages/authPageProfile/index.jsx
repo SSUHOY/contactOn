@@ -3,14 +3,13 @@ import userStore from "../../store/users";
 import * as S from "./userPage.styles";
 import { observer } from "mobx-react-lite";
 import Burger from "../../components/BurgerMenu";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { LoadingOutlined, PlusOutlined, TeamOutlined } from "@ant-design/icons";
 import { Breadcrumb, Button, Form, Space, theme } from "antd";
 import * as L from "../../components/Shared/Layout/index";
 
 const AuthUserProfile = observer(() => {
   const isAuth = userStore.isAuth;
   const [userAuthData, setAuthUserData] = useState([]);
-  console.log(userAuthData);
   const [error, setError] = useState("");
   const [imgLoading, setImgLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +25,6 @@ const AuthUserProfile = observer(() => {
   const handlerSubmitUserData = () => {
     userStore.saveNewUserData(userAuthData);
   };
-
   const getBase64 = (img, callback) => {
     const reader = new FileReader();
     reader.addEventListener("load", () => callback(reader.result));

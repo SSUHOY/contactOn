@@ -3,7 +3,11 @@ import userStore from "../../store/users";
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import Burger from "../../components/BurgerMenu";
-import { PlusOutlined, TeamOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  TeamOutlined,
+  UserDeleteOutlined,
+} from "@ant-design/icons";
 import { Breadcrumb, Button, Flex, theme } from "antd";
 import * as L from "../../components/Shared/Layout/index";
 import * as Shared from "../authPageProfile/userPage.styles";
@@ -12,9 +16,33 @@ import TextArea from "antd/es/input/TextArea";
 import Logo from "../../components/Shared/Logo";
 
 const UserProfile = observer(() => {
+  const [authUserUI, setAuthUserUI] = useState(false);
+  const [userIsYourFriend, setUserIsYourFriend] = useState();
+
   const { id } = useParams();
 
   const user = userStore.getUserById(Number(id));
+  console.log(user);
+  const authUser = JSON.parse(localStorage.getItem("authorizedUser"));
+  const isAuth = userStore.isAuth;
+  // Show UI for authorized user only
+  useEffect(() => {
+    if (authUser.id === user.id && isAuth) {
+      setAuthUserUI(true);
+    }
+  }, [authUser]);
+
+  const handleAddToFriends = () => {
+    const authUser = JSON.parse(localStorage.getItem("authorizedUser"));
+    userStore.addFriend(authUser.id, user.id);
+    setUserIsYourFriend(true);
+  };
+  const handleDeleteFromFriends = () => {
+    const authUser = JSON.parse(localStorage.getItem("authorizedUser"));
+    userStore.deleteFriend(authUser.id, user.id);
+    setUserIsYourFriend(false);
+  };
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -43,7 +71,7 @@ const UserProfile = observer(() => {
                   }}
                 />
               ) : (
-                <Shared.AvatarAltText>No User Photo</Shared.AvatarAltText>
+                <Shared.AvatarAltText>No photo</Shared.AvatarAltText>
               )}
             </Shared.ProfileImgContainer>
             <S.UserFriendsBox>
@@ -54,10 +82,21 @@ const UserProfile = observer(() => {
                   ? "friends"
                   : "friend"}
               </S.UserFriendsCount>
-              <Button style={{ textTransform: "uppercase" }}>
-                <PlusOutlined style={{ color: "white" }} />
-                Add {user.name} to friends
-              </Button>
+              {userIsYourFriend ? (
+                <Button
+                  style={{ textTransform: "uppercase" }}
+                  onClick={handleDeleteFromFriends}>
+                  <UserDeleteOutlined style={{ color: "white" }} />
+                  Remove {user.name} from friends
+                </Button>
+              ) : (
+                <Button
+                  style={{ textTransform: "uppercase" }}
+                  onClick={handleAddToFriends}>
+                  <PlusOutlined style={{ color: "white" }} />
+                  Add {user.name} to friends
+                </Button>
+              )}
             </S.UserFriendsBox>
           </Shared.LeftContentBlock>
           <Shared.RightContentBlock>
@@ -76,7 +115,7 @@ const UserProfile = observer(() => {
                       rows="5"
                       style={{ resize: "none", color: "white" }}
                       value={user.description || ""}
-                      readonly></TextArea>
+                      readOnly></TextArea>
                   </td>
                 </tr>
                 <S.UserDescriptionTitle>Interests:</S.UserDescriptionTitle>
@@ -88,7 +127,7 @@ const UserProfile = observer(() => {
                       rows="4"
                       style={{ resize: "none", color: "white" }}
                       value={user.interests || ""}
-                      readonly></TextArea>
+                      readOnly></TextArea>
                   </td>
                 </tr>
               </table>

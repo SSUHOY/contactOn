@@ -93,6 +93,30 @@ class UserStore {
       this.users = JSON.parse(usersFromStorage);
     }
   }
+  addFriend(userID, friendID) {
+    let user = this.users.find((user) => user.id === userID);
+    let friend = this.users.find((user) => user.id === friendID);
+
+    if (user && friend) {
+      user.friends.push(friend);
+      friend.friends.push(user);
+      console.log(`${user.name} and ${friend.name} are now friends!`);
+    } else {
+      console.log("User or friend not found.");
+    }
+  }
+  deleteFriend(userID, friendID) {
+    let user = this.users.find((user) => user.id === userID);
+    let friend = this.users.find((user) => user.id === friendID);
+
+    if (user && friend) {
+      user.friends.filter(friend);
+      friend.friends.filter(user);
+      console.log(`${user.name} and ${friend.name} are not friends now!`);
+    } else {
+      console.log("User or friend not found.");
+    }
+  }
   deleteLastUser() {
     this.users.pop();
   }
