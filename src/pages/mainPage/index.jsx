@@ -2,6 +2,7 @@ import { Layout, Menu, Breadcrumb, theme } from "antd";
 import React from "react";
 import UserList from "../../components/UserList";
 import { Container } from "./mainPage.styled";
+import Burger from "../../components/BurgerMenu";
 
 const { Header, Content, Footer } = Layout;
 
@@ -11,11 +12,13 @@ const MainPage = () => {
   } = theme.useToken();
   return (
     <Layout>
-      <Header style={{ display: "flex", alignItems: "center" }}></Header>
+      <Header style={{ display: "flex" }}>
+        <Burger />
+      </Header>
       <Content style={{ padding: "0 48px" }}>
         <Breadcrumb
           style={{ margin: "16px 0" }}
-          items={[{ path: "/", title: "Home" }]}></Breadcrumb>
+          items={[{ path: "/", title: "Главная" }]}></Breadcrumb>
         <Container
           style={{
             background: colorBgContainer,
