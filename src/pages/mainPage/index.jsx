@@ -1,5 +1,5 @@
 import { Breadcrumb, theme } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import * as S from "../../components/Shared/Layout/index";
 import UserList from "../../components/UserList";
 import Burger from "../../components/BurgerMenu";
@@ -12,10 +12,36 @@ import SearchBar from "../../components/SearchBar";
 
 const MainPage = observer(() => {
   const [userList, setUserList] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const users = useMemo(() => {
+    let result = [...userList];
+    if (searchText !== "") {
+      result = result.filter((user) =>
+        user.name.toLowerCase().includes(searchText.toLowerCase())
+      );
+    }
+    // if (selectedArtists.length > 0) {
+    //   result = result.filter((track) => selectedArtists.includes(track.author));
+    // }
+    // if (selectedGenres.length > 0) {
+    //   result = result.filter((track) => selectedGenres.includes(track.genre));
+    // }
+    // if (selectedFilters.year === "New") {
+    //   result.sort(
+    //     (a, b) => new Date(a.release_date) - new Date(b.release_date)
+    //   );
+    // } else if (selectedFilters.year === "Old") {
+    //   result.sort(
+    //     (a, b) => new Date(b.release_date) - new Date(a.release_date)
+    //   );
+    // }
+    return result;
+  }, [userList, searchText]);
 
   useEffect(() => {
     userStore.saveUsersToLocalStorage();
@@ -30,7 +56,7 @@ const MainPage = observer(() => {
       </S.SharedHeader>
       <S.FiltersBox>
         <S.SearchAndSortContainer>
-          <SearchBar />
+          <SearchBar onChange={(value) => setSearchText(value)} />
         </S.SearchAndSortContainer>
       </S.FiltersBox>
       <Content
@@ -46,7 +72,7 @@ const MainPage = observer(() => {
           <Breadcrumb
             style={{ margin: "16px 0" }}
             items={[{ title: "Home" }]}></Breadcrumb>
-          <UserList users={userList} />
+          <UserList users={users} />
         </Container>
       </Content>
     </S.SharedLayout>

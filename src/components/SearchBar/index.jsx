@@ -1,17 +1,16 @@
 import * as S from "./searchBar.styled";
+import { SearchOutlined } from "@ant-design/icons";
 
-const SearchBar = () => {
+const SearchBar = ({ onChange }) => {
   return (
     <S.CenterBlock>
-      <S.SearchSvg>
-        <use xlinkHref="img/icon/sprite.svg#icon-search" />
-      </S.SearchSvg>
+      <SearchOutlined style={{ color: "white" }} />
       <S.SearchText
         type="search"
-        placeholder="Поиск"
+        placeholder="Search by user name"
         name="search"
         id="search-bar"
-        // onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange(e.target.value)}
       />
     </S.CenterBlock>
   );
