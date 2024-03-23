@@ -80,6 +80,7 @@ const AuthPage = () => {
         interests: [],
         friends: [],
         messages: [],
+        receivedMessages: [],
         unReadMessages: [],
         addToFriendsEvents: [],
         messagesEvents: [],

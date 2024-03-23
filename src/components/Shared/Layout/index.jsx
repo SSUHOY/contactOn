@@ -28,7 +28,7 @@ export const UsersEvents = styled.div`
 export const AddToFriendsEvents = styled.div`
   position: absolute;
   width: 18px;
-  top: 18px;
+  top: 12px;
   height: 18px;
   border-radius: 50%;
   background-color: coral;
@@ -41,7 +41,8 @@ export const AddToFriendsEvents = styled.div`
 export const MessageInBoxEvents = styled.div`
   position: absolute;
   width: 18px;
-  top: 18px;
+  top: 12px;
+
   height: 18px;
   border-radius: 50%;
   background-color: coral;

@@ -104,10 +104,11 @@ class UserStore {
         content: messageContent,
       };
       sender.messages.push(message);
-      receiver.messagesEvents.push(message.id);
+      receiver.messages.push(message);
+      receiver.messagesEvents.push(message);
       receiver.receivedMessages.push(message);
       localStorage.setItem("users", JSON.stringify(this.users));
-
+      this.saveUsersToLocalStorage();
       console.log(
         `Message sent from ${sender.name} to ${receiver.name}: ${messageContent}`
       );

@@ -5,7 +5,8 @@ import AuthPage from "./pages/authPage";
 import { ProtectedRoute } from "./components/protected-route";
 import AuthUserProfile from "./pages/authPageProfile";
 import UserProfile from "./pages/profilePage";
-import Messages from "./pages/messagesPage";
+import MessagesUI from "./pages/messagesPage";
+import MessagesInBox from "./pages/messagesInBox";
 
 const AppRoutes = () => {
   return (
@@ -18,7 +19,8 @@ const AppRoutes = () => {
       <Route path="/register" element={<AuthPage />} />
       <Route element={<ProtectedRoute />}>
         <Route path="/profile" element={<AuthUserProfile />} />
-        <Route path="/message/:id" element={<Messages />} />
+        <Route path="/messages" element={<MessagesInBox />} />
+        <Route path="/message/:id" element={<MessagesUI />} />
       </Route>
       <Route path="*" element={<NotFound />} />
       <Route />

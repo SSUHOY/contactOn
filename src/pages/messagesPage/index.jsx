@@ -6,10 +6,10 @@ import Burger from "../../components/BurgerMenu";
 import Logo from "../../components/Shared/Logo";
 import TextArea from "antd/es/input/TextArea";
 import { useParams } from "react-router-dom";
-import { InboxOutlined } from "@ant-design/icons";
+
 import userStore from "../../store/users";
 
-const Messages = () => {
+const MessagesInBox = () => {
   const [messageContent, setMessageContent] = useState("");
   const [isSend, setIsSend] = useState(false);
 
@@ -65,10 +65,12 @@ const Messages = () => {
           </S.LeftUserUi>
           <S.RightMessageUi>
             <S.MessagesField>
-              {user.messages.map((message, index) => (
-                <S.MessageBox key={index}>
-                  <p>{message.content}</p>
-                </S.MessageBox>
+              {user.receivedMessages.map((message, index) => (
+                <S.SendMessagesBox key={index}>
+                  <S.SendMessage>
+                    <p>{message.content}</p>
+                  </S.SendMessage>
+                </S.SendMessagesBox>
               ))}
             </S.MessagesField>
             <p>Your message:</p>
@@ -92,4 +94,4 @@ const Messages = () => {
   );
 };
 
-export default Messages;
+export default MessagesInBox;
