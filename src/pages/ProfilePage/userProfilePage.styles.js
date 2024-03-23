@@ -5,13 +5,21 @@ export const UserFriendsBox = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  margin-top: 20px;
-  width: 400px;
+  margin: 20px 0 5px 0;
+  padding-bottom: 15px;
+  width: 100%;
+  border-bottom: 1px solid gray;
 `;
 export const UserFriendsCount = styled.p`
   color: #b4cad6;
   text-transform: uppercase;
 `;
+
+export const UserMessageBox = styled.div`
+height: 20px;
+width: 100%;
+margin: 0 20px 20px 0;
+`
 
 export const UserName = styled.h3`
   color: #b4cad6;
@@ -28,7 +36,7 @@ export const UserDescriptionTitle = styled.p`
 `;
 
 export const UserContent = styled.div`
-  margin-top: 10px;
+  margin-top: 5px;
 `;
 export const UserInterests = styled.p`
   color: #b4cad6;

@@ -5,6 +5,7 @@ import AuthPage from "./pages/authPage";
 import { ProtectedRoute } from "./components/protected-route";
 import AuthUserProfile from "./pages/authPageProfile";
 import UserProfile from "./pages/profilePage";
+import Messages from "./pages/messagesPage";
 
 const AppRoutes = () => {
   return (
@@ -17,6 +18,7 @@ const AppRoutes = () => {
       <Route path="/register" element={<AuthPage />} />
       <Route element={<ProtectedRoute />}>
         <Route path="/profile" element={<AuthUserProfile />} />
+        <Route path="/message/:id" element={<Messages />} />
       </Route>
       <Route path="*" element={<NotFound />} />
       <Route />

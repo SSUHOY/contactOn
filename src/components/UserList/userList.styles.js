@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const UserCard = styled.div`
   width: 350px;
   display: flex;
-  height: 150px;
+  height: 100%;
   background: #212121;
   padding: 8px;
   border-radius: 12px;
@@ -46,10 +46,15 @@ export const UserName = styled.h3`
 export const UserAge = styled.p`
   color: #fafafa;
 `;
+export const UserCity = styled.p`
+  color: #fafafa;
+`;
 
 export const UserDescription = styled.div`
   padding-top: 12px;
+  width: 186px;
   height: 100px;
+  border-bottom: 1px solid gray;
   p {
     white-space: wrap;
     overflow: hidden;

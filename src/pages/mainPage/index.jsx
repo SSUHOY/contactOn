@@ -13,6 +13,8 @@ import { BellOutlined, MailOutlined } from "@ant-design/icons";
 
 const MainPage = observer(() => {
   const isAuth = userStore.isAuth;
+  const authUser = userStore.getAuthorizedUser();
+
   const [userList, setUserList] = useState([]);
   const [searchType, setSearchType] = useState(null);
   const [gender, setGender] = useState("");
@@ -86,14 +88,33 @@ const MainPage = observer(() => {
         {isAuth ? (
           <S.UsersUI>
             <S.UsersEvents>
-              <BellOutlined style={{ color: "#8774E1" }} />
-              <MailOutlined style={{ color: "#8774E1" }} />
+              <BellOutlined
+                style={{ color: "#8774E1", fontSize: "24px", marginRight: 20 }}
+              />
+              {authUser?.addToFriendsEvents.length !== 0 ? (
+                <S.AddToFriendsEvents>
+                  <div style={{ width: 50, textAlign: "center" }}>
+                    <p>{authUser?.addToFriendsEvents.length}</p>
+                  </div>
+                </S.AddToFriendsEvents>
+              ) : (
+                ""
+              )}
+              <MailOutlined style={{ color: "#8774E1", fontSize: "24px" }} />
+              {authUser?.messagesEvents.length !== 0 ? (
+                <S.MessageInBoxEvents>
+                  <div style={{ width: 50, textAlign: "center" }}>
+                    <p>{authUser?.messagesEvents.length}</p>
+                  </div>
+                </S.MessageInBoxEvents>
+              ) : (
+                ""
+              )}
             </S.UsersEvents>
           </S.UsersUI>
         ) : (
           ""
         )}
-
         <Logo />
       </S.SharedHeader>
       <S.FiltersBox>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import userStore from "../../store/users";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import Burger from "../../components/BurgerMenu";
 import {
@@ -8,7 +8,7 @@ import {
   TeamOutlined,
   UserDeleteOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Button, Flex, theme } from "antd";
+import { Button, theme } from "antd";
 import * as L from "../../components/Shared/Layout/index";
 import * as Shared from "../authPageProfile/userPage.styles";
 import * as S from "./userProfilePage.styles";
@@ -16,12 +16,14 @@ import TextArea from "antd/es/input/TextArea";
 import Logo from "../../components/Shared/Logo";
 
 const UserProfile = observer(() => {
-  const [authUserUI, setAuthUserUI] = useState(false);
-  const [userIsYourFriend, setUserIsYourFriend] = useState();
+  const [userIsYourFriend, setUserIsYourFriend] = useState(false);
 
   const { id } = useParams();
 
   const user = userStore.getUserById(Number(id));
+  const authUser = userStore.getAuthorizedUser();
+  console.log("🚀 ~ UserProfile ~ authUser:", authUser);
+
   const isAuth = userStore.isAuth;
 
   const handleAddToFriends = () => {
@@ -31,19 +33,13 @@ const UserProfile = observer(() => {
   };
   const handleDeleteFromFriends = () => {
     const authUser = JSON.parse(localStorage.getItem("authorizedUser"));
-    userStore.deleteFriend(authUser.id, user.id);
+    userStore.deleteFriend(authUser?.id, user?.id);
     setUserIsYourFriend(false);
   };
 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-
-  // useEffect(() => {
-  //   if (authUser.id === user.id && isAuth) {
-  //     setAuthUserUI(true);
-  //   }
-  // }, [authUser]);
 
   return (
     <L.SharedLayout style={{ background: colorBgContainer }}>
@@ -80,26 +76,36 @@ const UserProfile = observer(() => {
                   ? "friends"
                   : "friend"}
               </S.UserFriendsCount>
-              {isAuth ? (
+              {authUser.id === user.id ? (
+                ""
+              ) : (
                 <div>
                   {userIsYourFriend ? (
-                    <Button
-                      style={{ textTransform: "uppercase" }}
-                      onClick={handleDeleteFromFriends}>
-                      <UserDeleteOutlined style={{ color: "white" }} />
-                      Remove {user.name} from friends
-                    </Button>
+                    <>
+                      <Link to={`/message/${id}`}>
+                        <S.UserMessageBox>
+                          <Button>Send a message</Button>
+                        </S.UserMessageBox>
+                      </Link>
+                      <Button onClick={handleDeleteFromFriends}>
+                        <UserDeleteOutlined style={{ color: "white" }} />
+                        Remove {user.name} from friends
+                      </Button>
+                    </>
                   ) : (
-                    <Button
-                      style={{ textTransform: "uppercase" }}
-                      onClick={handleAddToFriends}>
-                      <PlusOutlined style={{ color: "white" }} />
-                      Add {user.name} to friends
-                    </Button>
+                    <>
+                      <Link to={`/message/${id}`}>
+                        <S.UserMessageBox>
+                          <Button>Send a message</Button>
+                        </S.UserMessageBox>
+                      </Link>
+                      <Button onClick={handleAddToFriends}>
+                        <PlusOutlined style={{ color: "white" }} />
+                        Add {user.name} to friends
+                      </Button>
+                    </>
                   )}
                 </div>
-              ) : (
-                ""
               )}
             </S.UserFriendsBox>
           </Shared.LeftContentBlock>
@@ -123,7 +129,7 @@ const UserProfile = observer(() => {
                         color: "white",
                         borderRadius: 12,
                       }}
-                      value={user.description || ""}
+                      value={user.description || "no description yet"}
                       readOnly></TextArea>
                   </td>
                 </tr>
@@ -139,7 +145,7 @@ const UserProfile = observer(() => {
                         color: "white",
                         borderRadius: 12,
                       }}
-                      value={user.interests || ""}
+                      value={user.interests || "no interests yet"}
                       readOnly></TextArea>
                   </td>
                 </tr>

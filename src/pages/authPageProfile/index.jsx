@@ -3,8 +3,8 @@ import userStore from "../../store/users";
 import * as S from "./userPage.styles";
 import { observer } from "mobx-react-lite";
 import Burger from "../../components/BurgerMenu";
-import { LoadingOutlined, PlusOutlined, TeamOutlined } from "@ant-design/icons";
-import { Breadcrumb, Button, Form, Radio, Select, Space, theme } from "antd";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { Breadcrumb, Form, Space, theme } from "antd";
 import * as L from "../../components/Shared/Layout/index";
 
 const AuthUserProfile = observer(() => {
@@ -72,9 +72,16 @@ const AuthUserProfile = observer(() => {
         ...userAuthData,
         interests: [...userAuthData.interests, newInterest],
       });
+      setNewInterest("");
+      setIsSave(false);
     } else {
       setError("type text");
     }
+  };
+
+  const handleInputChange = (e) => {
+    setNewInterest(e.target.value);
+    setError("");
   };
 
   const uploadButton = (
@@ -266,8 +273,9 @@ const AuthUserProfile = observer(() => {
                 </Space>
                 <Space>
                   <S.StyledInput
+                    value={newInterest}
                     placeholder="Add new interest"
-                    onChange={(e) => setNewInterest(e.target.value)}
+                    onChange={handleInputChange}
                     name="interests"
                   />
                   <S.StyledButton

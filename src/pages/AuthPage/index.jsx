@@ -1,6 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { useEffect, useState } from "react";
-import { Button, Form } from "antd";
 import * as S from "./authPage.styles";
 import { useNavigate } from "react-router-dom";
 import userStore from "../../store/users";

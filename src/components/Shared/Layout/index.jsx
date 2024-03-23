@@ -25,6 +25,32 @@ export const UsersEvents = styled.div`
   color: "white";
 `;
 
+export const AddToFriendsEvents = styled.div`
+  position: absolute;
+  width: 18px;
+  top: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: coral;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const MessageInBoxEvents = styled.div`
+  position: absolute;
+  width: 18px;
+  top: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: coral;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 export const FiltersBox = styled.div`
   width: 100%;
   display: flex;
@@ -35,4 +61,11 @@ export const FiltersBox = styled.div`
 export const SearchAndSortContainer = styled.div`
   width: 500px;
   align-items: center;
+`;
+
+export const MessagePageContainer = styled.div`
+  height: 100vh;
+  background-color: #101010;
+  display: flex;
+  justify-content: center;
 `;

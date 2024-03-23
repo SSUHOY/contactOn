@@ -51,7 +51,7 @@ const Burger = () => {
         <UserOutlined />
       </Link>
     ),
-    getItem("Выйти из системы", "3", <LogoutOutlined />),
+    isAuth ? getItem("Выйти из системы", "3", <LogoutOutlined />) : "",
   ];
 
   const toggleCollapsed = () => {

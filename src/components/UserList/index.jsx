@@ -3,23 +3,17 @@ import { Button, Col, Row } from "antd";
 import {
   UserAge,
   UserCard,
+  UserCity,
   UserDescription,
   UserImageBlock,
   UserImg,
   UserInformation,
   UserName,
 } from "./userList.styles";
-import { TeamOutlined, UserAddOutlined } from "@ant-design/icons";
+import { TeamOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import userStore from "../../store/users";
 
 const UserList = ({ users }) => {
-
-  // const handleAddToFriends = () => {
-  //   const authUser = JSON.parse(localStorage.getItem("authorizedUser"));
-  //   userStore.addFriend(authUser?.id, user?.id);
-  //   setUserIsYourFriend(true);
-  // };
 
   return (
     <>
@@ -44,9 +38,18 @@ const UserList = ({ users }) => {
                     &nbsp;
                     {user.age ? user.age : "-"}
                   </UserAge>
+                  <UserCity>
+                    <span style={{ color: " #9F9F9F", fontSize: 16 }}>
+                      city:
+                    </span>
+                    &nbsp;
+                    {user.city ? user.city : "-"}
+                  </UserCity>
                   <UserDescription>
                     <p>{user.description}</p>
-                    <div
+                  
+                  </UserDescription>
+                  <div
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
@@ -56,16 +59,7 @@ const UserList = ({ users }) => {
                         {" "}
                         <TeamOutlined /> Friends: {user.friends.length}
                       </p>
-                      {userStore.isAuth ? (
-                        <Button>
-                          <UserAddOutlined style={{ color: "white" }} />
-                          to friends
-                        </Button>
-                      ) : (
-                        ""
-                      )}
                     </div>
-                  </UserDescription>
                 </UserInformation>
               </UserCard>
             </Link>

@@ -27,7 +27,7 @@ class UserStore {
       interests: ["cooking", "music", "fitness"],
       friends: [],
       messages: [],
-      unReadMessages: [],
+      receivedMessages: [],
       addToFriendsEvents: [],
       messagesEvents: [],
       description:
@@ -68,8 +68,8 @@ class UserStore {
 
     if (user && friend) {
       user.friends.push(toJS(friend));
-      friend.addToFriendsEvents.push(toJS(user.id));
       friend.friends.push(toJS(user));
+      friend.addToFriendsEvents.push(toJS(user.id));
       localStorage.setItem("users", JSON.stringify(this.users));
       console.log(`${user.name} and ${friend.name} are now friends!`);
     } else {
@@ -81,15 +81,43 @@ class UserStore {
     let friend = this.users.find((user) => user.id === friendID);
 
     if (user && friend) {
-      user.friends.filter(friend);
-      friend.friends.filter(user);
+      user.friends.splice(user.friends.indexOf(friend), 1);
+      friend.friends.splice(user.friends.indexOf(user), 1);
+      friend.addToFriendsEvents.splice(
+        friend.addToFriendsEvents.indexOf(user.id),
+        1
+      );
+      localStorage.setItem("users", JSON.stringify(this.users));
       console.log(`${user.name} and ${friend.name} are not friends now!`);
     } else {
       console.log("User or friend not found.");
     }
   }
-  deleteLastUser() {
-    this.users.pop();
+  sendMessage(senderID, receiverID, messageContent) {
+    let sender = this.users.find((user) => user.id === senderID);
+    let receiver = this.users.find((user) => user.id === receiverID);
+
+    if (sender && receiver) {
+      let message = {
+        sender: senderID,
+        receiver: receiverID,
+        content: messageContent,
+      };
+      sender.messages.push(message);
+      receiver.messagesEvents.push(message.id);
+      receiver.receivedMessages.push(message);
+      localStorage.setItem("users", JSON.stringify(this.users));
+
+      console.log(
+        `Message sent from ${sender.name} to ${receiver.name}: ${messageContent}`
+      );
+    } else {
+      console.log("Sender or receiver not found.");
+    }
+  }
+  getAuthorizedUser() {
+    const authUser = JSON.parse(localStorage.getItem("authorizedUser"));
+    return authUser;
   }
   saveUsersToLocalStorage() {
     localStorage.setItem("users", JSON.stringify(this.users));
