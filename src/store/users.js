@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, toJS } from "mobx";
 
 class UserStore {
   users = [
@@ -7,35 +7,13 @@ class UserStore {
       name: "Alice",
       age: 28,
       gender: "female",
-      location: "New York",
+      city: "New York",
       interests: ["traveling", "reading", "hiking"],
-      friends: [
-        {
-          id: 2,
-          name: "John",
-          age: 30,
-          gender: "male",
-          location: "Los Angeles",
-          interests: ["cooking", "music", "fitness"],
-          friends: [
-            {
-              id: 1,
-              name: "Alice",
-              age: 28,
-              gender: "female",
-              location: "New York",
-              interests: ["traveling", "reading", "hiking"],
-              friends: [],
-              description:
-                "Passionate traveler and book lover. Always up for an adventure!",
-              photo: "https://randomuser.me/api/portraits/women/1.jpg",
-            },
-          ],
-          description:
-            "Musician and fitness enthusiast. Looking for someone to share good food and great music with.",
-          photo: "https://randomuser.me/api/portraits/men/2.jpg",
-        },
-      ],
+      friends: [],
+      messages: [],
+      unReadMessages: [],
+      addToFriendsEvents: [],
+      messagesEvents: [],
       description:
         "Passionate traveler and book lover. Always up for an adventure!",
       photo: "https://randomuser.me/api/portraits/women/1.jpg",
@@ -45,22 +23,13 @@ class UserStore {
       name: "John",
       age: 30,
       gender: "male",
-      location: "Los Angeles",
+      city: "Los Angeles",
       interests: ["cooking", "music", "fitness"],
-      friends: [
-        {
-          id: 1,
-          name: "Alice",
-          age: 28,
-          gender: "female",
-          location: "New York",
-          interests: ["traveling", "reading", "hiking"],
-          friends: [],
-          description:
-            "Passionate traveler and book lover. Always up for an adventure!",
-          photo: "https://randomuser.me/api/portraits/women/1.jpg",
-        },
-      ],
+      friends: [],
+      messages: [],
+      unReadMessages: [],
+      addToFriendsEvents: [],
+      messagesEvents: [],
       description:
         "Musician and fitness enthusiast. Looking for someone to share good food and great music with.",
       photo: "https://randomuser.me/api/portraits/men/2.jpg",
@@ -98,8 +67,10 @@ class UserStore {
     let friend = this.users.find((user) => user.id === friendID);
 
     if (user && friend) {
-      user.friends.push(friend);
-      friend.friends.push(user);
+      user.friends.push(toJS(friend));
+      friend.addToFriendsEvents.push(toJS(user.id));
+      friend.friends.push(toJS(user));
+      localStorage.setItem("users", JSON.stringify(this.users));
       console.log(`${user.name} and ${friend.name} are now friends!`);
     } else {
       console.log("User or friend not found.");

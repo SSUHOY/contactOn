@@ -88,4 +88,5 @@ export const StyledButton = styled(Button)`
 
 export const Error = styled.p`
   color: coral;
+  text-align: center;
 `;

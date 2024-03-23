@@ -65,11 +65,11 @@ const AuthPage = () => {
     event.preventDefault();
   };
 
-  const submitHandlerRegistration = async (event) => {
+  const submitHandlerRegistration = (event) => {
     event.preventDefault();
     setIsLoading(true);
     const emailExists = userList.some((user) => user.email === userData.email);
-    if (!emailExists) {
+    if (!emailExists && userData.password === repeatedPassword) {
       const newUser = {
         id: userList.length + 1,
         name: userData.name,
@@ -80,6 +80,10 @@ const AuthPage = () => {
         location: "",
         interests: [],
         friends: [],
+        messages: [],
+        unReadMessages: [],
+        addToFriendsEvents: [],
+        messagesEvents: [],
         description: "",
         photo: "",
       };
@@ -92,8 +96,13 @@ const AuthPage = () => {
       setError("Ошибка регистрации, данный пользователь уже есть в системе");
       console.log("Ошибка");
     } else {
-      setError("Ошибка регистрации");
+      setError("Ошибка регистрации, пароли не совпадают");
     }
+  };
+
+  const handleSetIsLoginMode = (e) => {
+    setIsLoginMode(false);
+    setError("");
   };
 
   useEffect(() => {
@@ -137,9 +146,7 @@ const AuthPage = () => {
                 onClick={submitHandlerLogin}>
                 Войти
               </S.StyledButton>
-              <S.StyledButton
-                htmlType="submit"
-                onClick={() => setIsLoginMode(false)}>
+              <S.StyledButton htmlType="submit" onClick={handleSetIsLoginMode}>
                 Зарегистрироваться
               </S.StyledButton>
             </S.StyledButtonBox>

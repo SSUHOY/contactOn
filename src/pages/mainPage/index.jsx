@@ -9,39 +9,70 @@ import { Content } from "../../components/Shared/Layout/index";
 import Logo from "../../components/Shared/Logo";
 import { Container } from "../../components/Shared/Container";
 import SearchBar from "../../components/SearchBar";
+import { BellOutlined, MailOutlined } from "@ant-design/icons";
 
 const MainPage = observer(() => {
+  const isAuth = userStore.isAuth;
   const [userList, setUserList] = useState([]);
+  const [searchType, setSearchType] = useState(null);
+  const [gender, setGender] = useState("");
   const [searchText, setSearchText] = useState("");
 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const typeSelection = (e) => {
+    switch (e) {
+      case "name":
+        setSearchType("Name");
+        break;
+      case "age":
+        setSearchType("Age");
+        break;
+      case "city":
+        setSearchType("City");
+        break;
+      case "gender":
+        setSearchType("Gender");
+        break;
+      case "interests":
+        setSearchType("Interests");
+        break;
+      default:
+        setSearchType("Name");
+        break;
+    }
+  };
   const users = useMemo(() => {
     let result = [...userList];
-    if (searchText !== "") {
+    if (searchType === "Name" && searchText !== "") {
       result = result.filter((user) =>
         user.name.toLowerCase().includes(searchText.toLowerCase())
       );
     }
-    // if (selectedArtists.length > 0) {
-    //   result = result.filter((track) => selectedArtists.includes(track.author));
-    // }
-    // if (selectedGenres.length > 0) {
-    //   result = result.filter((track) => selectedGenres.includes(track.genre));
-    // }
-    // if (selectedFilters.year === "New") {
-    //   result.sort(
-    //     (a, b) => new Date(a.release_date) - new Date(b.release_date)
-    //   );
-    // } else if (selectedFilters.year === "Old") {
-    //   result.sort(
-    //     (a, b) => new Date(b.release_date) - new Date(a.release_date)
-    //   );
-    // }
+    if (searchType === "Age" && searchText !== "") {
+      result = result.filter((user) =>
+        user.age.toString().includes(searchText)
+      );
+    }
+    if (searchType === "City" && searchText !== "") {
+      result = result.filter((user) =>
+        user.city.toLowerCase().includes(searchText.toLowerCase())
+      );
+    }
+    if (searchType === "Gender" && gender !== "") {
+      result = result.filter((user) =>
+        user.gender.toLowerCase().includes(gender.toLowerCase())
+      );
+    }
+    if (searchType === "Interests" && searchText !== "") {
+      result = result.filter((user) =>
+        user.interests.includes(searchText.toLowerCase())
+      );
+    }
     return result;
-  }, [userList, searchText]);
+  }, [userList, searchText, gender]);
 
   useEffect(() => {
     userStore.saveUsersToLocalStorage();
@@ -52,11 +83,27 @@ const MainPage = observer(() => {
     <S.SharedLayout style={{ background: colorBgContainer }}>
       <S.SharedHeader style={{ background: colorBgContainer }}>
         <Burger />
+        {isAuth ? (
+          <S.UsersUI>
+            <S.UsersEvents>
+              <BellOutlined style={{ color: "#8774E1" }} />
+              <MailOutlined style={{ color: "#8774E1" }} />
+            </S.UsersEvents>
+          </S.UsersUI>
+        ) : (
+          ""
+        )}
+
         <Logo />
       </S.SharedHeader>
       <S.FiltersBox>
         <S.SearchAndSortContainer>
-          <SearchBar onChange={(value) => setSearchText(value)} />
+          <SearchBar
+            onChange={(e) => setSearchText(e)}
+            typeSelection={typeSelection}
+            searchType={searchType}
+            changeGender={(e) => setGender(e)}
+          />
         </S.SearchAndSortContainer>
       </S.FiltersBox>
       <Content

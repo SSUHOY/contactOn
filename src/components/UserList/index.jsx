@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Col, Row } from "antd";
 import {
   UserAge,
@@ -14,6 +14,12 @@ import { Link } from "react-router-dom";
 import userStore from "../../store/users";
 
 const UserList = ({ users }) => {
+
+  // const handleAddToFriends = () => {
+  //   const authUser = JSON.parse(localStorage.getItem("authorizedUser"));
+  //   userStore.addFriend(authUser?.id, user?.id);
+  //   setUserIsYourFriend(true);
+  // };
 
   return (
     <>

@@ -19,7 +19,7 @@ export const UserName = styled.h3`
   padding-bottom: 8px;
 `;
 export const UserAge = styled.span``;
-export const UserLocation = styled.p`
+export const UserInformation = styled.p`
   color: #9f9f9f;
 `;
 

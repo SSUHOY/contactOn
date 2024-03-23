@@ -13,6 +13,18 @@ export const SharedHeader = styled(Header)`
   justify-content: space-between;
 `;
 
+export const UsersUI = styled.div`
+  width: 50%;
+  height: 50px;
+`;
+export const UsersEvents = styled.div`
+  height: 68px;
+  width: 50px;
+  display: flex;
+  justify-content: space-between;
+  color: "white";
+`;
+
 export const FiltersBox = styled.div`
   width: 100%;
   display: flex;

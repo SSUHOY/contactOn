@@ -1,4 +1,4 @@
-import { Input, Upload } from "antd";
+import { Button, Input, Select, Upload } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import styled from "styled-components";
 
@@ -15,11 +15,10 @@ export const PageContent = styled.div`
 
 export const LeftContentBlock = styled.div`
   width: 100%;
-  margin-right: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 8px;
+  padding: 2px;
 `;
 export const RightContentBlock = styled.div`
   width: 100%;
@@ -27,11 +26,10 @@ export const RightContentBlock = styled.div`
 `;
 
 export const ProfileImgContainer = styled.div`
-  margin-right: 20px;
   border-radius: 100%;
   border: 1px solid #37373d;
-  width: 350px;
-  height: 350px;
+  width: 200px;
+  height: 200px;
 `;
 
 export const ImgUploadWrapper = styled(Upload)`
@@ -72,13 +70,14 @@ export const AvatarAltText = styled.p`
 
 export const UserPageContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  width: 864px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   height: 100%;
+  width: 340px;
   padding: 20px;
   margin-bottom: 8px;
   background: #212121;
-  justify-content: space-between;
   border-radius: 10px;
   box-shadow: 0 2px 5px 3px rgba(0, 0, 0, 0.3);
 `;
@@ -96,6 +95,13 @@ export const StyledInput = styled(Input)`
   padding: 10px;
   height: auto;
   border-radius: 3px;
+  .ant-space-item {
+    .ant-input {
+      &.placeholder-shown {
+        color: "red";
+      }
+    }
+  }
   &:where(
       .css-dev-only-do-not-override-mik4fl
     ).ant-input-outlined.ant-input-status-error:not(.ant-input-disabled) {
@@ -113,7 +119,6 @@ export const StyledInput = styled(Input)`
 export const StyledTextArea = styled(TextArea)`
   background-color: #d9d9d9;
   color: black;
-  margin: 12px;
   height: auto;
   border-radius: 3px;
   width: 150px;
@@ -129,6 +134,44 @@ export const StyledTextArea = styled(TextArea)`
   &:hover {
     background-color: #d9d9d9;
     border-radius: 3px solid #8774e1;
+  }
+`;
+export const StyledSelect = styled(Select)`
+  &:where(
+      .css-dev-only-do-not-override-mik4fl
+    ).ant-select.ant-select-in-form-item {
+    width: 150px;
+    height: 100%;
+    .ant-select-selector {
+      background-color: #d9d9d9;
+      border-radius: 3px;
+      .ant-select-selection-item {
+        color: black;
+      }
+      .ant-select-selection-placeholder {
+        color: black;
+      }
+    }
+    .and-input {
+      height: 100%;
+    }
+  }
+`;
+export const StyledButton = styled(Button)`
+  &:where(.css-dev-only-do-not-override-mik4fl).ant-btn-default {
+    margin-bottom: 14px;
+    padding: 4px;
+    span {
+      color: #d9d9d9;
+    }
+  }
+  &:where(.css-dev-only-do-not-override-mik4fl).ant-btn-primary {
+    margin-bottom: 14px;
+    width: 150px;
+    padding: 5px;
+    span {
+      color: white;
+    }
   }
 `;
 

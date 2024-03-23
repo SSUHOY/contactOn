@@ -59,10 +59,7 @@ const Burger = () => {
   };
 
   return (
-    <div
-      style={{
-        width: 256,
-      }}>
+    <div>
       <Button
         type="primary"
         onClick={toggleCollapsed}
@@ -79,7 +76,7 @@ const Burger = () => {
         style={{
           display: collapsed ? "block" : "none",
           zIndex: 1000,
-          position: "relative",
+          position: "absolute",
           textAlign: "center",
           borderRadius: "20px",
           width: 180,

@@ -22,19 +22,11 @@ const UserProfile = observer(() => {
   const { id } = useParams();
 
   const user = userStore.getUserById(Number(id));
-  console.log(user);
-  const authUser = JSON.parse(localStorage.getItem("authorizedUser"));
   const isAuth = userStore.isAuth;
-  // Show UI for authorized user only
-  useEffect(() => {
-    if (authUser.id === user.id && isAuth) {
-      setAuthUserUI(true);
-    }
-  }, [authUser]);
 
   const handleAddToFriends = () => {
     const authUser = JSON.parse(localStorage.getItem("authorizedUser"));
-    userStore.addFriend(authUser.id, user.id);
+    userStore.addFriend(authUser?.id, user?.id);
     setUserIsYourFriend(true);
   };
   const handleDeleteFromFriends = () => {
@@ -46,6 +38,12 @@ const UserProfile = observer(() => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  // useEffect(() => {
+  //   if (authUser.id === user.id && isAuth) {
+  //     setAuthUserUI(true);
+  //   }
+  // }, [authUser]);
 
   return (
     <L.SharedLayout style={{ background: colorBgContainer }}>
@@ -65,8 +63,8 @@ const UserProfile = observer(() => {
                   src={!user.photo ? "" : user.photo}
                   alt="avatar"
                   style={{
-                    width: 350,
-                    height: 350,
+                    width: 200,
+                    height: 200,
                     borderRadius: "100%",
                   }}
                 />
@@ -82,27 +80,34 @@ const UserProfile = observer(() => {
                   ? "friends"
                   : "friend"}
               </S.UserFriendsCount>
-              {userIsYourFriend ? (
-                <Button
-                  style={{ textTransform: "uppercase" }}
-                  onClick={handleDeleteFromFriends}>
-                  <UserDeleteOutlined style={{ color: "white" }} />
-                  Remove {user.name} from friends
-                </Button>
+              {isAuth ? (
+                <div>
+                  {userIsYourFriend ? (
+                    <Button
+                      style={{ textTransform: "uppercase" }}
+                      onClick={handleDeleteFromFriends}>
+                      <UserDeleteOutlined style={{ color: "white" }} />
+                      Remove {user.name} from friends
+                    </Button>
+                  ) : (
+                    <Button
+                      style={{ textTransform: "uppercase" }}
+                      onClick={handleAddToFriends}>
+                      <PlusOutlined style={{ color: "white" }} />
+                      Add {user.name} to friends
+                    </Button>
+                  )}
+                </div>
               ) : (
-                <Button
-                  style={{ textTransform: "uppercase" }}
-                  onClick={handleAddToFriends}>
-                  <PlusOutlined style={{ color: "white" }} />
-                  Add {user.name} to friends
-                </Button>
+                ""
               )}
             </S.UserFriendsBox>
           </Shared.LeftContentBlock>
           <Shared.RightContentBlock>
             <S.UserName>{user.name}</S.UserName>
-            <S.UserAge>Age: {user.age}</S.UserAge>
-            <S.UserLocation>Location: {user.location}</S.UserLocation>
+            <S.UserInformation>Age: {user.age}</S.UserInformation>
+            <S.UserInformation>City: {user.city}</S.UserInformation>
+            <S.UserInformation>Gender: {user.gender}</S.UserInformation>
             <br />
             <S.UserContent>
               <S.UserDescriptionTitle>Description:</S.UserDescriptionTitle>
@@ -113,7 +118,11 @@ const UserProfile = observer(() => {
                       id="description"
                       name="description"
                       rows="5"
-                      style={{ resize: "none", color: "white" }}
+                      style={{
+                        resize: "none",
+                        color: "white",
+                        borderRadius: 12,
+                      }}
                       value={user.description || ""}
                       readOnly></TextArea>
                   </td>
@@ -124,8 +133,12 @@ const UserProfile = observer(() => {
                     <TextArea
                       id="interests"
                       name="interests"
-                      rows="4"
-                      style={{ resize: "none", color: "white" }}
+                      rows="2"
+                      style={{
+                        resize: "none",
+                        color: "white",
+                        borderRadius: 12,
+                      }}
                       value={user.interests || ""}
                       readOnly></TextArea>
                   </td>
