@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Carousel } from "antd";
 import userStore from "../../store/users";
 const contentStyle = {
@@ -13,25 +13,24 @@ const contentStyle = {
   paddingBottom: 20,
   border: "1px solid gray",
 };
-const PhotoCarousel = ({ userID }) => {
-  const [currentSlide, setCurrentSlide] = useState(1);
-  const user = userStore.getUserById(Number(userID));
-
-  const onChange = (currentSlide) => {
-    setCurrentSlide(currentSlide + 1);
-  };
+const AuthUserPhotoCarousel = () => {
+  const [showedImages, setShowedImages] = useState([]);
+  const authUser = userStore.getAuthorizedUser();
+  useEffect(() => {
+    setShowedImages(authUser?.photoGallery || []);
+  }, [authUser]);
   return (
     <>
-      <Carousel afterChange={onChange} style={{ borderRadius: 20 }}>
-        <Carousel afterChange={onChange}>
-          {user.photoGallery.map((photo) => (
-            <div key={photo.id}>
+      <Carousel style={{ borderRadius: 20 }}>
+        <Carousel>
+          {showedImages.map((photo, index) => (
+            <div key={index}>
               <img src={photo} alt="gallery" style={contentStyle}></img>
             </div>
           ))}
         </Carousel>
       </Carousel>{" "}
-      {user.photoGallery.length === 0 ? (
+      {showedImages.length === 0 ? (
         <div
           style={{
             width: "100%",
@@ -40,14 +39,16 @@ const PhotoCarousel = ({ userID }) => {
             justifyItems: "center",
             color: "#bdbdbd",
             borderRadius: 20,
+            display: "flex",
+            justifyContent: "center",
             border: "1px solid gray",
           }}>
           <p>No photo</p>
         </div>
       ) : (
-        <span>{currentSlide}</span>
+        ""
       )}
     </>
   );
 };
-export default PhotoCarousel;
+export default AuthUserPhotoCarousel;

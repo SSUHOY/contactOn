@@ -1,4 +1,4 @@
-import { Layout, theme } from "antd";
+import { Layout } from "antd";
 import styled from "styled-components";
 
 export const { Header, Content, Footer } = Layout;

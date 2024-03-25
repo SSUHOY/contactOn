@@ -1,4 +1,4 @@
-import { Breadcrumb, theme } from "antd";
+import { theme } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import * as S from "../../components/Shared/Layout/index";
 import UserList from "../../components/UserList";
@@ -11,9 +11,8 @@ import { Container } from "../../components/Shared/Container";
 import SearchBar from "../../components/SearchBar";
 import DropDown from "../../components/Dropdown";
 
-const MainPage = observer(() => {
+const Main = observer(() => {
   const isAuth = userStore.isAuth;
-  const authUser = userStore.getAuthorizedUser();
 
   const [userList, setUserList] = useState([]);
   const [searchType, setSearchType] = useState(null);
@@ -74,7 +73,7 @@ const MainPage = observer(() => {
       );
     }
     return result;
-  }, [userList, searchText, gender]);
+  }, [userList, searchText, gender, searchType]);
 
   useEffect(() => {
     userStore.saveUsersToLocalStorage();
@@ -104,14 +103,7 @@ const MainPage = observer(() => {
           />
         </S.SearchAndSortContainer>
       </S.FiltersBox>
-      <Breadcrumb
-        separator=">"
-        items={[
-          {
-            title: "Home",
-          },
-        ]}
-      />
+
       <br />
       <Content
         style={{
@@ -130,4 +122,4 @@ const MainPage = observer(() => {
   );
 });
 
-export default MainPage;
+export default Main;

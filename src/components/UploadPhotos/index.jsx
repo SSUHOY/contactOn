@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Modal, Upload } from "antd";
+import { Button, Modal, Upload } from "antd";
 import userStore from "../../store/users";
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -10,6 +10,7 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 const UploadPhotos = () => {
+  const [saved, setIsSaved] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -28,8 +29,13 @@ const UploadPhotos = () => {
   };
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
-    userStore.addToPhotoGallery(fileList);
+    setIsSaved(false);
   };
+  const handleSavePhotosToGallery = () => {
+    userStore.addToPhotoGallery(fileList);
+    setIsSaved(true);
+  };
+
   const uploadButton = (
     <button
       style={{
@@ -70,6 +76,13 @@ const UploadPhotos = () => {
           src={previewImage}
         />
       </Modal>
+      {fileList.length !== 0 ? (
+        <Button onClick={handleSavePhotosToGallery} disabled={saved}>
+          {saved ? "Saved!" : "Save"}
+        </Button>
+      ) : (
+        ""
+      )}
     </>
   );
 };

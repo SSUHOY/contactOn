@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import * as L from "../../components/Shared/Layout/index";
 import * as S from "../messagesPage/messagesPage.styles";
 import { InboxOutlined } from "@ant-design/icons";
@@ -54,11 +54,30 @@ const MessagesInBox = () => {
                         alignItems: "center",
                       }}>
                       <div style={{ marginRight: 50 }}>
-                        <img
-                          src={chats.photo}
-                          alt="avatar"
-                          style={{ borderRadius: "50%", height: 50, width: 50 }}
-                        />
+                        {chats.photo ? (
+                          <img
+                            src={chats.photo}
+                            alt="avatar"
+                            style={{
+                              borderRadius: "50%",
+                              height: 50,
+                              width: 50,
+                            }}
+                          />
+                        ) : (
+                          <div
+                            style={{
+                              height: 50,
+                              width: 50,
+                              borderRadius: "50%",
+                              border: "1px solid gray",
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "center",
+                            }}>
+                            <S.AvatarAltText>No photo</S.AvatarAltText>
+                          </div>
+                        )}
                       </div>
                       <div>
                         <p>{chats.name}</p>

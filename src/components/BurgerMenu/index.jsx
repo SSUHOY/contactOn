@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Button, Menu } from "antd";
 import {
   MenuUnfoldOutlined,
@@ -37,15 +37,14 @@ const Burger = () => {
       navigate("/");
     }
     if (e.key === "6") {
+      window.location.reload();
       userStore.clearStorage();
-      userStore.handleLogOutUser();
-      navigate("/login");
     }
     toggleCollapsed();
   };
 
   const items = [
-    isAuth ? getItem(`${authUser.name}`) : "",
+    isAuth && authUser ? getItem(`${authUser?.name}`) : "",
     getItem(
       "Home",
       "1",
@@ -90,9 +89,8 @@ const Burger = () => {
     getItem(
       "Clear Storage",
       "6",
-      <Link to={"/login"}>
-        <UserOutlined />
-      </Link>
+
+      <UserOutlined />
     ),
   ];
 

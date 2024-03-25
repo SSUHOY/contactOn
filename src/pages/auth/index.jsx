@@ -23,7 +23,7 @@ const validateMessages = {
   },
 };
 
-const AuthPage = () => {
+const Auth = () => {
   const [error, setError] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -164,6 +164,7 @@ const AuthPage = () => {
                     setUserData({ ...userData, password: e.target.value })
                   }>
                   <S.StyledInputPassword
+                    autocomplete="on"
                     type="password"
                     placeholder="enter password"
                   />
@@ -173,12 +174,12 @@ const AuthPage = () => {
                     type="primary"
                     htmlType="submit"
                     onClick={submitHandlerLogin}>
-                    Войти
+                    Log in
                   </S.StyledButton>
                   <S.StyledButton
                     htmlType="submit"
                     onClick={handleSetIsLoginMode}>
-                    Зарегистрироваться
+                    Register
                   </S.StyledButton>
                 </S.StyledButtonBox>
                 <S.Error>{error}</S.Error>
@@ -212,6 +213,7 @@ const AuthPage = () => {
                 </S.StyledFormItem>
                 <S.StyledFormItem
                   name={["password"]}
+                  autocomplete="on"
                   label={<span style={{ color: "white" }}>Password:</span>}
                   value={userData.password}
                   onChange={(e) =>
@@ -219,6 +221,7 @@ const AuthPage = () => {
                   }
                   rules={[{ required: true, type: "password" }]}>
                   <S.StyledInputPassword
+                    autocomplete="on"
                     type="password"
                     placeholder="Enter your password"
                   />
@@ -231,6 +234,7 @@ const AuthPage = () => {
                   onChange={(e) => repeatPasswordHandler(e)}
                   rules={[{ required: true, type: "password" }]}>
                   <S.StyledInputPassword
+                    autocomplete="on"
                     type="password"
                     placeholder="Repeat password"
                   />
@@ -240,12 +244,12 @@ const AuthPage = () => {
                     type="primary"
                     htmlType="submit"
                     onClick={submitHandlerRegistration}>
-                    Зарегистрироваться
+                    Register
                   </S.StyledButton>
                   <S.StyledButton
                     htmlType="submit"
                     onClick={() => setIsLoginMode(true)}>
-                    Назад
+                    Back
                   </S.StyledButton>
                 </S.StyledButtonBox>
               </S.StyledForm>
@@ -257,4 +261,4 @@ const AuthPage = () => {
   );
 };
 
-export default AuthPage;
+export default Auth;

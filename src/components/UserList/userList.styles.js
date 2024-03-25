@@ -51,10 +51,12 @@ export const UserCity = styled.p`
 `;
 
 export const UserDescription = styled.div`
-  padding-top: 12px;
+  padding: 5px;
   width: 186px;
   height: 100px;
-  border-bottom: 1px solid gray;
+  overflow: auto;
+  border: 1px solid gray;
+  margin-bottom: 8px;
   p {
     white-space: wrap;
     overflow: hidden;

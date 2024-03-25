@@ -25,16 +25,16 @@ export const ContentBlock = styled.div`
   text-align: center;
 `;
 export const RightContentBlock = styled.div`
-  width: 500px;
+  width: 340px;
   text-align: center;
-  height: 500px;
+  height: 400px;
   padding: 20px;
   background-color: #212121;
   margin-left: 20px;
   border-radius: 20px;
 `;
 export const UserUploadPhotos = styled.div`
-  width: 260px;
+  width: 320px;
   height: 400px;
   overflow: auto;
   background-color: lightblue;

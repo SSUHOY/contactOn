@@ -10,6 +10,7 @@ import Messages from "./messagesEvents";
 
 const DropDown = () => {
   const authUser = userStore.getAuthorizedUser();
+  const isAuth = userStore.isAuth;
 
   const clearEvents = () => {
     userStore.clearFriendsEvents(authUser.id);
@@ -20,11 +21,18 @@ const DropDown = () => {
       key: "1",
       label: (
         <>
-          <p>You have {authUser.addToFriendsEvents.length} new friends</p>
-          {authUser.addToFriendsEvents.length !== 0 ? (
-            <Link to={"/friends"}>
-              <u>Click to show friends</u>
-            </Link>
+          {isAuth ? (
+            <>
+              {" "}
+              <p>You have {authUser.addToFriendsEvents.length} new friends</p>
+              {authUser.addToFriendsEvents.length !== 0 ? (
+                <Link to={"/friends"}>
+                  <u>Click to show friends</u>
+                </Link>
+              ) : (
+                ""
+              )}
+            </>
           ) : (
             ""
           )}
