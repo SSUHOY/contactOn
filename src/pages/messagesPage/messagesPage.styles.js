@@ -1,17 +1,18 @@
 import styled from "styled-components";
 
-export const MessagesUi = styled.div`
-  width: 800px;
+export const BoxUi = styled.div`
+  width: 350px;
+  display: flex;
+  gap: 10px;
   height: 400px;
-  padding: 20px;
+  margin-top: 20px;
   background-color: #1e1e1e;
   border-radius: 20px;
-  display: flex;
-  justify-content: space-between;
 `;
 
 export const LeftUserUi = styled.div`
   width: 40%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,47 +43,52 @@ export const RecipientInformation = styled.div`
   text-align: center;
 `;
 export const MessagesField = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-end;
-  height: 400px;
-  overflow-y: auto;
+  width: 100%;
+  overflow: auto;
+  max-height: 200px;
+  height: 100%;
   background-color: #323233;
   border-radius: 2px;
-  border: 1px solid gray;
+`;
+export const MessagesAligner = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: flex-end;
 `;
 
 export const Message = styled.div`
   width: 100%;
+  height: 400px;
   display: flex;
-  overflow: auto;
   flex-direction: column;
   gap: 10px;
 `;
-export const MessageItem = styled.div`
+export const Item = styled.div`
   width: 100%;
-  height: 50px;
+  height: 70px;
+  padding: 20px;
   color: white;
   display: flex;
-  justify-content: space-between;
-  border: 1px solid gray;
-  border-radius: 2px;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid gray;
+  margin-bottom: 5px;
 `;
 
 export const SendMessagesBox = styled.div`
-  height: auto;
   padding: 10px;
   margin: 5px;
+  max-width: 435px;
+  min-width: 50px;
   color: white;
   background-color: #8774e1;
   border-radius: 20px;
 `;
-export const ReceivedMessage = styled.div`
-  width: auto;
-`;
 export const SendMessage = styled.div`
   width: auto;
+  margin: 2px;
+  padding: 2px;
 `;
 
 export const ReceivedMessagesBox = styled.div`

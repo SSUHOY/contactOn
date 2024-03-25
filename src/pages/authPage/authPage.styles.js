@@ -19,7 +19,9 @@ export const StyledForm = styled(Form)`
   padding: 20px;
 `;
 
-export const StyledFormItem = styled(Form.Item)``;
+export const StyledFormItem = styled(Form.Item)`
+  box-sizing: border-box;
+`;
 
 export const StyledInput = styled(Input)`
   background-color: #d9d9d9;

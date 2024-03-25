@@ -20,9 +20,29 @@ export const LeftContentBlock = styled.div`
   align-items: center;
   padding: 2px;
 `;
-export const RightContentBlock = styled.div`
+export const ContentBlock = styled.div`
   width: 100%;
   text-align: center;
+`;
+export const RightContentBlock = styled.div`
+  width: 500px;
+  text-align: center;
+  height: 500px;
+  padding: 20px;
+  background-color: #212121;
+  margin-left: 20px;
+  border-radius: 20px;
+`;
+export const UserUploadPhotos = styled.div`
+  width: 260px;
+  height: 400px;
+  overflow: auto;
+  background-color: lightblue;
+  border-radius: 10px;
+  padding: 10px;
+  padding-top: 15px;
+  margin-left: 10px;
+  background-color: #212121;
 `;
 
 export const ProfileImgContainer = styled.div`

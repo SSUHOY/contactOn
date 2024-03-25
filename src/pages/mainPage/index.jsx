@@ -9,8 +9,7 @@ import { Content } from "../../components/Shared/Layout/index";
 import Logo from "../../components/Shared/Logo";
 import { Container } from "../../components/Shared/Container";
 import SearchBar from "../../components/SearchBar";
-import { BellOutlined, MailOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import DropDown from "../../components/Dropdown";
 
 const MainPage = observer(() => {
   const isAuth = userStore.isAuth;
@@ -20,7 +19,6 @@ const MainPage = observer(() => {
   const [searchType, setSearchType] = useState(null);
   const [gender, setGender] = useState("");
   const [searchText, setSearchText] = useState("");
-  const [showEvents, setShowEvents] = useState(false);
 
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -78,10 +76,6 @@ const MainPage = observer(() => {
     return result;
   }, [userList, searchText, gender]);
 
-  const handleClickShowEvents = () => {
-    setShowEvents(!showEvents);
-  };
-
   useEffect(() => {
     userStore.saveUsersToLocalStorage();
     setUserList(userStore.users);
@@ -93,49 +87,7 @@ const MainPage = observer(() => {
         <Burger />
         {isAuth ? (
           <S.UsersUI>
-            <S.UsersEvents>
-              <div>
-                <BellOutlined
-                  onClick={handleClickShowEvents}
-                  style={{
-                    color: "#8774E1",
-                    fontSize: "28px",
-                    marginRight: 20,
-                  }}
-                />
-                {authUser?.addToFriendsEvents.length !== 0 ? (
-                  <S.AddToFriendsEvents>
-                    <div style={{ width: 50, textAlign: "center" }}>
-                      {authUser?.addToFriendsEvents.length}
-                    </div>
-                  </S.AddToFriendsEvents>
-                ) : (
-                  ""
-                )}
-              </div>
-
-              <div>
-                <Link to={"/messages"}>
-                  <MailOutlined
-                    style={{
-                      color: "#8774E1",
-                      fontSize: "28px",
-                      marginLeft: 5,
-                    }}
-                  />
-                </Link>
-
-                {authUser?.messagesEvents.length !== 0 ? (
-                  <S.MessageInBoxEvents>
-                    <div style={{ width: 50, textAlign: "center" }}>
-                      {authUser?.messagesEvents.length}
-                    </div>
-                  </S.MessageInBoxEvents>
-                ) : (
-                  ""
-                )}
-              </div>
-            </S.UsersEvents>
+            <DropDown />
           </S.UsersUI>
         ) : (
           ""
@@ -152,6 +104,15 @@ const MainPage = observer(() => {
           />
         </S.SearchAndSortContainer>
       </S.FiltersBox>
+      <Breadcrumb
+        separator=">"
+        items={[
+          {
+            title: "Home",
+          },
+        ]}
+      />
+      <br />
       <Content
         style={{
           display: "flex",
@@ -162,9 +123,6 @@ const MainPage = observer(() => {
             borderRadius: borderRadiusLG,
             background: colorBgContainer,
           }}>
-          <Breadcrumb
-            style={{ margin: "16px 0" }}
-            items={[{ title: "Home" }]}></Breadcrumb>
           <UserList users={users} />
         </Container>
       </Content>

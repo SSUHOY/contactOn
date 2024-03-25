@@ -7,12 +7,15 @@ class UserStore {
       name: "Alice",
       age: 28,
       gender: "female",
+      email: "alice87xv@example.com",
       city: "New York",
       interests: ["traveling", "reading", "hiking"],
       friends: [],
       messages: [],
-      unReadMessages: [],
+      receivedMessages: [],
       addToFriendsEvents: [],
+      photoGallery: [],
+      chats: [],
       messagesEvents: [],
       description:
         "Passionate traveler and book lover. Always up for an adventure!",
@@ -21,6 +24,7 @@ class UserStore {
     {
       id: 2,
       name: "John",
+      email: "johnsmith23@example.com",
       age: 30,
       gender: "male",
       city: "Los Angeles",
@@ -29,6 +33,8 @@ class UserStore {
       messages: [],
       receivedMessages: [],
       addToFriendsEvents: [],
+      photoGallery: [],
+      chats: [],
       messagesEvents: [],
       description:
         "Musician and fitness enthusiast. Looking for someone to share good food and great music with.",
@@ -36,6 +42,7 @@ class UserStore {
     },
   ];
   isAuth = false;
+  alreadyFriends = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -56,6 +63,22 @@ class UserStore {
     }
     this.saveUsersToLocalStorage();
   }
+  saveAuthUserData() {
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let authorizedUser = JSON.parse(localStorage.getItem("authorizedUser"));
+    let authorizedUserData = users.find(
+      (user) => user.id === authorizedUser.id
+    );
+    if (authorizedUserData !== -1) {
+      authorizedUser[authorizedUserData] = authorizedUser;
+      localStorage.setItem(
+        "authorizedUser",
+        JSON.stringify(authorizedUserData)
+      );
+    } else {
+      console.error("Authorized user not found in the users list.");
+    }
+  }
   loadUsersFromLocalStorage() {
     const usersFromStorage = localStorage.getItem("users");
     if (usersFromStorage) {
@@ -70,10 +93,20 @@ class UserStore {
       user.friends.push(toJS(friend));
       friend.friends.push(toJS(user));
       friend.addToFriendsEvents.push(toJS(user.id));
+      this.saveUsersToLocalStorage();
+      this.saveAuthUserData();
       localStorage.setItem("users", JSON.stringify(this.users));
-      console.log(`${user.name} and ${friend.name} are now friends!`);
+      this.alreadyFriends = true;
     } else {
-      console.log("User or friend not found.");
+      this.alreadyFriends = false;
+    }
+  }
+  isFriends(authUserID, user) {
+    let isFriend = user.friends.some((friend) => friend.id === authUserID);
+    if (isFriend) {
+      this.alreadyFriends = true;
+    } else {
+      this.alreadyFriends = false;
     }
   }
   deleteFriend(userID, friendID) {
@@ -87,31 +120,87 @@ class UserStore {
         friend.addToFriendsEvents.indexOf(user.id),
         1
       );
+      this.saveUsersToLocalStorage();
+      this.saveAuthUserData();
       localStorage.setItem("users", JSON.stringify(this.users));
+      this.alreadyFriends = false;
       console.log(`${user.name} and ${friend.name} are not friends now!`);
     } else {
-      console.log("User or friend not found.");
+      this.alreadyFriends = true;
     }
   }
-  sendMessage(senderID, receiverID, messageContent) {
+  sendMessage(
+    senderID,
+    receiverID,
+    messageContent,
+    senderName,
+    receiverName,
+    senderPhoto,
+    receiverPhoto,
+    senderEmail,
+    receiverEmail
+  ) {
     let sender = this.users.find((user) => user.id === senderID);
     let receiver = this.users.find((user) => user.id === receiverID);
-
     if (sender && receiver) {
-      let message = {
-        sender: senderID,
-        receiver: receiverID,
-        content: messageContent,
-      };
-      sender.messages.push(message);
-      receiver.messages.push(message);
-      receiver.messagesEvents.push(message);
-      receiver.receivedMessages.push(message);
-      localStorage.setItem("users", JSON.stringify(this.users));
-      this.saveUsersToLocalStorage();
-      console.log(
-        `Message sent from ${sender.name} to ${receiver.name}: ${messageContent}`
+      const senderChats = toJS(sender);
+      const receiverChats = toJS(receiver);
+      let existingSendersChat = senderChats.chats.some(
+        (chat) => chat.email === receiver.email
       );
+      let existingReceiverChat = receiverChats.chats.some(
+        (chat) => chat.email === sender.email
+      );
+
+      if (existingSendersChat && existingReceiverChat) {
+        let message = {
+          senderID: senderID,
+          receiverID: receiverID,
+          senderName: senderName,
+          receiverName: receiverName,
+          senderPhoto: senderPhoto,
+          receiverPhoto: receiverPhoto,
+          content: messageContent,
+        };
+        sender.messages.push(message);
+        receiver.messages.push(message);
+        receiver.messagesEvents.push(sender.id);
+        receiver.receivedMessages.push(message);
+        localStorage.setItem("users", JSON.stringify(this.users));
+        this.saveUsersToLocalStorage();
+        this.saveAuthUserData();
+      } else {
+        let newReceiverChat = {
+          receiverID: receiverID,
+          name: senderName,
+          photo: senderPhoto,
+          email: senderEmail,
+        };
+        let newSenderChat = {
+          senderID: senderID,
+          name: receiverName,
+          photo: receiverPhoto,
+          email: receiverEmail,
+        };
+        let message = {
+          senderID: senderID,
+          receiverID: receiverID,
+          senderName: senderName,
+          receiverName: receiverName,
+          senderPhoto: senderPhoto,
+          receiverPhoto: receiverPhoto,
+          content: messageContent,
+        };
+        receiver.chats.push(newReceiverChat);
+        sender.chats.push(newSenderChat);
+        sender.messages.push(message);
+        receiver.messages.push(message);
+        receiver.messagesEvents.push(sender.id);
+        receiver.receivedMessages.push(message);
+        localStorage.setItem("users", JSON.stringify(this.users));
+        this.saveUsersToLocalStorage();
+        this.saveAuthUserData();
+      }
     } else {
       console.log("Sender or receiver not found.");
     }
@@ -121,14 +210,45 @@ class UserStore {
     return authUser;
   }
   saveUsersToLocalStorage() {
-    localStorage.setItem("users", JSON.stringify(this.users));
+    const userList = localStorage.setItem("users", JSON.stringify(this.users));
+    return userList;
   }
   getUserById(id) {
-    return this.users.find((user) => user.id === id);
+    const userID = this.users.find((user) => user.id === id);
+    return toJS(userID);
   }
   theUserIsAuth(props) {
     this.isAuth = props;
   }
+  handleLogOutUser() {
+    userStore.theUserIsAuth(false);
+    localStorage.clear("authorizedUser");
+  }
+  clearFriendsEvents(userID) {
+    let user = this.users.find((user) => user.id === userID);
+    user.addToFriendsEvents.splice(0, user.addToFriendsEvents.length);
+    this.saveUsersToLocalStorage();
+    this.saveAuthUserData();
+    localStorage.setItem("users", JSON.stringify(this.users));
+  }
+  clearMessagesEvents(userID) {
+    let user = this.users.find((user) => user.id === userID);
+    user.messagesEvents.splice(0, user.messagesEvents.length);
+    this.saveUsersToLocalStorage();
+    this.saveAuthUserData();
+    localStorage.setItem("users", JSON.stringify(this.users));
+  }
+  setAuthUserData(user) {
+    localStorage.setItem("authorizedUser", JSON.stringify(user));
+  }
+  addToPhotoGallery = (fileList) => {
+    const user = this.getAuthorizedUser();
+    user.photoGallery = user.photoGallery.concat(fileList);
+    this.setAuthUserData(user);
+  };
+  clearStorage = () => {
+    localStorage.clear();
+  };
 }
 const userStore = new UserStore();
 export default userStore;

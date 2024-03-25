@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Button, Col, Row } from "antd";
+import React from "react";
+import { Col, Row } from "antd";
 import {
   UserAge,
   UserCard,
@@ -14,7 +14,6 @@ import { TeamOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 const UserList = ({ users }) => {
-
   return (
     <>
       <Row gutter={[16, 24]}>
@@ -47,19 +46,18 @@ const UserList = ({ users }) => {
                   </UserCity>
                   <UserDescription>
                     <p>{user.description}</p>
-                  
                   </UserDescription>
                   <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        rowGap: 10,
-                      }}>
-                      <p>
-                        {" "}
-                        <TeamOutlined /> Friends: {user.friends.length}
-                      </p>
-                    </div>
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      rowGap: 10,
+                    }}>
+                    <p>
+                      {" "}
+                      <TeamOutlined /> Friends: {user.friends.length}
+                    </p>
+                  </div>
                 </UserInformation>
               </UserCard>
             </Link>

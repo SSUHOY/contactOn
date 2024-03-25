@@ -11,4 +11,29 @@ body {
   span {
     color: #9f9f9f;
   }
+  ::-webkit-scrollbar {
+    width: 10px;
+    padding: 20px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #888;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+  ::placeholder {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .ant-breadcrumb {
+    .ant-breadcrumb-link {
+      color: #888;
+    }
+    .ant-breadcrumb-separator {
+      color: #888;
+    }
+  }
 }

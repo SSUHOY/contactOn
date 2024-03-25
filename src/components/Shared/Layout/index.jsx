@@ -28,7 +28,7 @@ export const UsersEvents = styled.div`
 export const AddToFriendsEvents = styled.div`
   position: absolute;
   width: 18px;
-  top: 12px;
+  top: 7px;
   height: 18px;
   border-radius: 50%;
   background-color: coral;
@@ -41,8 +41,7 @@ export const AddToFriendsEvents = styled.div`
 export const MessageInBoxEvents = styled.div`
   position: absolute;
   width: 18px;
-  top: 12px;
-
+  top: 7px;
   height: 18px;
   border-radius: 50%;
   background-color: coral;
@@ -64,7 +63,7 @@ export const SearchAndSortContainer = styled.div`
   align-items: center;
 `;
 
-export const MessagePageContainer = styled.div`
+export const PageContainer = styled.div`
   height: 100vh;
   background-color: #101010;
   display: flex;

@@ -4,13 +4,17 @@ import * as S from "./userPage.styles";
 import { observer } from "mobx-react-lite";
 import Burger from "../../components/BurgerMenu";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Breadcrumb, Form, Space, theme } from "antd";
+import { Breadcrumb, Dropdown, Form, Space, message, theme } from "antd";
+import { BellOutlined, MailOutlined } from "@ant-design/icons";
 import * as L from "../../components/Shared/Layout/index";
+import { Link } from "react-router-dom";
+import Logo from "../../components/Shared/Logo";
+import DropDown from "../../components/Dropdown";
+import UploadPhotos from "../../components/UploadPhotos";
 
 const AuthUserProfile = observer(() => {
   const isAuth = userStore.isAuth;
   const [userAuthData, setAuthUserData] = useState([]);
-  const [error, setError] = useState("");
   const [newInterest, setNewInterest] = useState(null);
   const [isSave, setIsSave] = useState(false);
   const [imgLoading, setImgLoading] = useState(false);
@@ -42,11 +46,11 @@ const AuthUserProfile = observer(() => {
   const beforeUpload = (file) => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
-      setError("You can only upload JPG/PNG file!");
+      message.error("You can only upload JPG/PNG file!");
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      setError("Image must smaller than 2MB!");
+      message.error("Image must smaller than 2MB!");
     }
     return isJpgOrPng && isLt2M;
   };
@@ -60,7 +64,6 @@ const AuthUserProfile = observer(() => {
       getBase64(info.file.originFileObj, (url) => {
         setImgLoading(false);
         setImageUrl(url);
-        setError("");
         setAuthUserData({ ...userAuthData, photo: url });
       });
     }
@@ -75,13 +78,12 @@ const AuthUserProfile = observer(() => {
       setNewInterest("");
       setIsSave(false);
     } else {
-      setError("type text");
+      message.error("type text");
     }
   };
 
   const handleInputChange = (e) => {
     setNewInterest(e.target.value);
-    setError("");
   };
 
   const uploadButton = (
@@ -96,7 +98,7 @@ const AuthUserProfile = observer(() => {
         style={{
           marginTop: 8,
         }}>
-        Upload
+        Upload Avatar
       </div>
     </button>
   );
@@ -116,6 +118,15 @@ const AuthUserProfile = observer(() => {
           background: colorBgContainer,
         }}>
         <Burger />
+
+        {isAuth ? (
+          <L.UsersUI>
+            <DropDown />
+          </L.UsersUI>
+        ) : (
+          ""
+        )}
+        <Logo />
       </L.SharedHeader>
       {isLoading ? (
         ""
@@ -146,10 +157,9 @@ const AuthUserProfile = observer(() => {
                     uploadButton
                   )}
                 </S.ImgUploadWrapper>
-                {error ? <S.Error>{error}</S.Error> : ""}
               </S.ProfileImgContainer>
             </S.LeftContentBlock>
-            <S.RightContentBlock>
+            <S.ContentBlock>
               <Form
                 name="complex-form"
                 wrapperCol={{
@@ -296,8 +306,19 @@ const AuthUserProfile = observer(() => {
                 onClick={handlerSubmitUserData}>
                 {!isSave ? "Save" : "Saved!"}
               </S.StyledButton>
-            </S.RightContentBlock>
+            </S.ContentBlock>
           </S.UserPageContainer>
+          <S.UserUploadPhotos>
+            <div
+              style={{
+                textAlign: "center",
+                color: "white",
+                paddingBottom: 10,
+              }}>
+              <p>Upload photos to your photo gallery</p>
+            </div>
+            <UploadPhotos />
+          </S.UserUploadPhotos>
         </S.PageContent>
       )}
     </L.SharedLayout>
