@@ -2,12 +2,13 @@ import { Breadcrumb, theme } from "antd";
 import React, { useEffect, useState } from "react";
 import * as S from "../../components/Shared/Layout/index";
 import UserList from "../../components/UserList";
-import { Container } from "./mainPage.styled";
 import Burger from "../../components/BurgerMenu";
 import { observer } from "mobx-react-lite";
 import userStore from "../../store/users";
 import { Content } from "../../components/Shared/Layout/index";
 import Logo from "../../components/Shared/Logo";
+import { Container } from "../../components/Shared/Container";
+import SearchBar from "../../components/SearchBar";
 
 const MainPage = observer(() => {
   const [userList, setUserList] = useState([]);
@@ -27,6 +28,11 @@ const MainPage = observer(() => {
         <Burger />
         <Logo />
       </S.SharedHeader>
+      <S.FiltersBox>
+        <S.SearchAndSortContainer>
+          <SearchBar />
+        </S.SearchAndSortContainer>
+      </S.FiltersBox>
       <Content
         style={{
           display: "flex",

@@ -29,8 +29,8 @@ export const UserImageBlock = styled.div`
 `;
 
 export const UserImg = styled.img`
-  height: auto;
-
+  height: 128px;
+  width: 128px;
   border-radius: 100%;
 `;
 
@@ -50,9 +50,9 @@ export const UserAge = styled.p`
 export const UserDescription = styled.div`
   padding-top: 12px;
   height: 100px;
-  p{
-    white-space: wrap; 
-  overflow: hidden;
-  text-overflow: ellipsis;
+  p {
+    white-space: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;

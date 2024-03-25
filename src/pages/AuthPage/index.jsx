@@ -27,7 +27,6 @@ const AuthPage = () => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [userList, setUserList] = useState([]);
-  const [allUserChecksIsPassed, setAllUserChecksIsPassed] = useState(null);
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -48,14 +47,14 @@ const AuthPage = () => {
     );
     if (allInputsIsCorrect) {
       const usersFromLocalStorage = JSON.parse(localStorage.getItem("users"));
-      const authUser = usersFromLocalStorage.filter(function (user) {
+      const authUser = usersFromLocalStorage.find(function (user) {
         return (
           user.email === userData.email && user.password === userData.password
         );
       });
       userStore.theUserIsAuth(true);
       localStorage.setItem("authorizedUser", JSON.stringify(authUser));
-      navigate(`/`, { replace: true });
+      navigate(`/profile`, { replace: true });
       setIsLoading(false);
     } else {
       setError(
@@ -88,7 +87,7 @@ const AuthPage = () => {
       userStore.addUser(newUser);
       setIsLoading(false);
       userStore.theUserIsAuth(true);
-      navigate(`/users/${newUser.id}`, { state: { user: newUser } });
+      navigate(`/profile`, { replace: true });
     } else if (emailExists) {
       setError("Ошибка регистрации, данный пользователь уже есть в системе");
       console.log("Ошибка");

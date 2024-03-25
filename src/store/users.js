@@ -77,10 +77,44 @@ class UserStore {
     this.saveUsersToLocalStorage();
     this.isAuth = true;
   }
+  saveNewUserData(userAuthData) {
+    localStorage.setItem("authorizedUser", JSON.stringify(userAuthData));
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let userIndex = this.users.findIndex((user) => user.id === userAuthData.id);
+    if (userIndex !== -1) {
+      this.users[userIndex] = { ...userAuthData };
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+    this.saveUsersToLocalStorage();
+  }
   loadUsersFromLocalStorage() {
     const usersFromStorage = localStorage.getItem("users");
     if (usersFromStorage) {
       this.users = JSON.parse(usersFromStorage);
+    }
+  }
+  addFriend(userID, friendID) {
+    let user = this.users.find((user) => user.id === userID);
+    let friend = this.users.find((user) => user.id === friendID);
+
+    if (user && friend) {
+      user.friends.push(friend);
+      friend.friends.push(user);
+      console.log(`${user.name} and ${friend.name} are now friends!`);
+    } else {
+      console.log("User or friend not found.");
+    }
+  }
+  deleteFriend(userID, friendID) {
+    let user = this.users.find((user) => user.id === userID);
+    let friend = this.users.find((user) => user.id === friendID);
+
+    if (user && friend) {
+      user.friends.filter(friend);
+      friend.friends.filter(user);
+      console.log(`${user.name} and ${friend.name} are not friends now!`);
+    } else {
+      console.log("User or friend not found.");
     }
   }
   deleteLastUser() {
@@ -88,10 +122,6 @@ class UserStore {
   }
   saveUsersToLocalStorage() {
     localStorage.setItem("users", JSON.stringify(this.users));
-    console.log(this.users);
-  }
-  addNewUser(newUser) {
-    this.users.push(newUser);
   }
   getUserById(id) {
     return this.users.find((user) => user.id === id);

@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Row } from "antd";
+import { Button, Col, Row } from "antd";
 import {
   UserAge,
   UserCard,
@@ -9,9 +9,12 @@ import {
   UserInformation,
   UserName,
 } from "./userList.styles";
+import { TeamOutlined, UserAddOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import userStore from "../../store/users";
 
 const UserList = ({ users }) => {
+
   return (
     <>
       <Row gutter={[16, 24]}>
@@ -37,6 +40,25 @@ const UserList = ({ users }) => {
                   </UserAge>
                   <UserDescription>
                     <p>{user.description}</p>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        rowGap: 10,
+                      }}>
+                      <p>
+                        {" "}
+                        <TeamOutlined /> Friends: {user.friends.length}
+                      </p>
+                      {userStore.isAuth ? (
+                        <Button>
+                          <UserAddOutlined style={{ color: "white" }} />
+                          to friends
+                        </Button>
+                      ) : (
+                        ""
+                      )}
+                    </div>
                   </UserDescription>
                 </UserInformation>
               </UserCard>
