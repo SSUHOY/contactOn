@@ -1,4 +1,4 @@
-import { Breadcrumb, theme } from "antd";
+import { theme } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import * as S from "../../components/Shared/Layout/index";
 import UserList from "../../components/UserList";
@@ -104,14 +104,7 @@ const MainPage = observer(() => {
           />
         </S.SearchAndSortContainer>
       </S.FiltersBox>
-      <Breadcrumb
-        separator=">"
-        items={[
-          {
-            title: "Home",
-          },
-        ]}
-      />
+
       <br />
       <Content
         style={{

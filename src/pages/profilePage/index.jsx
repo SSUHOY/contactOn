@@ -8,7 +8,8 @@ import {
   TeamOutlined,
   UserDeleteOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Button, theme } from "antd";
+import { Button, theme } from "antd";
+import { FileImageOutlined } from "@ant-design/icons";
 import * as L from "../../components/Shared/Layout/index";
 import * as Shared from "../authPageProfile/userPage.styles";
 import * as S from "./userProfilePage.styles";
@@ -36,7 +37,7 @@ const UserProfile = observer(() => {
   };
 
   const {
-    token: { colorBgContainer },
+    token: { colorBgContainer, borderRadius },
   } = theme.useToken();
 
   useEffect(() => {
@@ -61,18 +62,7 @@ const UserProfile = observer(() => {
         )}
         <Logo />
       </L.SharedHeader>
-      <Breadcrumb
-        separator=">"
-        items={[
-          {
-            title: "Home",
-            href: "/",
-          },
-          {
-            title: `${user.name}'s profile`,
-          },
-        ]}
-      />
+
       <Shared.PageContent>
         <Shared.UserPageContainer>
           <Shared.LeftContentBlock>
@@ -109,10 +99,14 @@ const UserProfile = observer(() => {
                         <>
                           <Link to={`/message/${id}`}>
                             <S.UserMessageBox>
-                              <Button>Send a message</Button>
+                              <Button style={{ borderRadius: 20 }}>
+                                Send a message
+                              </Button>
                             </S.UserMessageBox>
                           </Link>
-                          <Button onClick={handleDeleteFromFriends}>
+                          <Button
+                            onClick={handleDeleteFromFriends}
+                            style={{ borderRadius: 20 }}>
                             <UserDeleteOutlined style={{ color: "white" }} />
                             Remove {user.name} from friends
                           </Button>
@@ -121,10 +115,14 @@ const UserProfile = observer(() => {
                         <>
                           <Link to={`/message/${id}`}>
                             <S.UserMessageBox>
-                              <Button>Send a message</Button>
+                              <Button style={{ borderRadius: 20 }}>
+                                Send a message
+                              </Button>
                             </S.UserMessageBox>
                           </Link>
-                          <Button onClick={handleAddToFriends}>
+                          <Button
+                            onClick={handleAddToFriends}
+                            style={{ borderRadius: 20 }}>
                             <PlusOutlined style={{ color: "white" }} />
                             Add {user.name} to friends
                           </Button>
@@ -139,7 +137,7 @@ const UserProfile = observer(() => {
                     Log in to add friends and write messages
                   </p>
                   <Link to={"/login"}>
-                    <Button>Log In</Button>
+                    <Button style={{ borderRadius: 20 }}>Log In</Button>
                   </Link>
                 </>
               )}
@@ -153,7 +151,7 @@ const UserProfile = observer(() => {
             <br />
             <S.UserContent>
               <S.UserDescriptionTitle>Description:</S.UserDescriptionTitle>
-              <table class="form-table">
+              <table>
                 <tr>
                   <td>
                     <TextArea
@@ -163,7 +161,8 @@ const UserProfile = observer(() => {
                       style={{
                         resize: "none",
                         color: "white",
-                        borderRadius: 12,
+                        borderBottomLeftRadius: 10,
+                        borderTopLeftRadius: 10,
                       }}
                       value={user.description || "no description yet"}
                       readOnly></TextArea>
@@ -179,7 +178,6 @@ const UserProfile = observer(() => {
                       style={{
                         resize: "none",
                         color: "white",
-                        borderRadius: 12,
                       }}
                       value={user.interests || "no interests yet"}
                       readOnly></TextArea>
@@ -196,6 +194,7 @@ const UserProfile = observer(() => {
               color: "white",
               marginBottom: 10,
             }}>
+            <FileImageOutlined />
             <span>{user.name}'s photo gallery</span>
           </div>
           <PhotoCarousel userID={id} />

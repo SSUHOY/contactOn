@@ -33,12 +33,12 @@ const Messages = () => {
   return (
     <div>
       <button
-        onClick={clearEvents}
         style={{
           background: "none",
           border: "none",
           cursor: "pointer",
-        }}>
+        }}
+        onClick={clearEvents}>
         <Dropdown
           menu={{ items }}
           trigger={["click"]}

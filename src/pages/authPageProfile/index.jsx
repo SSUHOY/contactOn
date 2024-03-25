@@ -4,16 +4,18 @@ import * as S from "./userPage.styles";
 import { observer } from "mobx-react-lite";
 import Burger from "../../components/BurgerMenu";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Breadcrumb, Dropdown, Form, Space, message, theme } from "antd";
-import { BellOutlined, MailOutlined } from "@ant-design/icons";
+import { Form, Space, message, theme } from "antd";
 import * as L from "../../components/Shared/Layout/index";
-import { Link } from "react-router-dom";
 import Logo from "../../components/Shared/Logo";
 import DropDown from "../../components/Dropdown";
 import UploadPhotos from "../../components/UploadPhotos";
+import { FileImageOutlined } from "@ant-design/icons";
+import { MailOutlined, TeamOutlined } from "@ant-design/icons";
+import AuthUserPhotoCarousel from "../../components/PhotoCarousel/authUserPhoto";
 
 const AuthUserProfile = observer(() => {
   const isAuth = userStore.isAuth;
+  const authUser = userStore.getAuthorizedUser();
   const [userAuthData, setAuthUserData] = useState([]);
   const [newInterest, setNewInterest] = useState(null);
   const [isSave, setIsSave] = useState(false);
@@ -145,7 +147,7 @@ const AuthUserProfile = observer(() => {
                   onChange={handleChange}>
                   {userAuthData.photo ? (
                     <img
-                      src={userAuthData.photo ? userAuthData.photo : imageUrl}
+                      src={userAuthData?.photo ? userAuthData?.photo : imageUrl}
                       alt="avatar"
                       style={{
                         width: 200,
@@ -158,17 +160,22 @@ const AuthUserProfile = observer(() => {
                   )}
                 </S.ImgUploadWrapper>
               </S.ProfileImgContainer>
+              <div
+                style={{ textAlign: "center", marginTop: 15, color: "white" }}>
+                <TeamOutlined />
+                <span>Friends: {authUser.friends.length}</span> <br />
+                <MailOutlined />{" "}
+                <span>Messages: {authUser.messages.length}</span>
+              </div>
             </S.LeftContentBlock>
             <S.ContentBlock>
               <Form
-                name="complex-form"
                 wrapperCol={{
                   span: 18,
                 }}>
                 <Form.Item>
                   <Space>
                     <Form.Item
-                      name="name"
                       style={{
                         marginBottom: 0,
                         color: "white",
@@ -185,7 +192,6 @@ const AuthUserProfile = observer(() => {
                       />
                     </Form.Item>
                     <Form.Item
-                      name="year"
                       style={{
                         marginBottom: 0,
                         color: "white",
@@ -203,7 +209,6 @@ const AuthUserProfile = observer(() => {
                 <Form.Item>
                   <Space>
                     <Form.Item
-                      name="city"
                       style={{
                         color: "white",
                       }}>
@@ -219,7 +224,6 @@ const AuthUserProfile = observer(() => {
                       />
                     </Form.Item>
                     <Form.Item
-                      name="gender"
                       style={{
                         marginTop: -10,
                         color: "white",
@@ -250,7 +254,6 @@ const AuthUserProfile = observer(() => {
                 </Form.Item>
                 <Space>
                   <Form.Item
-                    name="description"
                     style={{
                       display: "flex",
                       color: "white",
@@ -267,7 +270,6 @@ const AuthUserProfile = observer(() => {
                 </Space>
                 <Space>
                   <Form.Item
-                    name="interests"
                     style={{
                       display: "flex",
                       color: "white",
@@ -303,11 +305,24 @@ const AuthUserProfile = observer(() => {
                   position: "relative",
                 }}
                 htmlType="submit"
+                disabled={isSave}
                 onClick={handlerSubmitUserData}>
                 {!isSave ? "Save" : "Saved!"}
               </S.StyledButton>
             </S.ContentBlock>
           </S.UserPageContainer>
+          <S.UserUploadPhotos style={{ width: 260 }}>
+            <div
+              style={{
+                textAlign: "center",
+                color: "white",
+                paddingBottom: 10,
+              }}>
+              <FileImageOutlined />
+              <span>Upload photos to photo gallery</span>
+            </div>
+            <UploadPhotos />
+          </S.UserUploadPhotos>
           <S.UserUploadPhotos>
             <div
               style={{
@@ -315,9 +330,10 @@ const AuthUserProfile = observer(() => {
                 color: "white",
                 paddingBottom: 10,
               }}>
-              <p>Upload photos to your photo gallery</p>
+              <FileImageOutlined />
+              <span>Your current photo gallery</span>
             </div>
-            <UploadPhotos />
+            <AuthUserPhotoCarousel />
           </S.UserUploadPhotos>
         </S.PageContent>
       )}

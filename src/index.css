@@ -27,13 +27,18 @@ body {
     font-size: 14px;
     font-weight: bold;
   }
-
-  .ant-breadcrumb {
-    .ant-breadcrumb-link {
-      color: #888;
-    }
-    .ant-breadcrumb-separator {
-      color: #888;
-    }
+  :where(.css-dev-only-do-not-override-mik4fl)
+    .ant-carousel
+    .slick-dots
+    button {
+    background: #7f9f7f;
+    height: 10px;
+  }
+  :where(.css-dev-only-do-not-override-mik4fl)
+    .ant-carousel
+    .slick-dots
+    li.slick-active
+    button {
+    background: #8774e1;
   }
 }

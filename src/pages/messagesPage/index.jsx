@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as L from "../../components/Shared/Layout/index";
 import * as S from "./messagesPage.styles";
-import { Button, theme } from "antd";
+import { Button, message, theme } from "antd";
 import Burger from "../../components/BurgerMenu";
 import Logo from "../../components/Shared/Logo";
 import TextArea from "antd/es/input/TextArea";
@@ -49,6 +49,7 @@ const MessagesInBox = () => {
     );
     setMessageContent("");
     setIsSend(true);
+    success();
   };
 
   const containerRef = useRef(null);
@@ -63,88 +64,117 @@ const MessagesInBox = () => {
     scrollToBottom();
   }, [isSend]);
 
-  return (
-    <L.SharedLayout>
-      <L.SharedHeader
-        style={{
-          background: colorBgContainer,
-        }}>
-        <Burger />
-        {isAuth ? (
-          <L.UsersUI>
-            <DropDown />
-          </L.UsersUI>
-        ) : (
-          ""
-        )}
-        <Logo />
-      </L.SharedHeader>
-      <L.PageContainer>
-        <S.BoxUi>
-          <S.LeftUserUi>
-            <S.RecipientInformation>
-              Message to: <h3>{user?.name ? user.name : "-"}</h3>
-              <S.ProfileImgContainer>
-                {user.photo ? (
-                  <img
-                    src={!user.photo ? "" : user.photo}
-                    alt="avatar"
-                    style={{
-                      width: 200,
-                      height: 200,
-                      borderRadius: "100%",
-                    }}
-                  />
-                ) : (
-                  <S.AvatarAltText>No photo</S.AvatarAltText>
-                )}
-                <span>Email:</span>
-                <h3>{user?.email ? user.email : "-"}</h3>
-              </S.ProfileImgContainer>
-            </S.RecipientInformation>
-          </S.LeftUserUi>
-          <S.RightMessageUi>
-            <S.MessagesField ref={containerRef}>
-              <S.MessagesAligner>
-                {filteredMessages.map((message, index) => (
-                  <S.SendMessagesBox
-                    key={index}
-                    style={{
-                      alignSelf:
-                        message.senderID === sender.id
-                          ? "flex-end"
-                          : "flex-start",
-                      backgroundColor:
-                        message.senderID === sender.id ? "#8774e1" : "#212121",
-                    }}>
-                    <S.SendMessage>
-                      <p style={{ wordWrap: "break-word" }}>
-                        {message.content}
-                      </p>
-                    </S.SendMessage>
-                  </S.SendMessagesBox>
-                ))}
-              </S.MessagesAligner>
-            </S.MessagesField>
+  const [messageApi, contextHolder] = message.useMessage();
 
-            <p>Your message:</p>
-            <TextArea
-              rows={4}
-              value={messageContent}
-              placeholder="Type your message"
-              style={{ background: "#D9D9D9", resize: "none" }}
-              onChange={handleTextAreaChange}
-            />
-            <Button
-              type="primary"
-              style={{ width: 150, marginTop: 5 }}
-              onClick={handleSendMessage}>
-              Send
-            </Button>
-          </S.RightMessageUi>
-        </S.BoxUi>
-      </L.PageContainer>
-    </L.SharedLayout>
+  const success = () => {
+    messageApi.open({
+      type: "success",
+      content: "Message successfully  delivered!",
+    });
+  };
+
+
+  return (
+    <>
+      {contextHolder}
+      <L.SharedLayout>
+        <L.SharedHeader
+          style={{
+            background: colorBgContainer,
+          }}>
+          <Burger />
+          {isAuth ? (
+            <L.UsersUI>
+              <DropDown />
+            </L.UsersUI>
+          ) : (
+            ""
+          )}
+          <Logo />
+        </L.SharedHeader>
+        <L.PageContainer>
+          <S.BoxUi style={{ width: 700 }}>
+            <S.LeftUserUi>
+              <S.RecipientInformation>
+                Message to: <h3>{user?.name ? user.name : "-"}</h3>
+                <br />
+                <S.ProfileImgContainer>
+                  {user.photo ? (
+                    <img
+                      src={!user.photo ? "" : user.photo}
+                      alt="avatar"
+                      style={{
+                        width: 200,
+                        height: 200,
+                        borderRadius: "100%",
+                      }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        height: 200,
+                        width: 200,
+                        borderRadius: "50%",
+                        border: "1px solid gray",
+                        display: "flex",
+                        marginBottom: 20,
+                        flexDirection: "column",
+                        justifyContent: "center",
+                      }}>
+                      <S.AvatarAltText>No photo</S.AvatarAltText>
+                    </div>
+                  )}
+
+                  <span>Email:</span>
+                  <h3>{user?.email ? user.email : "-"}</h3>
+                </S.ProfileImgContainer>
+              </S.RecipientInformation>
+            </S.LeftUserUi>
+            <S.RightMessageUi>
+              <S.MessagesField ref={containerRef}>
+                <S.MessagesAligner>
+                  {filteredMessages.map((message, index) => (
+                    <S.SendMessagesBox
+                      key={index}
+                      style={{
+                        alignSelf:
+                          message.senderID === sender.id
+                            ? "flex-end"
+                            : "flex-start",
+                        backgroundColor:
+                          message.senderID === sender.id
+                            ? "#8774e1"
+                            : "#212121",
+                      }}>
+                      <S.SendMessage>
+                        <p style={{ wordWrap: "break-word" }}>
+                          {message.content}
+                        </p>
+                      </S.SendMessage>
+                    </S.SendMessagesBox>
+                  ))}
+                </S.MessagesAligner>
+              </S.MessagesField>
+
+              <p>Your message:</p>
+              <TextArea
+                rows={4}
+                value={messageContent}
+                placeholder="Type your message"
+                style={{ background: "#D9D9D9", resize: "none" }}
+                onChange={handleTextAreaChange}
+              />
+              <Button
+                type="primary"
+                style={{ width: 150, marginTop: 5 }}
+                onClick={handleSendMessage}>
+                Send
+              </Button>
+            </S.RightMessageUi>
+          </S.BoxUi>
+        </L.PageContainer>
+      </L.SharedLayout>
+    </>
   );
 };
 

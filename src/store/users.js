@@ -40,6 +40,99 @@ class UserStore {
         "Musician and fitness enthusiast. Looking for someone to share good food and great music with.",
       photo: "https://randomuser.me/api/portraits/men/2.jpg",
     },
+    {
+      id: 3,
+      name: "Emily",
+      age: 28,
+      gender: "female",
+      email: "Emily@example.com",
+      city: "New York",
+      interests: ["art", "photography", "yoga"],
+      friends: [],
+      messages: [],
+      receivedMessages: [],
+      addToFriendsEvents: [],
+      photoGallery: [],
+      chats: [],
+      messagesEvents: [],
+      description:
+        "Art lover and yoga practitioner. Seeking someone to explore galleries and go on yoga retreats.",
+      photo: "https://randomuser.me/api/portraits/women/3.jpg",
+    },
+    {
+      id: 4,
+      name: "Michael",
+      email: "Michael@example.com",
+      age: 30,
+      gender: "male",
+      city: "Los Angeles",
+      interests: ["wine tasting", "traveling", "film"],
+      friends: [],
+      messages: [],
+      receivedMessages: [],
+      addToFriendsEvents: [],
+      photoGallery: [],
+      chats: [],
+      messagesEvents: [],
+      description:
+        "Wine connoisseur and film buff. Looking for a partner to travel the world and enjoy good wine.",
+      photo: "https://randomuser.me/api/portraits/men/6.jpg",
+    },
+    {
+      id: 5,
+      name: "Michael",
+      email: "Michael@example.com",
+      age: 30,
+      gender: "male",
+      city: "Los Angeles",
+      interests: ["wine tasting", "traveling", "film"],
+      friends: [],
+      messages: [],
+      receivedMessages: [],
+      addToFriendsEvents: [],
+      photoGallery: [],
+      chats: [],
+      messagesEvents: [],
+      description:
+        "Wine connoisseur and film buff. Looking for a partner to travel the world and enjoy good wine.",
+      photo: "https://randomuser.me/api/portraits/men/8.jpg",
+    },
+    {
+      id: 6,
+      name: "Serg",
+      email: "Serg@example.com",
+      age: 24,
+      gender: "male",
+      city: "Los Angeles",
+      interests: ["wine tasting", "traveling", "film"],
+      friends: [],
+      messages: [],
+      receivedMessages: [],
+      addToFriendsEvents: [],
+      photoGallery: [],
+      chats: [],
+      messagesEvents: [],
+      description: "Formatting photos and testing bikes",
+      photo: "https://randomuser.me/api/portraits/men/9.jpg",
+    },
+    {
+      id: 5,
+      name: "Mike",
+      email: "Mike@example.com",
+      age: 31,
+      gender: "male",
+      city: "Los Angeles",
+      interests: ["wine tasting", "traveling", "film"],
+      friends: [],
+      messages: [],
+      receivedMessages: [],
+      addToFriendsEvents: [],
+      photoGallery: [],
+      chats: [],
+      messagesEvents: [],
+      description: "Cats and boards",
+      photo: "https://randomuser.me/api/portraits/men/10.jpg",
+    },
   ];
   isAuth = false;
   alreadyFriends = false;
@@ -172,12 +265,14 @@ class UserStore {
       } else {
         let newReceiverChat = {
           receiverID: receiverID,
+          senderID: senderID,
           name: senderName,
           photo: senderPhoto,
           email: senderEmail,
         };
         let newSenderChat = {
           senderID: senderID,
+          receiverID: receiverID,
           name: receiverName,
           photo: receiverPhoto,
           email: receiverEmail,
@@ -202,7 +297,7 @@ class UserStore {
         this.saveAuthUserData();
       }
     } else {
-      console.log("Sender or receiver not found.");
+      return "Error! Message isn't sent.";
     }
   }
   getAuthorizedUser() {
@@ -242,9 +337,18 @@ class UserStore {
     localStorage.setItem("authorizedUser", JSON.stringify(user));
   }
   addToPhotoGallery = (fileList) => {
-    const user = this.getAuthorizedUser();
-    user.photoGallery = user.photoGallery.concat(fileList);
-    this.setAuthUserData(user);
+    const authUser = this.getAuthorizedUser();
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    const imgURLs = fileList.map((image) => image.thumbUrl);
+    authUser.photoGallery = authUser.photoGallery.concat(imgURLs);
+
+    let userIndex = this.users.findIndex((user) => user.id === authUser.id);
+    if (userIndex !== -1) {
+      this.users[userIndex] = { ...authUser };
+      localStorage.setItem("users", JSON.stringify(users));
+    }
+    this.saveUsersToLocalStorage();
+    this.setAuthUserData(authUser);
   };
   clearStorage = () => {
     localStorage.clear();
