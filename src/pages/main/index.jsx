@@ -10,13 +10,17 @@ import Logo from "../../components/Shared/Logo";
 import { Container } from "../../components/Shared/Container";
 import SearchBar from "../../components/SearchBar";
 import DropDown from "../../components/Dropdown";
+import Fuse from "fuse.js";
+import { toJS } from "mobx";
 
 const Main = observer(() => {
   const isAuth = userStore.isAuth;
 
   const [userList, setUserList] = useState([]);
-  const [searchType, setSearchType] = useState(null);
+  const [searchType, setSearchType] = useState("");
+  console.log("🚀 ~ Main ~ searchType:", searchType);
   const [gender, setGender] = useState("");
+  console.log("🚀 ~ Main ~ gender:", gender);
   const [searchText, setSearchText] = useState("");
 
   const {
@@ -47,33 +51,27 @@ const Main = observer(() => {
   };
   const users = useMemo(() => {
     let result = [...userList];
-    if (searchType === "Name" && searchText !== "") {
-      result = result.filter((user) =>
-        user.name.toLowerCase().includes(searchText.toLowerCase())
-      );
-    }
-    if (searchType === "Age" && searchText !== "") {
-      result = result.filter((user) =>
-        user.age.toString().includes(searchText)
-      );
-    }
-    if (searchType === "City" && searchText !== "") {
-      result = result.filter((user) =>
-        user.city.toLowerCase().includes(searchText.toLowerCase())
-      );
+    if (searchType && searchText !== "") {
+      const options = {
+        keys: [searchType.toLowerCase()],
+      };
+      const fuse = new Fuse(toJS(userList), options);
+      const result = fuse.search(searchText);
+      const items = result.map((result) => result.item);
+      return items;
     }
     if (searchType === "Gender" && gender !== "") {
-      result = result.filter((user) =>
-        user.gender.toLowerCase().includes(gender.toLowerCase())
-      );
-    }
-    if (searchType === "Interests" && searchText !== "") {
-      result = result.filter((user) =>
-        user.interests.includes(searchText.toLowerCase())
-      );
+      console.log("gender");
+      const options = {
+        keys: ["gender"],
+      };
+      const fuse = new Fuse(toJS(userList), options);
+      const result = fuse.search(gender);
+      const items = result.map((result) => result.item);
+      return items;
     }
     return result;
-  }, [userList, searchText, gender, searchType]);
+  }, [userList, searchText, searchType, gender]);
 
   useEffect(() => {
     userStore.saveUsersToLocalStorage();
@@ -103,7 +101,6 @@ const Main = observer(() => {
           />
         </S.SearchAndSortContainer>
       </S.FiltersBox>
-
       <br />
       <Content
         style={{

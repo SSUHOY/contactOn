@@ -22,13 +22,11 @@ const AuthUserPhotoCarousel = observer(() => {
   return (
     <>
       <Carousel style={{ borderRadius: 20 }}>
-        <Carousel>
-          {user.photoGallery.map((photo, index) => (
-            <div key={index}>
-              <img src={photo} alt="photo_gallery" style={contentStyle}></img>
-            </div>
-          ))}
-        </Carousel>
+        {user.photoGallery.map((photo) => (
+          <div key={photo.id}>
+            <img src={photo} alt="photo_gallery" style={contentStyle}></img>
+          </div>
+        ))}
       </Carousel>{" "}
       {user.photoGallery.length === 0 ? (
         <div

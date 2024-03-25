@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import * as S from "./authPage.styles";
 import { useNavigate } from "react-router-dom";
 import userStore from "../../store/users";
-import { message, theme } from "antd";
+import { App, theme } from "antd";
 import * as L from "../../components/Shared/Layout/index";
 import Burger from "../../components/BurgerMenu";
 
@@ -35,6 +35,8 @@ const Auth = () => {
     name: "",
   });
 
+  const { modal } = App.useApp();
+
   const navigate = useNavigate();
 
   const repeatPasswordHandler = (e) => {
@@ -59,7 +61,7 @@ const Auth = () => {
       navigate(`/profile`, { replace: true });
       setIsLoading(false);
     } else {
-      message.error(
+      modal.error(
         "Error! User doesn't exist or the information you entered isn't correct"
       );
       setIsLoading(false);
@@ -108,7 +110,7 @@ const Auth = () => {
       repeatedPassword !== "" &&
       repeatedPassword === userData.password
     ) {
-      message.error("Email already exists");
+      modal.error("Email already exists");
     } else if (
       userData.name === "" ||
       userData.password === "" ||
@@ -116,7 +118,7 @@ const Auth = () => {
       repeatedPassword === "" ||
       repeatedPassword !== userData.password
     ) {
-      message.error("Registration error");
+      modal.error("Registration error");
     }
   };
 
@@ -164,7 +166,7 @@ const Auth = () => {
                     setUserData({ ...userData, password: e.target.value })
                   }>
                   <S.StyledInputPassword
-                    autocomplete="on"
+                    autoComplete="on"
                     type="password"
                     placeholder="enter password"
                   />
@@ -213,7 +215,7 @@ const Auth = () => {
                 </S.StyledFormItem>
                 <S.StyledFormItem
                   name={["password"]}
-                  autocomplete="on"
+                  autoComplete="on"
                   label={<span style={{ color: "white" }}>Password:</span>}
                   value={userData.password}
                   onChange={(e) =>
@@ -221,7 +223,7 @@ const Auth = () => {
                   }
                   rules={[{ required: true, type: "password" }]}>
                   <S.StyledInputPassword
-                    autocomplete="on"
+                    autoComplete="on"
                     type="password"
                     placeholder="Enter your password"
                   />
@@ -234,7 +236,7 @@ const Auth = () => {
                   onChange={(e) => repeatPasswordHandler(e)}
                   rules={[{ required: true, type: "password" }]}>
                   <S.StyledInputPassword
-                    autocomplete="on"
+                    autoComplete="on"
                     type="password"
                     placeholder="Repeat password"
                   />

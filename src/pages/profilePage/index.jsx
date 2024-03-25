@@ -151,39 +151,30 @@ const UserProfile = () => {
             <br />
             <S.UserContent>
               <S.UserDescriptionTitle>Description:</S.UserDescriptionTitle>
-              <table>
-                <tr>
-                  <td>
-                    <TextArea
-                      id="description"
-                      name="description"
-                      rows="5"
-                      style={{
-                        resize: "none",
-                        color: "white",
-                        borderBottomLeftRadius: 10,
-                        borderTopLeftRadius: 10,
-                      }}
-                      value={user.description || "no description yet"}
-                      readOnly></TextArea>
-                  </td>
-                </tr>
-                <S.UserDescriptionTitle>Interests:</S.UserDescriptionTitle>
-                <tr>
-                  <td>
-                    <TextArea
-                      id="interests"
-                      name="interests"
-                      rows="2"
-                      style={{
-                        resize: "none",
-                        color: "white",
-                      }}
-                      value={user.interests || "no interests yet"}
-                      readOnly></TextArea>
-                  </td>
-                </tr>
-              </table>
+
+              <TextArea
+                id="description"
+                name="description"
+                rows="5"
+                style={{
+                  resize: "none",
+                  color: "white",
+                  borderBottomLeftRadius: 10,
+                  borderTopLeftRadius: 10,
+                }}
+                value={user.description || "no description yet"}
+                readOnly></TextArea>
+              <S.UserDescriptionTitle>Interests:</S.UserDescriptionTitle>
+              <TextArea
+                id="interests"
+                name="interests"
+                rows="2"
+                style={{
+                  resize: "none",
+                  color: "white",
+                }}
+                value={user.interests || "no interests yet"}
+                readOnly></TextArea>
             </S.UserContent>
           </Shared.ContentBlock>
         </Shared.UserPageContainer>

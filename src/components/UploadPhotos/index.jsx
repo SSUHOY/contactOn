@@ -1,14 +1,8 @@
 import React, { useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button, Modal, Upload } from "antd";
 import userStore from "../../store/users";
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
+
 const UploadPhotos = () => {
   const [saved, setIsSaved] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -19,7 +13,7 @@ const UploadPhotos = () => {
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+      file.preview = previewImage;
     }
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);

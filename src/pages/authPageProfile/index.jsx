@@ -3,8 +3,12 @@ import userStore from "../../store/users";
 import * as S from "./userPage.styles";
 import { observer } from "mobx-react-lite";
 import Burger from "../../components/BurgerMenu";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Form, Space, message, theme } from "antd";
+import {
+  LoadingOutlined,
+  PlusOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { Form, Space, App, theme } from "antd";
 import * as L from "../../components/Shared/Layout/index";
 import Logo from "../../components/Shared/Logo";
 import DropDown from "../../components/Dropdown";
@@ -26,6 +30,7 @@ const AuthUserProfile = observer(() => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+  const { modal } = App.useApp();
 
   const onChange = (e) => {
     setIsSave(false);
@@ -48,11 +53,11 @@ const AuthUserProfile = observer(() => {
   const beforeUpload = (file) => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
+      modal.error("You can only upload JPG/PNG file!");
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error("Image must smaller than 2MB!");
+      modal.error("Image must smaller than 2MB!");
     }
     return isJpgOrPng && isLt2M;
   };
@@ -64,6 +69,10 @@ const AuthUserProfile = observer(() => {
       setAuthUserData({ ...userAuthData, photo: url });
     });
   };
+  const handleDeleteAvatar = () => {
+    setImageUrl("");
+    setAuthUserData({ ...userAuthData, photo: "" });
+  };
 
   const addInterest = () => {
     if (newInterest) {
@@ -74,7 +83,7 @@ const AuthUserProfile = observer(() => {
       setNewInterest("");
       setIsSave(false);
     } else {
-      message.error("type text");
+      modal.error("type text");
     }
   };
 
@@ -136,7 +145,6 @@ const AuthUserProfile = observer(() => {
                   listType="picture-circle"
                   className="avatar-uploader"
                   showUploadList={false}
-                  action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                   beforeUpload={beforeUpload}
                   onChange={handleChange}>
                   {userAuthData.photo ? (
@@ -153,13 +161,36 @@ const AuthUserProfile = observer(() => {
                     uploadButton
                   )}
                 </S.ImgUploadWrapper>
+                {userAuthData.photo ? (
+                  <div
+                    style={{
+                      width: "100%",
+                      textAlign: "center",
+                      marginTop: 8,
+                      color: "white",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    }}
+                    onClick={handleDeleteAvatar}>
+                    Delete Avatar
+                    <DeleteOutlined />
+                  </div>
+                ) : (
+                  ""
+                )}
               </S.ProfileImgContainer>
               <div
-                style={{ textAlign: "center", marginTop: 15, color: "white" }}>
+                style={{
+                  textAlign: "center",
+                  marginTop: 30,
+                  color: "white",
+                  marginBottom: 10,
+                }}>
                 <TeamOutlined />
                 <span>Friends: {authUser.friends.length}</span> <br />
                 <MailOutlined />{" "}
                 <span>Messages: {authUser.messages.length}</span>
+                <br />@ <span>Email: {authUser.email}</span>
               </div>
             </S.LeftContentBlock>
             <S.ContentBlock>
