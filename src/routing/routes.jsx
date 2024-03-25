@@ -6,8 +6,8 @@ import UserProfile from "../pages/profilePage";
 import MessagesUI from "../pages/messagesPage";
 import MessagesInBox from "../pages/messagesInBox";
 import Friends from "../pages/friendsPage";
-import Main from "../pages/MainPage";
-import Auth from "../pages/AuthPage";
+import Main from "../pages/main";
+import Auth from '../pages/auth'
 
 const AppRoutes = () => {
   return (
