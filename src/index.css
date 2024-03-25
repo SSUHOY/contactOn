@@ -8,4 +8,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   width: 100vw;
   height: 100vh;
+  span {
+    color: #9f9f9f;
+  }
 }

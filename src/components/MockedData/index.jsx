@@ -39,6 +39,7 @@ export const MockedUsersData = [
     gender: "male",
     location: "Paris",
     interests: ["wine tasting", "traveling", "film"],
+    friends: [],
     description:
       "Wine connoisseur and film buff. Looking for a partner to travel the world and enjoy good wine.",
     photo: "https://randomuser.me/api/portraits/men/4.jpg",

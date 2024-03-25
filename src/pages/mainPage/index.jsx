@@ -1,38 +1,50 @@
-import { Layout, Breadcrumb, theme } from "antd";
-import React from "react";
+import { Breadcrumb, theme } from "antd";
+import React, { useEffect, useState } from "react";
+import * as S from "../../components/Shared/Layout/index";
 import UserList from "../../components/UserList";
 import { Container } from "./mainPage.styled";
 import Burger from "../../components/BurgerMenu";
+import { observer } from "mobx-react-lite";
+import userStore from "../../store/users";
+import { Content } from "../../components/Shared/Layout/index";
+import Logo from "../../components/Shared/Logo";
 
-const { Header, Content, Footer } = Layout;
+const MainPage = observer(() => {
+  const [userList, setUserList] = useState([]);
 
-const MainPage = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  useEffect(() => {
+    userStore.saveUsersToLocalStorage();
+    setUserList(userStore.users);
+  }, []);
+
   return (
-    <Layout>
-      <Header style={{ display: "flex" }}>
+    <S.SharedLayout style={{ background: colorBgContainer }}>
+      <S.SharedHeader style={{ background: colorBgContainer }}>
         <Burger />
-      </Header>
-      <Content style={{ padding: "0 48px" }}>
-        <Breadcrumb
-          style={{ margin: "16px 0" }}
-          items={[{ path: "/", title: "Главная" }]}></Breadcrumb>
+        <Logo />
+      </S.SharedHeader>
+      <Content
+        style={{
+          display: "flex",
+          flexDirection: "column",
+        }}>
         <Container
           style={{
-            background: colorBgContainer,
-            minHeight: 280,
-            padding: 24,
             borderRadius: borderRadiusLG,
+            background: colorBgContainer,
           }}>
-          <UserList />
+          <Breadcrumb
+            style={{ margin: "16px 0" }}
+            items={[{ title: "Home" }]}></Breadcrumb>
+          <UserList users={userList} />
         </Container>
       </Content>
-      <Footer style={{ textAlign: "center" }}></Footer>
-    </Layout>
+    </S.SharedLayout>
   );
-};
+});
 
 export default MainPage;

@@ -12,9 +12,9 @@ root.render(
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: "#EC3223",
+            colorPrimary: "#8774E1",
             borderRadius: 2,
-            colorBgContainer: "#E6E3E4",
+            colorBgContainer: "#101010",
           },
         }}>
         <App />

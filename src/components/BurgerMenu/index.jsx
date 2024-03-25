@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Button, Menu } from "antd";
 import {
   MenuUnfoldOutlined,
@@ -8,7 +8,7 @@ import {
   HomeOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { handleLogOutUser } from "./helpers";
+import userStore from "../../store/users";
 
 function getItem(label, key, icon, children, type, onClick) {
   return {
@@ -22,8 +22,16 @@ function getItem(label, key, icon, children, type, onClick) {
 }
 
 const Burger = () => {
-  const [userIsAuth, setUserIsAuth] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const isAuth = userStore.isAuth;
+
+  const handleLogOutUser = (e) => {
+    if (e.key === "3") {
+      userStore.theUserIsAuth(false);
+      localStorage.clear("authorizedUser");
+      toggleCollapsed();
+    }
+  };
 
   const items = [
     getItem(
@@ -34,24 +42,18 @@ const Burger = () => {
       </Link>
     ),
     getItem(
-      userIsAuth ? "Мой профиль" : "Войти",
+      isAuth ? "Мой профиль" : "Войти",
       "2",
-      <Link to={userIsAuth ? "/user" : "/login"}>
+      <Link to={isAuth ? `/profile` : "/login"}>
         <UserOutlined />
       </Link>
     ),
-    getItem("Выйти", "3", <LogoutOutlined />),
+    getItem("Выйти из системы", "3", <LogoutOutlined />),
   ];
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
   };
-
-  useEffect(() => {
-    if (localStorage.getItem("userData")) {
-      setUserIsAuth(true);
-    }
-  }, [userIsAuth]);
 
   return (
     <div
@@ -68,19 +70,17 @@ const Burger = () => {
       </Button>
       <Menu
         onClick={handleLogOutUser}
-        defaultSelectedKeys={["1"]}
-        defaultOpenKeys={["sub1"]}
         theme="dark"
         items={items}
-        inlineCollapsed={collapsed}
         mode="inline"
         style={{
-          display: collapsed ? "none" : "block",
-          zIndex: 1000000,
+          display: collapsed ? "block" : "none",
+          zIndex: 1000,
           position: "relative",
           textAlign: "center",
-        }}>
-      </Menu>
+          borderRadius: "20px",
+          width: 180,
+        }}></Menu>
     </div>
   );
 };

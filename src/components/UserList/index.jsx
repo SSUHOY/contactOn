@@ -1,22 +1,43 @@
 import React from "react";
 import { Col, Row } from "antd";
-import { MockedUsersData } from "../MockedData/index";
-import { UserCard, UserImg, UserInformation } from "./userList.styles";
+import {
+  UserAge,
+  UserCard,
+  UserDescription,
+  UserImageBlock,
+  UserImg,
+  UserInformation,
+  UserName,
+} from "./userList.styles";
 import { Link } from "react-router-dom";
 
-const UserList = () => {
+const UserList = ({ users }) => {
   return (
     <>
       <Row gutter={[16, 24]}>
-        {MockedUsersData.map((user) => (
+        {users.map((user) => (
           <Col className="gutter-row" span={6} key={user.id}>
-            <Link to="/user">
+            <Link to={`/users/${user.id}`}>
               <UserCard>
-                <UserImg src={user.photo} alt="Фотография" />
+                <UserImageBlock>
+                  {user.photo ? (
+                    <UserImg src={user.photo} alt="Фотография" />
+                  ) : (
+                    <p style={{ color: "#9F9F9F" }}>No photo</p>
+                  )}
+                </UserImageBlock>
                 <UserInformation>
-                  <h3>{user.name}</h3>
-                  <p>{user.age}</p>
-                  <p>{user.description}</p>
+                  <UserName>{user.name}</UserName>
+                  <UserAge>
+                    <span style={{ color: " #9F9F9F", fontSize: 16 }}>
+                      age:
+                    </span>
+                    &nbsp;
+                    {user.age ? user.age : "-"}
+                  </UserAge>
+                  <UserDescription>
+                    <p>{user.description}</p>
+                  </UserDescription>
                 </UserInformation>
               </UserCard>
             </Link>

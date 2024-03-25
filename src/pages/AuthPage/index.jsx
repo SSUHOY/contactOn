@@ -1,9 +1,9 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { useEffect, useState } from "react";
-import { Button, Form, Input } from "antd";
-import { AuthPageContainer } from "./authPage.styles";
+import { Button, Form } from "antd";
+import * as S from "./authPage.styles";
 import { useNavigate } from "react-router-dom";
-import { MockedUsersData } from "../../components/MockedData";
+import userStore from "../../store/users";
 
 const layout = {
   labelCol: { span: 8 },
@@ -25,7 +25,9 @@ const AuthPage = () => {
   const [error, setError] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [isAuthLoading, setIsAuthLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userList, setUserList] = useState([]);
+  const [allUserChecksIsPassed, setAllUserChecksIsPassed] = useState(null);
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -36,144 +38,182 @@ const AuthPage = () => {
 
   const repeatPasswordHandler = (e) => {
     setRepeatedPassword(e.target.value);
-    setError(null);
-    if (!e.target.value) {
-      setIsAuthLoading(true);
-    } else {
-      setIsAuthLoading(false);
-    }
   };
 
-  const submitHandlerRegistration = (event) => {
-    if (
-      userData.email !== "" &&
-      userData.password !== "" &&
-      userData.password === repeatedPassword
-    ) {
-      localStorage.setItem("userData", JSON.stringify(userData));
-      const newUser = {
-        id: MockedUsersData.length + 1,
-        name: userData.name,
-        email: userData.email,
-      };
-      MockedUsersData.push(newUser);
-      console.log("Регистрация прошла успешно");
+  const submitHandlerLogin = (event) => {
+    setIsLoading(true);
+    const allInputsIsCorrect = userList.some(
+      (user) =>
+        user.email === userData.email && user.password === userData.password
+    );
+    if (allInputsIsCorrect) {
+      const usersFromLocalStorage = JSON.parse(localStorage.getItem("users"));
+      const authUser = usersFromLocalStorage.filter(function (user) {
+        return (
+          user.email === userData.email && user.password === userData.password
+        );
+      });
+      userStore.theUserIsAuth(true);
+      localStorage.setItem("authorizedUser", JSON.stringify(authUser));
+      navigate(`/`, { replace: true });
+      setIsLoading(false);
     } else {
-      setError("Ошибка авторизации");
+      setError(
+        "Ошибка авторизации, проверьте правильность введенных вами данных"
+      );
+      setIsLoading(false);
     }
     event.preventDefault();
   };
 
-  useEffect(() => {
-    if (localStorage.getItem("userData")) {
-      navigate("/", { replace: true });
+  const submitHandlerRegistration = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    const emailExists = userList.some((user) => user.email === userData.email);
+    if (!emailExists) {
+      const newUser = {
+        id: userList.length + 1,
+        name: userData.name,
+        email: userData.email,
+        password: userData.password,
+        age: "",
+        gender: "",
+        location: "",
+        interests: [],
+        friends: [],
+        description: "",
+        photo: "",
+      };
+      localStorage.setItem("authorizedUser", JSON.stringify(newUser));
+      userStore.addUser(newUser);
+      setIsLoading(false);
+      userStore.theUserIsAuth(true);
+      navigate(`/users/${newUser.id}`, { state: { user: newUser } });
+    } else if (emailExists) {
+      setError("Ошибка регистрации, данный пользователь уже есть в системе");
+      console.log("Ошибка");
+    } else {
+      setError("Ошибка регистрации");
     }
-  }, [isAuthLoading]);
+  };
+
+  useEffect(() => {
+    userStore.saveUsersToLocalStorage();
+    setUserList(userStore.users);
+  }, [userData, isLoading]);
 
   return (
-    <AuthPageContainer>
+    <S.AuthPageContainer>
       {isLoginMode ? (
         <>
-          <Form
+          <S.StyledForm
             {...layout}
             name="nest-messages"
-            style={{
-              maxWidth: 600,
-              width: 380,
-              border: "1px solid #373C3F",
-              borderRadius: 10,
-              padding: 20,
-            }}
             validateMessages={validateMessages}>
-            <Form.Item
+            <S.StyledFormItem
               name={["user", "email"]}
-              label="Email"
-              rules={[{ required: true, type: "email" }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item
+              label={<span style={{ color: "white" }}>Email:</span>}
+              rules={[{ required: true, type: "email" }]}
+              onChange={(e) =>
+                setUserData({ ...userData, email: e.target.value })
+              }>
+              <S.StyledInput type="email" placeholder="enter email" />
+            </S.StyledFormItem>
+            <S.StyledFormItem
               name={["user", "password"]}
-              label="Пароль"
-              rules={[{ required: true, type: "password" }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item
-              wrapperCol={{ ...layout.wrapperCol, offset: 8 }}
-              style={{ display: "flex", textAlign: "center" }}>
-              <Button type="primary" htmlType="submit">
+              label={<span style={{ color: "white" }}>Password:</span>}
+              rules={[{ required: true, type: "password" }]}
+              onChange={(e) =>
+                setUserData({ ...userData, password: e.target.value })
+              }>
+              <S.StyledInputPassword
+                type="password"
+                placeholder="enter password"
+              />
+            </S.StyledFormItem>
+            <S.StyledButtonBox>
+              <S.StyledButton
+                type="primary"
+                htmlType="submit"
+                onClick={submitHandlerLogin}>
                 Войти
-              </Button>
-              <Button htmlType="submit" onClick={() => setIsLoginMode(false)}>
+              </S.StyledButton>
+              <S.StyledButton
+                htmlType="submit"
+                onClick={() => setIsLoginMode(false)}>
                 Зарегистрироваться
-              </Button>
-            </Form.Item>
-          </Form>
+              </S.StyledButton>
+            </S.StyledButtonBox>
+            <S.Error>{error}</S.Error>
+          </S.StyledForm>
         </>
       ) : (
         <>
-          <Form
+          <S.StyledForm
             {...layout}
             name="nest-messages"
-            style={{
-              maxWidth: 600,
-              width: 380,
-              border: "1px solid #373C3F",
-              borderRadius: 10,
-              padding: 20,
-            }}
             validateMessages={validateMessages}>
-            <Form.Item
+            <S.StyledFormItem
               name={["user", "name"]}
-              label="Имя"
+              label={<span style={{ color: "white" }}>Name:</span>}
               value={userData.name}
               onChange={(e) =>
                 setUserData({ ...userData, name: e.target.value })
               }
               rules={[{ required: true, type: "text" }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item
+              <S.StyledInput type="text" placeholder="Enter your name" />
+            </S.StyledFormItem>
+            <S.StyledFormItem
               name={["user", "email"]}
-              label="Email"
+              label={<span style={{ color: "white" }}>Email:</span>}
               value={userData.password}
               onChange={(e) =>
                 setUserData({ ...userData, email: e.target.value })
               }
               rules={[{ required: true, type: "email" }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item
+              <S.StyledInput type="email" placeholder="Enter your Email" />
+            </S.StyledFormItem>
+            <S.StyledFormItem
               name={["user", "password"]}
-              label="Пароль"
+              label={<span style={{ color: "white" }}>Password:</span>}
               value={userData.password}
               onChange={(e) =>
                 setUserData({ ...userData, password: e.target.value })
               }
               rules={[{ required: true, type: "password" }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item
+              <S.StyledInputPassword
+                type="password"
+                placeholder="Enter your password"
+              />
+            </S.StyledFormItem>
+            <S.StyledFormItem
               name={["user", "repeat-password"]}
-              label="Повторите пароль"
+              label={<span style={{ color: "white" }}>Repeat password:</span>}
               onChange={(e) => repeatPasswordHandler(e)}
               rules={[{ required: true, type: "password" }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item
-              wrapperCol={{ ...layout.wrapperCol, offset: 8 }}
-              style={{ display: "flex", textAlign: "center" }}>
-              <Button htmlType="submit" onClick={submitHandlerRegistration}>
+              <S.StyledInputPassword
+                type="password"
+                placeholder="Repeat password"
+              />
+            </S.StyledFormItem>
+            <S.StyledButtonBox>
+              <S.StyledButton
+                type="primary"
+                htmlType="submit"
+                onClick={submitHandlerRegistration}>
                 Зарегистрироваться
-              </Button>
-              <Button htmlType="submit" onClick={() => setIsLoginMode(true)}>
+              </S.StyledButton>
+              <S.StyledButton
+                htmlType="submit"
+                onClick={() => setIsLoginMode(true)}>
                 Назад
-              </Button>
-            </Form.Item>
-            {error}
-          </Form>
+              </S.StyledButton>
+            </S.StyledButtonBox>
+            <S.Error>{error}</S.Error>
+          </S.StyledForm>
         </>
       )}
-    </AuthPageContainer>
+    </S.AuthPageContainer>
   );
 };
 
