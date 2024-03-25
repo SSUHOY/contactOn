@@ -37,7 +37,7 @@ const UserProfile = observer(() => {
   };
 
   const {
-    token: { colorBgContainer, borderRadius },
+    token: { colorBgContainer },
   } = theme.useToken();
 
   useEffect(() => {

@@ -14,7 +14,11 @@ class UserStore {
       messages: [],
       receivedMessages: [],
       addToFriendsEvents: [],
-      photoGallery: [],
+      photoGallery: [
+        "https://picsum.photos/200/300",
+        "https://picsum.photos/250/350",
+        "https://picsum.photos/300/400",
+      ],
       chats: [],
       messagesEvents: [],
       description:
@@ -33,7 +37,10 @@ class UserStore {
       messages: [],
       receivedMessages: [],
       addToFriendsEvents: [],
-      photoGallery: [],
+      photoGallery: [
+        "https://picsum.photos/350/450",
+        "https://picsum.photos/400/500",
+      ],
       chats: [],
       messagesEvents: [],
       description:
@@ -52,7 +59,7 @@ class UserStore {
       messages: [],
       receivedMessages: [],
       addToFriendsEvents: [],
-      photoGallery: [],
+      photoGallery: ["https://picsum.photos/200/300"],
       chats: [],
       messagesEvents: [],
       description:
