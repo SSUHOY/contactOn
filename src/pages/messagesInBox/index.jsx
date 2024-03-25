@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import * as L from "../../components/Shared/Layout/index";
 import * as S from "../messagesPage/messagesPage.styles";
 import { InboxOutlined } from "@ant-design/icons";

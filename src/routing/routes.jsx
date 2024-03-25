@@ -1,7 +1,5 @@
 import { Route, Routes } from "react-router";
 import NotFound from "../pages/notFound";
-import MainPage from "../pages/mainPage";
-import AuthPage from "../pages/authPage";
 import { ProtectedRoute } from "./protected-route";
 import AuthUserProfile from "../pages/authPageProfile";
 import UserProfile from "../pages/profilePage";
