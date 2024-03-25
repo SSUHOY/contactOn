@@ -1,8 +1,9 @@
+import { Select } from "antd";
 import styled from "styled-components";
 
 export const CenterBlock = styled.div`
   width: 100%;
-  border-bottom: 1px solid #4e4e4e;
+  height: 40px;
   margin-bottom: 51px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -15,14 +16,6 @@ export const CenterBlock = styled.div`
   -ms-flex-align: center;
   align-items: center;
 `;
-export const SearchSvg = styled.svg`
-  width: 17px;
-  height: 17px;
-  margin-right: 5px;
-  stroke: #ffffff;
-  fill: transparent;
-`;
-
 export const SearchText = styled.input`
   -webkit-box-flex: 100;
   -ms-flex-positive: 100;
@@ -35,4 +28,33 @@ export const SearchText = styled.input`
   font-size: 16px;
   line-height: 24px;
   color: #ffffff;
+  &.input[type="number"] {
+    -moz-appearance: textfield; /* Для Firefox */
+  }
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    display: none;
+  }
+`;
+
+export const StyledSelect = styled(Select)`
+  margin-right: 20px;
+  &:where(.css-dev-only-do-not-override-mik4fl).ant-select-single {
+    width: 150px;
+    height: 100%;
+    .ant-select-selector {
+      background-color: #d9d9d9;
+      border-radius: 3px;
+      .ant-select-selection-item {
+        color: black;
+      }
+      .ant-select-selection-placeholder {
+        color: black;
+      }
+    }
+    .and-input {
+      height: 100%;
+    }
+  }
 `;

@@ -1,20 +1,19 @@
 import React from "react";
-import { Button, Col, Row } from "antd";
+import { Col, Row } from "antd";
 import {
   UserAge,
   UserCard,
+  UserCity,
   UserDescription,
   UserImageBlock,
   UserImg,
   UserInformation,
   UserName,
 } from "./userList.styles";
-import { TeamOutlined, UserAddOutlined } from "@ant-design/icons";
+import { TeamOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import userStore from "../../store/users";
 
 const UserList = ({ users }) => {
-
   return (
     <>
       <Row gutter={[16, 24]}>
@@ -38,28 +37,27 @@ const UserList = ({ users }) => {
                     &nbsp;
                     {user.age ? user.age : "-"}
                   </UserAge>
+                  <UserCity>
+                    <span style={{ color: " #9F9F9F", fontSize: 16 }}>
+                      city:
+                    </span>
+                    &nbsp;
+                    {user.city ? user.city : "-"}
+                  </UserCity>
                   <UserDescription>
                     <p>{user.description}</p>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        rowGap: 10,
-                      }}>
-                      <p>
-                        {" "}
-                        <TeamOutlined /> Friends: {user.friends.length}
-                      </p>
-                      {userStore.isAuth ? (
-                        <Button>
-                          <UserAddOutlined style={{ color: "white" }} />
-                          to friends
-                        </Button>
-                      ) : (
-                        ""
-                      )}
-                    </div>
                   </UserDescription>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      rowGap: 10,
+                    }}>
+                    <p>
+                      {" "}
+                      <TeamOutlined /> Friends: {user.friends.length}
+                    </p>
+                  </div>
                 </UserInformation>
               </UserCard>
             </Link>

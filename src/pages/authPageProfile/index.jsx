@@ -3,14 +3,20 @@ import userStore from "../../store/users";
 import * as S from "./userPage.styles";
 import { observer } from "mobx-react-lite";
 import Burger from "../../components/BurgerMenu";
-import { LoadingOutlined, PlusOutlined, TeamOutlined } from "@ant-design/icons";
-import { Breadcrumb, Button, Form, Space, theme } from "antd";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { Breadcrumb, Dropdown, Form, Space, message, theme } from "antd";
+import { BellOutlined, MailOutlined } from "@ant-design/icons";
 import * as L from "../../components/Shared/Layout/index";
+import { Link } from "react-router-dom";
+import Logo from "../../components/Shared/Logo";
+import DropDown from "../../components/Dropdown";
+import UploadPhotos from "../../components/UploadPhotos";
 
 const AuthUserProfile = observer(() => {
   const isAuth = userStore.isAuth;
   const [userAuthData, setAuthUserData] = useState([]);
-  const [error, setError] = useState("");
+  const [newInterest, setNewInterest] = useState(null);
+  const [isSave, setIsSave] = useState(false);
   const [imgLoading, setImgLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
@@ -20,12 +26,19 @@ const AuthUserProfile = observer(() => {
   } = theme.useToken();
 
   const onChange = (e) => {
+    setIsSave(false);
     setAuthUserData({ ...userAuthData, [e.target.name]: e.target.value });
+  };
+  const onChangeGenderFromSelect = (e) => {
+    setIsSave(false);
+    setAuthUserData({ ...userAuthData, gender: e });
   };
   const handlerSubmitUserData = () => {
     userStore.saveNewUserData(userAuthData);
+    setIsSave(true);
   };
   const getBase64 = (img, callback) => {
+    setIsSave(false);
     const reader = new FileReader();
     reader.addEventListener("load", () => callback(reader.result));
     reader.readAsDataURL(img);
@@ -33,16 +46,16 @@ const AuthUserProfile = observer(() => {
   const beforeUpload = (file) => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
-      setError("You can only upload JPG/PNG file!");
+      message.error("You can only upload JPG/PNG file!");
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      setError("Image must smaller than 2MB!");
+      message.error("Image must smaller than 2MB!");
     }
     return isJpgOrPng && isLt2M;
   };
 
-  const handleChange = (info, name) => {
+  const handleChange = (info) => {
     if (info.file.status === "uploading") {
       setImgLoading(true);
       return;
@@ -54,6 +67,23 @@ const AuthUserProfile = observer(() => {
         setAuthUserData({ ...userAuthData, photo: url });
       });
     }
+  };
+
+  const addInterest = () => {
+    if (newInterest) {
+      setAuthUserData({
+        ...userAuthData,
+        interests: [...userAuthData.interests, newInterest],
+      });
+      setNewInterest("");
+      setIsSave(false);
+    } else {
+      message.error("type text");
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setNewInterest(e.target.value);
   };
 
   const uploadButton = (
@@ -68,7 +98,7 @@ const AuthUserProfile = observer(() => {
         style={{
           marginTop: 8,
         }}>
-        Upload
+        Upload Avatar
       </div>
     </button>
   );
@@ -88,6 +118,15 @@ const AuthUserProfile = observer(() => {
           background: colorBgContainer,
         }}>
         <Burger />
+
+        {isAuth ? (
+          <L.UsersUI>
+            <DropDown />
+          </L.UsersUI>
+        ) : (
+          ""
+        )}
+        <Logo />
       </L.SharedHeader>
       {isLoading ? (
         ""
@@ -109,29 +148,22 @@ const AuthUserProfile = observer(() => {
                       src={userAuthData.photo ? userAuthData.photo : imageUrl}
                       alt="avatar"
                       style={{
-                        width: 350,
-                        height: 350,
-                        borderRadius: "100%",
+                        width: 200,
+                        height: 200,
+                        borderRadius: 100,
                       }}
                     />
                   ) : (
                     uploadButton
                   )}
                 </S.ImgUploadWrapper>
-                {error ? <S.Error>{error}</S.Error> : ""}
               </S.ProfileImgContainer>
             </S.LeftContentBlock>
-            <S.RightContentBlock>
+            <S.ContentBlock>
               <Form
                 name="complex-form"
-                labelCol={{
-                  span: 8,
-                }}
                 wrapperCol={{
-                  span: 16,
-                }}
-                style={{
-                  maxWidth: 600,
+                  span: 18,
                 }}>
                 <Form.Item>
                   <Space>
@@ -168,74 +200,125 @@ const AuthUserProfile = observer(() => {
                     </Form.Item>
                   </Space>
                 </Form.Item>
-                <Form.Item
-                  style={{
-                    marginBottom: 0,
-                  }}>
+                <Form.Item>
                   <Space>
                     <Form.Item
-                      name="location"
+                      name="city"
                       style={{
                         color: "white",
                       }}>
-                      Location:
+                      City:
                       <S.StyledInput
-                        name="location"
-                        placeholder="Location"
-                        value={userAuthData?.location || ""}
+                        name="city"
+                        placeholder="City"
+                        style={{
+                          marginBottom: 0,
+                        }}
+                        value={userAuthData?.city || ""}
                         onChange={onChange}
                       />
                     </Form.Item>
                     <Form.Item
-                      name="description"
+                      name="gender"
                       style={{
-                        display: "flex",
+                        marginTop: -10,
                         color: "white",
-                        gap: 25,
-                        flexDirection: "column",
-                        justifyContent: "space-between",
                       }}>
-                      Short description:
-                      <S.StyledInput
-                        name="description"
-                        placeholder="Short description"
-                        onChange={onChange}
-                        value={userAuthData?.description || ""}
+                      Gender:
+                      <S.StyledSelect
+                        onChange={onChangeGenderFromSelect}
+                        defaultValue={userAuthData.gender === "Male" && "Male"}
+                        placeholder="Select a gender"
+                        optionFilterProp="children"
+                        options={[
+                          {
+                            value: "male",
+                            label: "Male",
+                          },
+                          {
+                            value: "female",
+                            label: "Female",
+                          },
+                          {
+                            value: "Not mentioned",
+                            label: "Not mentioned",
+                          },
+                        ]}
                       />
                     </Form.Item>
                   </Space>
                 </Form.Item>
-                <Form.Item
-                  name="interests"
-                  style={{
-                    display: "flex",
-                    color: "white",
-                  }}>
-                  Interests:
-                  <S.StyledTextArea
-                    placeholder="Your interests"
-                    value={userAuthData?.interests || ""}
-                    onChange={onChange}
-                    style={{ width: 406, resize: "none", height: 100 }}
+                <Space>
+                  <Form.Item
+                    name="description"
+                    style={{
+                      display: "flex",
+                      color: "white",
+                    }}>
+                    Description:
+                    <S.StyledTextArea
+                      placeholder="Profile description"
+                      value={userAuthData?.description || ""}
+                      onChange={onChange}
+                      style={{ width: 410, resize: "none", height: 80 }}
+                      name="description"
+                    />
+                  </Form.Item>
+                </Space>
+                <Space>
+                  <Form.Item
+                    name="interests"
+                    style={{
+                      display: "flex",
+                      color: "white",
+                      alignItems: "center",
+                    }}>
+                    Interests:
+                    <S.StyledTextArea
+                      value={userAuthData?.interests || ""}
+                      readOnly
+                      style={{ width: 410, resize: "none" }}
+                    />
+                  </Form.Item>
+                </Space>
+                <Space>
+                  <S.StyledInput
+                    value={newInterest}
+                    placeholder="Add new interest"
+                    onChange={handleInputChange}
                     name="interests"
                   />
-                </Form.Item>
+                  <S.StyledButton
+                    onClick={addInterest}
+                    style={{ height: 40, margin: 4 }}>
+                    Add
+                  </S.StyledButton>
+                </Space>
               </Form>
-              <Button
+              <S.StyledButton
                 type="primary"
                 style={{
                   width: 200,
                   marginTop: 8,
                   position: "relative",
-                  right: 66,
-                  color: "white",
                 }}
                 htmlType="submit"
                 onClick={handlerSubmitUserData}>
-                Submit
-              </Button>
-            </S.RightContentBlock>
+                {!isSave ? "Save" : "Saved!"}
+              </S.StyledButton>
+            </S.ContentBlock>
           </S.UserPageContainer>
+          <S.UserUploadPhotos>
+            <div
+              style={{
+                textAlign: "center",
+                color: "white",
+                paddingBottom: 10,
+              }}>
+              <p>Upload photos to your photo gallery</p>
+            </div>
+            <UploadPhotos />
+          </S.UserUploadPhotos>
         </S.PageContent>
       )}
     </L.SharedLayout>

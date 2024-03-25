@@ -6,7 +6,10 @@ import {
   LogoutOutlined,
   UserOutlined,
   HomeOutlined,
+  TeamOutlined,
+  MailOutlined,
 } from "@ant-design/icons";
+
 import { Link, useNavigate } from "react-router-dom";
 import userStore from "../../store/users";
 
@@ -24,34 +27,73 @@ function getItem(label, key, icon, children, type, onClick) {
 const Burger = () => {
   const [collapsed, setCollapsed] = useState(false);
   const isAuth = userStore.isAuth;
+  const authUser = userStore.getAuthorizedUser();
 
   const navigate = useNavigate();
 
   const handleLogOutUser = (e) => {
-    if (e.key === "3") {
-      userStore.theUserIsAuth(false);
-      localStorage.clear("authorizedUser");
-      toggleCollapsed();
+    if (e.key === "5") {
+      userStore.handleLogOutUser();
+      navigate("/");
+    }
+    if (e.key === "6") {
+      userStore.clearStorage();
+      userStore.handleLogOutUser();
       navigate("/login");
     }
+    toggleCollapsed();
   };
 
   const items = [
+    isAuth ? getItem(`${authUser.name}`) : "",
     getItem(
-      "Домой",
+      "Home",
       "1",
       <Link to="/">
         <HomeOutlined />
       </Link>
     ),
     getItem(
-      isAuth ? "Мой профиль" : "Войти",
+      isAuth ? "My profile" : "Log in",
       "2",
       <Link to={isAuth ? `/profile` : "/login"}>
         <UserOutlined />
       </Link>
     ),
-    getItem("Выйти из системы", "3", <LogoutOutlined />),
+    isAuth
+      ? getItem(
+          "Friends",
+          "3",
+          <Link to={"/friends"}>
+            <TeamOutlined />
+          </Link>
+        )
+      : "",
+    isAuth
+      ? getItem(
+          "Chats",
+          "4",
+          <Link to={"/messages"}>
+            <MailOutlined />
+          </Link>
+        )
+      : "",
+    isAuth
+      ? getItem(
+          "Log out",
+          "5",
+          <Link to={"/login"}>
+            <LogoutOutlined />
+          </Link>
+        )
+      : "",
+    getItem(
+      "Clear Storage",
+      "6",
+      <Link to={"/login"}>
+        <UserOutlined />
+      </Link>
+    ),
   ];
 
   const toggleCollapsed = () => {
@@ -59,10 +101,7 @@ const Burger = () => {
   };
 
   return (
-    <div
-      style={{
-        width: 256,
-      }}>
+    <div>
       <Button
         type="primary"
         onClick={toggleCollapsed}
@@ -79,7 +118,7 @@ const Burger = () => {
         style={{
           display: collapsed ? "block" : "none",
           zIndex: 1000,
-          position: "relative",
+          position: "absolute",
           textAlign: "center",
           borderRadius: "20px",
           width: 180,
