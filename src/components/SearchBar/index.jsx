@@ -15,6 +15,7 @@ const SearchBar = ({ onChange, typeSelection, searchType, changeGender }) => {
             placeholder="Select gender"
             onChange={changeGender}
             optionFilterProp="children"
+            style={{ width: 150 }}
             options={[
               {
                 value: "male",

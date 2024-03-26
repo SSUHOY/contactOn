@@ -24,8 +24,10 @@ const Friends = () => {
         <Burger />
         <Logo />
       </L.SharedHeader>
-      <L.PageContainer>
-        <BoxUi>
+      <L.PageContainer
+        style={{ flexDirection: "column", alignItems: "center" }}>
+        <h2 style={{ color: "white" }}>Friends</h2>
+        <BoxUi style={{ width: 600 }}>
           {user.friends.length !== 0 ? (
             <div
               style={{

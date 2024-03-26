@@ -1,4 +1,4 @@
-import { Input, Form, Button } from "antd";
+import { Form } from "antd";
 import styled from "styled-components";
 
 export const AuthPageContainer = styled.div`

@@ -264,7 +264,6 @@ class UserStore {
     this.saveUsersToLocalStorage();
   }
   saveAuthUserData() {
-    console.log("object");
     let users = JSON.parse(localStorage.getItem("users")) || [];
     let authorizedUser = JSON.parse(localStorage.getItem("authorizedUser"));
     let authorizedUserData = users.find(
@@ -283,7 +282,7 @@ class UserStore {
   loadUsersFromLocalStorage() {
     const usersFromStorage = localStorage.getItem("users");
     if (usersFromStorage) {
-      this.users = JSON.parse(usersFromStorage);
+      return (this.users = JSON.parse(usersFromStorage));
     }
   }
   addFriend(userID, friendID) {
@@ -309,6 +308,7 @@ class UserStore {
     } else {
       this.alreadyFriends = false;
     }
+    return isFriend;
   }
   deleteFriend(userID, friendID) {
     let user = this.users.find((user) => user.id === userID);
@@ -339,7 +339,8 @@ class UserStore {
     senderPhoto,
     receiverPhoto,
     senderEmail,
-    receiverEmail
+    receiverEmail,
+    userID
   ) {
     let sender = this.users.find((user) => user.id === senderID);
     let receiver = this.users.find((user) => user.id === receiverID);
@@ -372,22 +373,27 @@ class UserStore {
         this.saveAuthUserData();
       } else {
         let newReceiverChat = {
+          chatID: receiver.chats.length + 1,
           receiverID: receiverID,
           senderID: senderID,
           name: senderName,
           photo: senderPhoto,
           email: senderEmail,
+          userID: userID,
         };
         let newSenderChat = {
+          chatID: sender.chats.length + 1,
           senderID: senderID,
           receiverID: receiverID,
           name: receiverName,
           photo: receiverPhoto,
           email: receiverEmail,
+          userID: userID,
         };
         let message = {
           senderID: senderID,
           receiverID: receiverID,
+          userID: userID,
           senderName: senderName,
           receiverName: receiverName,
           senderPhoto: senderPhoto,
@@ -408,6 +414,7 @@ class UserStore {
       return "Error! Message isn't sent.";
     }
   }
+
   getAuthorizedUser() {
     const authUser = JSON.parse(localStorage.getItem("authorizedUser"));
     return authUser;
@@ -441,6 +448,19 @@ class UserStore {
     this.saveAuthUserData();
     localStorage.setItem("users", JSON.stringify(this.users));
   }
+  // // clearMessagesEvents(userID) {
+  // //   const authUser = this.getAuthorizedUser();
+  // //   let user = authUser.messagesEvents.find((user) => user.id === userID);
+  // //   const deleteUser = user.messagesEvents.filter((item) => item !== 13);
+  // //   console.log(
+  // //     "🚀 ~ UserStore ~ clearMessagesEvents ~ deleteUser:",
+  // //     deleteUser
+  // //   );
+
+  //   this.saveUsersToLocalStorage();
+  //   this.saveAuthUserData();
+  //   localStorage.setItem("users", JSON.stringify(this.users));
+  // }
   setAuthUserData(user) {
     localStorage.setItem("authorizedUser", JSON.stringify(user));
   }

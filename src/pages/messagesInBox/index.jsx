@@ -8,8 +8,9 @@ import Logo from "../../components/Shared/Logo";
 import userStore from "../../store/users";
 import { Link } from "react-router-dom";
 import DropDown from "../../components/Dropdown";
+import { observer } from "mobx-react-lite";
 
-const MessagesInBox = () => {
+const MessagesInBox = observer(() => {
   const isAuth = userStore.isAuth;
   const {
     token: { colorBgContainer },
@@ -33,7 +34,9 @@ const MessagesInBox = () => {
         )}
         <Logo />
       </L.SharedHeader>
-      <L.PageContainer>
+      <L.PageContainer
+        style={{ flexDirection: "column", alignItems: "center" }}>
+        <h2 style={{ color: "white" }}>Chats</h2>
         <S.BoxUi>
           {user?.chats?.length !== 0 ? (
             <div
@@ -46,7 +49,12 @@ const MessagesInBox = () => {
               }}>
               {user?.chats?.map((chats, index) => (
                 <S.Item key={index}>
-                  <Link to={`/message/${chats.receiverID}`}>
+                  <Link
+                    to={`/message/${
+                      user.id === chats.receiverID
+                        ? chats.senderID
+                        : chats.receiverID
+                    }`}>
                     <div
                       style={{
                         display: "flex",
@@ -102,6 +110,6 @@ const MessagesInBox = () => {
       </L.PageContainer>
     </L.SharedLayout>
   );
-};
+});
 
 export default MessagesInBox;

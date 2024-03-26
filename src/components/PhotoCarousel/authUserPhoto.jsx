@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Carousel } from "antd";
 import userStore from "../../store/users";
 import { toJS } from "mobx";

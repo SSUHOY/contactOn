@@ -8,7 +8,7 @@ import {
   PlusOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
-import { Form, Space, App, theme, Input, Select, Upload } from "antd";
+import { Form, Space, theme, Input, Select, Upload, message } from "antd";
 import * as L from "../../components/Shared/Layout/index";
 import Logo from "../../components/Shared/Logo";
 import DropDown from "../../components/Dropdown";
@@ -19,6 +19,8 @@ import AuthUserPhotoCarousel from "../../components/PhotoCarousel/authUserPhoto"
 import TextArea from "antd/es/input/TextArea";
 
 const AuthUserProfile = observer(() => {
+  const [messageApi, contextHolder] = message.useMessage();
+
   const isAuth = userStore.isAuth;
   const authUser = userStore.getAuthorizedUser();
   const [userAuthData, setAuthUserData] = useState([]);
@@ -31,7 +33,6 @@ const AuthUserProfile = observer(() => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const { modal } = App.useApp();
 
   const onChange = (e) => {
     setIsSave(false);
@@ -54,11 +55,17 @@ const AuthUserProfile = observer(() => {
   const beforeUpload = (file) => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
-      modal.warning("You can only upload JPG/PNG file!");
+      messageApi.open({
+        type: "error",
+        content: "You can only upload JPG/PNG file!",
+      });
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      modal.warning("Image must smaller than 2MB!");
+      messageApi.open({
+        type: "error",
+        content: "Image must smaller than 2MB!",
+      });
     }
     return isJpgOrPng && isLt2M;
   };
@@ -84,7 +91,10 @@ const AuthUserProfile = observer(() => {
       setNewInterest("");
       setIsSave(false);
     } else {
-      modal.warning("type text");
+      messageApi.open({
+        type: "error",
+        content: "Enter text",
+      });
     }
   };
 
@@ -118,258 +128,266 @@ const AuthUserProfile = observer(() => {
   }, [isAuth]);
 
   return (
-    <L.SharedLayout style={{ background: colorBgContainer }}>
-      <L.SharedHeader
-        style={{
-          background: colorBgContainer,
-        }}>
-        <Burger />
+    <>
+      {contextHolder}
+      <L.SharedLayout style={{ background: colorBgContainer }}>
+        <L.SharedHeader
+          style={{
+            background: colorBgContainer,
+          }}>
+          <Burger />
 
-        {isAuth ? (
-          <L.UsersUI>
-            <DropDown />
-          </L.UsersUI>
-        ) : (
+          {isAuth ? (
+            <L.UsersUI>
+              <DropDown />
+            </L.UsersUI>
+          ) : (
+            ""
+          )}
+          <Logo />
+        </L.SharedHeader>
+        {isLoading ? (
           ""
-        )}
-        <Logo />
-      </L.SharedHeader>
-      {isLoading ? (
-        ""
-      ) : (
-        <S.PageContent>
-          <S.UserPageContainer>
-            <S.LeftContentBlock>
-              <S.ProfileImgContainer>
-                <Upload
-                  name="photo"
-                  listType="picture-circle"
-                  className="avatar-uploader"
-                  showUploadList={false}
-                  beforeUpload={beforeUpload}
-                  onChange={handleChange}>
+        ) : (
+          <S.PageContent>
+            <S.UserPageContainer>
+              <S.LeftContentBlock>
+                <S.ProfileImgContainer>
+                  <Upload
+                    name="photo"
+                    listType="picture-circle"
+                    className="avatar-uploader"
+                    showUploadList={false}
+                    beforeUpload={beforeUpload}
+                    onChange={handleChange}>
+                    {userAuthData.photo ? (
+                      <img
+                        src={
+                          userAuthData?.photo ? userAuthData?.photo : imageUrl
+                        }
+                        alt="avatar"
+                        style={{
+                          width: 200,
+                          height: 200,
+                          borderRadius: 100,
+                        }}
+                      />
+                    ) : (
+                      uploadButton
+                    )}
+                  </Upload>
                   {userAuthData.photo ? (
-                    <img
-                      src={userAuthData?.photo ? userAuthData?.photo : imageUrl}
-                      alt="avatar"
+                    <div
                       style={{
-                        width: 200,
-                        height: 200,
-                        borderRadius: 100,
+                        width: "100%",
+                        textAlign: "center",
+                        marginTop: 8,
+                        color: "white",
+                        textDecoration: "underline",
+                        cursor: "pointer",
                       }}
-                    />
+                      onClick={handleDeleteAvatar}>
+                      Delete Avatar
+                      <DeleteOutlined />
+                    </div>
                   ) : (
-                    uploadButton
+                    ""
                   )}
-                </Upload>
-                {userAuthData.photo ? (
-                  <div
-                    style={{
-                      width: "100%",
-                      textAlign: "center",
-                      marginTop: 8,
-                      color: "white",
-                      textDecoration: "underline",
-                      cursor: "pointer",
-                    }}
-                    onClick={handleDeleteAvatar}>
-                    Delete Avatar
-                    <DeleteOutlined />
-                  </div>
-                ) : (
-                  ""
-                )}
-              </S.ProfileImgContainer>
+                </S.ProfileImgContainer>
+                <br />
+                <div
+                  style={{
+                    textAlign: "center",
+                    marginTop: 30,
+                    color: "white",
+                    marginBottom: 10,
+                  }}>
+                  <TeamOutlined />
+                  <span>Friends: {authUser.friends.length}</span> <br />
+                  <MailOutlined />{" "}
+                  <span>Messages: {authUser.messages.length}</span>
+                  <br />@ <span>Email: {authUser.email}</span>
+                </div>
+              </S.LeftContentBlock>
+              <S.ContentBlock>
+                <Form
+                  wrapperCol={{
+                    span: 18,
+                  }}>
+                  <Form.Item>
+                    <Space>
+                      <Form.Item
+                        style={{
+                          width: "100%",
+                          marginBottom: 0,
+                          color: "white",
+                        }}>
+                        Name:
+                        <Input
+                          name="name"
+                          value={userAuthData?.name || ""}
+                          onChange={onChange}
+                          style={{
+                            marginBottom: 0,
+                            width: 150,
+                          }}
+                          placeholder="Your name"
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        style={{
+                          marginBottom: 0,
+                          color: "white",
+                          width: 150,
+                        }}>
+                        Age:
+                        <Input
+                          name="age"
+                          placeholder="Your age"
+                          value={userAuthData?.age || ""}
+                          onChange={onChange}
+                        />
+                      </Form.Item>
+                    </Space>
+                  </Form.Item>
+                  <Form.Item>
+                    <Space>
+                      <Form.Item
+                        style={{
+                          color: "white",
+                        }}>
+                        City:
+                        <Input
+                          name="city"
+                          placeholder="City"
+                          style={{
+                            marginBottom: 0,
+                            width: 150,
+                          }}
+                          value={userAuthData?.city || ""}
+                          onChange={onChange}
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        style={{
+                          marginTop: -10,
+                          color: "white",
+                        }}>
+                        Gender:
+                        <Select
+                          style={{ width: 150, height: 22 }}
+                          onChange={onChangeGenderFromSelect}
+                          defaultValue={
+                            userAuthData.gender === "Male" && "Male"
+                          }
+                          placeholder="Select a gender"
+                          optionFilterProp="children"
+                          options={[
+                            {
+                              value: "male",
+                              label: "Male",
+                            },
+                            {
+                              value: "female",
+                              label: "Female",
+                            },
+                            {
+                              value: "Not mentioned",
+                              label: "Not mentioned",
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </Space>
+                  </Form.Item>
+                  <Space>
+                    <Form.Item
+                      style={{
+                        display: "flex",
+                        color: "white",
+                      }}>
+                      Description:
+                      <TextArea
+                        placeholder="Profile description"
+                        value={userAuthData?.description || ""}
+                        onChange={onChange}
+                        style={{ width: 410, resize: "none", height: 80 }}
+                        name="description"
+                      />
+                    </Form.Item>
+                  </Space>
+                  <Space>
+                    <Form.Item
+                      style={{
+                        display: "flex",
+                        color: "white",
+                        alignItems: "center",
+                      }}>
+                      Interests:
+                      <TextArea
+                        value={userAuthData?.interests || ""}
+                        readOnly
+                        placeholder="Click add to set interests..."
+                        style={{ width: 410, resize: "none" }}
+                      />
+                    </Form.Item>
+                  </Space>
+                  <Space>
+                    <Input
+                      value={newInterest}
+                      placeholder="Add new interest"
+                      onChange={handleInputChange}
+                      name="interests"
+                    />
+                    <S.StyledButton
+                      onClick={addInterest}
+                      style={{ height: 40, margin: 4 }}>
+                      Add
+                    </S.StyledButton>
+                  </Space>
+                </Form>
+                <S.StyledButton
+                  type="primary"
+                  style={{
+                    width: 200,
+                    marginTop: 8,
+                    position: "relative",
+                  }}
+                  htmlType="submit"
+                  disabled={isSave}
+                  onClick={handlerSubmitUserData}>
+                  {!isSave ? "Save" : "Saved!"}
+                </S.StyledButton>
+              </S.ContentBlock>
+            </S.UserPageContainer>
+            <S.UserUploadPhotos style={{ width: 260 }}>
               <div
                 style={{
                   textAlign: "center",
-                  marginTop: 30,
                   color: "white",
-                  marginBottom: 10,
+                  paddingBottom: 10,
                 }}>
-                <TeamOutlined />
-                <span>Friends: {authUser.friends.length}</span> <br />
-                <MailOutlined />{" "}
-                <span>Messages: {authUser.messages.length}</span>
-                <br />@ <span>Email: {authUser.email}</span>
+                <FileImageOutlined />
+                <span>Upload photos to photo gallery</span>
               </div>
-            </S.LeftContentBlock>
-            <S.ContentBlock>
-              <Form
-                wrapperCol={{
-                  span: 18,
-                }}>
-                <Form.Item>
-                  <Space>
-                    <Form.Item
-                      style={{
-                        width: "100%",
-                        marginBottom: 0,
-                        color: "white",
-                      }}>
-                      Name:
-                      <Input
-                        name="name"
-                        value={userAuthData?.name || ""}
-                        onChange={onChange}
-                        style={{
-                          marginBottom: 0,
-                          width: 150,
-                        }}
-                        placeholder="Your name"
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      style={{
-                        marginBottom: 0,
-                        color: "white",
-                        width: 150,
-                      }}>
-                      Age:
-                      <Input
-                        name="age"
-                        placeholder="Your age"
-                        value={userAuthData?.age || ""}
-                        onChange={onChange}
-                      />
-                    </Form.Item>
-                  </Space>
-                </Form.Item>
-                <Form.Item>
-                  <Space>
-                    <Form.Item
-                      style={{
-                        color: "white",
-                      }}>
-                      City:
-                      <Input
-                        name="city"
-                        placeholder="City"
-                        style={{
-                          marginBottom: 0,
-                          width: 150,
-                        }}
-                        value={userAuthData?.city || ""}
-                        onChange={onChange}
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      style={{
-                        marginTop: -10,
-                        color: "white",
-                      }}>
-                      Gender:
-                      <Select
-                        style={{ width: 150, height: 22 }}
-                        onChange={onChangeGenderFromSelect}
-                        defaultValue={userAuthData.gender === "Male" && "Male"}
-                        placeholder="Select a gender"
-                        optionFilterProp="children"
-                        options={[
-                          {
-                            value: "male",
-                            label: "Male",
-                          },
-                          {
-                            value: "female",
-                            label: "Female",
-                          },
-                          {
-                            value: "Not mentioned",
-                            label: "Not mentioned",
-                          },
-                        ]}
-                      />
-                    </Form.Item>
-                  </Space>
-                </Form.Item>
-                <Space>
-                  <Form.Item
-                    style={{
-                      display: "flex",
-                      color: "white",
-                    }}>
-                    Description:
-                    <TextArea
-                      placeholder="Profile description"
-                      value={userAuthData?.description || ""}
-                      onChange={onChange}
-                      style={{ width: 410, resize: "none", height: 80 }}
-                      name="description"
-                    />
-                  </Form.Item>
-                </Space>
-                <Space>
-                  <Form.Item
-                    style={{
-                      display: "flex",
-                      color: "white",
-                      alignItems: "center",
-                    }}>
-                    Interests:
-                    <TextArea
-                      value={userAuthData?.interests || ""}
-                      readOnly
-                      placeholder="Click add to set interests..."
-                      style={{ width: 410, resize: "none" }}
-                    />
-                  </Form.Item>
-                </Space>
-                <Space>
-                  <Input
-                    value={newInterest}
-                    placeholder="Add new interest"
-                    onChange={handleInputChange}
-                    name="interests"
-                  />
-                  <S.StyledButton
-                    onClick={addInterest}
-                    style={{ height: 40, margin: 4 }}>
-                    Add
-                  </S.StyledButton>
-                </Space>
-              </Form>
-              <S.StyledButton
-                type="primary"
+              <UploadPhotos />
+            </S.UserUploadPhotos>
+            <S.UserUploadPhotos>
+              <div
                 style={{
-                  width: 200,
-                  marginTop: 8,
-                  position: "relative",
-                }}
-                htmlType="submit"
-                disabled={isSave}
-                onClick={handlerSubmitUserData}>
-                {!isSave ? "Save" : "Saved!"}
-              </S.StyledButton>
-            </S.ContentBlock>
-          </S.UserPageContainer>
-          <S.UserUploadPhotos style={{ width: 260 }}>
-            <div
-              style={{
-                textAlign: "center",
-                color: "white",
-                paddingBottom: 10,
-              }}>
-              <FileImageOutlined />
-              <span>Upload photos to photo gallery</span>
-            </div>
-            <UploadPhotos />
-          </S.UserUploadPhotos>
-          <S.UserUploadPhotos>
-            <div
-              style={{
-                textAlign: "center",
-                color: "white",
-                paddingBottom: 10,
-              }}>
-              <FileImageOutlined />
-              <span>Your current photo gallery</span>
-            </div>
-            <AuthUserPhotoCarousel />
-          </S.UserUploadPhotos>
-        </S.PageContent>
-      )}
-    </L.SharedLayout>
+                  textAlign: "center",
+                  color: "white",
+                  paddingBottom: 10,
+                }}>
+                <FileImageOutlined />
+                <span>Your current photo gallery</span>
+              </div>
+              <AuthUserPhotoCarousel />
+            </S.UserUploadPhotos>
+          </S.PageContent>
+        )}
+      </L.SharedLayout>
+    </>
   );
 });
 

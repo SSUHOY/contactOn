@@ -9,9 +9,11 @@ import { useParams } from "react-router-dom";
 
 import userStore from "../../store/users";
 import DropDown from "../../components/Dropdown";
+import { observer } from "mobx-react-lite";
 
-const MessagesInBox = () => {
+const MessagesInBox = observer(() => {
   const isAuth = userStore.isAuth;
+  const unRead = userStore.unRead;
 
   const [messageContent, setMessageContent] = useState("");
   const [isSend, setIsSend] = useState(false);
@@ -45,7 +47,8 @@ const MessagesInBox = () => {
       sender.photo,
       user.photo,
       sender.email,
-      user.email
+      user.email,
+      user.id
     );
     setMessageContent("");
     setIsSend(true);
@@ -60,8 +63,13 @@ const MessagesInBox = () => {
     }
   };
 
+  // const handleClearEvents = () => {
+  //   userStore.clearMessagesEvents(user.id);
+  // };
+
   useEffect(() => {
     scrollToBottom();
+    // handleClearEvents();
   }, [isSend]);
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -149,12 +157,18 @@ const MessagesInBox = () => {
                         <p style={{ wordWrap: "break-word" }}>
                           {message.content}
                         </p>
+                        {unRead && message.senderID === sender.id ? (
+                          <span style={{ wordWrap: "break-word" }}>
+                            {unRead ? `unread` : "read"}
+                          </span>
+                        ) : (
+                          ""
+                        )}
                       </S.SendMessage>
                     </S.SendMessagesBox>
                   ))}
                 </S.MessagesAligner>
               </S.MessagesField>
-
               <p>Your message:</p>
               <TextArea
                 rows={4}
@@ -165,6 +179,7 @@ const MessagesInBox = () => {
               />
               <Button
                 type="primary"
+                disabled={messageContent === ""}
                 style={{ width: 150, marginTop: 5 }}
                 onClick={handleSendMessage}>
                 Send
@@ -175,6 +190,6 @@ const MessagesInBox = () => {
       </L.SharedLayout>
     </>
   );
-};
+});
 
 export default MessagesInBox;

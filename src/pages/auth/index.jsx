@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import * as S from "./authPage.styles";
 import { useNavigate } from "react-router-dom";
 import userStore from "../../store/users";
-import { App, Button, Input, message, theme } from "antd";
+import { Button, Input, message, theme } from "antd";
 import * as L from "../../components/Shared/Layout/index";
 import Burger from "../../components/BurgerMenu";
 
@@ -158,7 +158,7 @@ const Auth = () => {
                 validateMessages={validateMessages}>
                 <S.StyledFormItem
                   name={["email"]}
-                  label={<span style={{ color: "white" }}>Email:</span>}
+                  label={<span style={{ color: "white" }}>Email</span>}
                   rules={[{ required: true, type: "email" }]}
                   onChange={(e) =>
                     setUserData({ ...userData, email: e.target.value })
@@ -167,7 +167,7 @@ const Auth = () => {
                 </S.StyledFormItem>
                 <S.StyledFormItem
                   name={["password"]}
-                  label={<span style={{ color: "white" }}>Password:</span>}
+                  label={<span style={{ color: "white" }}>Password</span>}
                   rules={[
                     {
                       required: true,
@@ -205,7 +205,7 @@ const Auth = () => {
                 validateMessages={validateMessages}>
                 <S.StyledFormItem
                   name={["name"]}
-                  label={<span style={{ color: "white" }}>Name:</span>}
+                  label={<span style={{ color: "white" }}>Name</span>}
                   value={userData.name}
                   onChange={(e) =>
                     setUserData({ ...userData, name: e.target.value })
@@ -215,7 +215,7 @@ const Auth = () => {
                 </S.StyledFormItem>
                 <S.StyledFormItem
                   name={["email"]}
-                  label={<span style={{ color: "white" }}>Email:</span>}
+                  label={<span style={{ color: "white" }}>Email</span>}
                   value={userData.password}
                   onChange={(e) =>
                     setUserData({ ...userData, email: e.target.value })
@@ -226,7 +226,7 @@ const Auth = () => {
                 <S.StyledFormItem
                   name={["password"]}
                   autoComplete="on"
-                  label={<span style={{ color: "white" }}>Password:</span>}
+                  label={<span style={{ color: "white" }}>Password</span>}
                   value={userData.password}
                   onChange={(e) =>
                     setUserData({ ...userData, password: e.target.value })
@@ -247,7 +247,7 @@ const Auth = () => {
                 <S.StyledFormItem
                   name={["user", "repeat-password"]}
                   label={
-                    <span style={{ color: "white" }}>Repeat password:</span>
+                    <span style={{ color: "white" }}>Repeat password</span>
                   }
                   onChange={(e) => repeatPasswordHandler(e)}
                   rules={[{ required: true, type: "password" }]}>

@@ -8,14 +8,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
   width: 100vw;
   height: 100vh;
-  span {
-    color: #f1fcf8;
-  }
   ::-webkit-scrollbar {
     width: 10px;
     padding: 20px;
   }
-
+  span {
+    color: white;
+  }
   ::-webkit-scrollbar-thumb {
     background-color: #888;
   }
@@ -48,7 +47,19 @@ body {
     width: 200px;
     height: 200px;
   }
-  .ant-message > span {
-    color: black;
+  .ant-message {
+    span {
+      color: black;
+    }
+  }
+  .ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item,
+  .ant-dropdown-menu-submenu .ant-dropdown-menu .ant-dropdown-menu-item,
+  .ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-submenu-title,
+  .ant-dropdown-menu-submenu
+    .ant-dropdown-menu
+    .ant-dropdown-menu-submenu-title {
+    span {
+      color: black;
+    }
   }
 }

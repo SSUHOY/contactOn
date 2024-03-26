@@ -8,7 +8,7 @@ import { Dropdown } from "antd";
 const Messages = () => {
   const authUser = userStore.getAuthorizedUser();
 
-  const clearEvents = () => {
+  const clearMessagesEvents = () => {
     userStore.clearMessagesEvents(authUser.id);
   };
 
@@ -33,12 +33,12 @@ const Messages = () => {
   return (
     <div>
       <button
+        onClick={clearMessagesEvents}
         style={{
           background: "none",
           border: "none",
           cursor: "pointer",
-        }}
-        onClick={clearEvents}>
+        }}>
         <Dropdown
           menu={{ items }}
           trigger={["click"]}

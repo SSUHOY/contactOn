@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import userStore from "../../store/users";
 import { Link, useParams } from "react-router-dom";
+import { observer } from "mobx-react-lite";
 import Burger from "../../components/BurgerMenu";
 import {
   PlusOutlined,
@@ -17,7 +18,7 @@ import Logo from "../../components/Shared/Logo";
 import DropDown from "../../components/Dropdown";
 import PhotoCarousel from "../../components/PhotoCarousel";
 
-const UserProfile = () => {
+const UserProfile = observer(() => {
   const { id } = useParams();
 
   const user = userStore.getUserById(Number(id));
@@ -27,11 +28,9 @@ const UserProfile = () => {
   const isAuth = userStore.isAuth;
 
   const handleAddToFriends = () => {
-    const authUser = JSON.parse(localStorage.getItem("authorizedUser"));
     userStore.addFriend(authUser?.id, user?.id);
   };
   const handleDeleteFromFriends = () => {
-    const authUser = JSON.parse(localStorage.getItem("authorizedUser"));
     userStore.deleteFriend(authUser?.id, user?.id);
   };
 
@@ -150,29 +149,39 @@ const UserProfile = () => {
             <br />
             <S.UserContent>
               <S.UserDescriptionTitle>Description:</S.UserDescriptionTitle>
-              <TextArea
-                id="description"
-                name="description"
-                rows="5"
-                style={{
-                  resize: "none",
-                  color: "white",
-                  borderBottomLeftRadius: 10,
-                  borderTopLeftRadius: 10,
-                }}
-                value={user.description || "no description yet"}
-                readOnly></TextArea>
-              <S.UserDescriptionTitle>Interests:</S.UserDescriptionTitle>
-              <TextArea
-                id="interests"
-                name="interests"
-                rows="2"
-                style={{
-                  resize: "none",
-                  color: "white",
-                }}
-                value={user.interests || "no interests yet"}
-                readOnly></TextArea>
+              <table>
+                <tr>
+                  <td>
+                    <TextArea
+                      id="description"
+                      name="description"
+                      rows="5"
+                      style={{
+                        resize: "none",
+                        color: "white",
+                        borderBottomLeftRadius: 10,
+                        borderTopLeftRadius: 10,
+                      }}
+                      value={user.description || "no description yet"}
+                      readOnly></TextArea>
+                  </td>
+                </tr>
+                <S.UserDescriptionTitle>Interests:</S.UserDescriptionTitle>
+                <tr>
+                  <td>
+                    <TextArea
+                      id="interests"
+                      name="interests"
+                      rows="2"
+                      style={{
+                        resize: "none",
+                        color: "white",
+                      }}
+                      value={user.interests || "no interests yet"}
+                      readOnly></TextArea>
+                  </td>
+                </tr>
+              </table>
             </S.UserContent>
           </Shared.ContentBlock>
         </Shared.UserPageContainer>
@@ -191,6 +200,6 @@ const UserProfile = () => {
       </Shared.PageContent>
     </L.SharedLayout>
   );
-};
+});
 
 export default UserProfile;

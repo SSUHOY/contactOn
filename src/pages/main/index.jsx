@@ -18,9 +18,7 @@ const Main = observer(() => {
 
   const [userList, setUserList] = useState([]);
   const [searchType, setSearchType] = useState("");
-  console.log("🚀 ~ Main ~ searchType:", searchType);
   const [gender, setGender] = useState("");
-  console.log("🚀 ~ Main ~ gender:", gender);
   const [searchText, setSearchText] = useState("");
 
   const {

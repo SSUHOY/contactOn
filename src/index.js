@@ -14,7 +14,7 @@ root.render(
           token: {
             colorPrimary: "#8774E1",
             colorBgContainer: "#101010",
-            colorTextBase: "#AAAAAB",
+            colorTextBase: "#BBC0C5",
           },
           components: {
             Input: {

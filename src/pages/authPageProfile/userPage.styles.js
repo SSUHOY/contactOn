@@ -1,5 +1,4 @@
-import { Button, Input, Select, Upload } from "antd";
-import TextArea from "antd/es/input/TextArea";
+import { Button } from "antd";
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
