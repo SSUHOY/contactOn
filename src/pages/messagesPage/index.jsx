@@ -73,7 +73,6 @@ const MessagesInBox = () => {
     });
   };
 
-
   return (
     <>
       {contextHolder}
@@ -161,7 +160,7 @@ const MessagesInBox = () => {
                 rows={4}
                 value={messageContent}
                 placeholder="Type your message"
-                style={{ background: "#D9D9D9", resize: "none" }}
+                style={{ resize: "none" }}
                 onChange={handleTextAreaChange}
               />
               <Button

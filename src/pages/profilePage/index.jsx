@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import userStore from "../../store/users";
 import { Link, useParams } from "react-router-dom";
-import { observer } from "mobx-react-lite";
 import Burger from "../../components/BurgerMenu";
 import {
   PlusOutlined,
@@ -151,7 +150,6 @@ const UserProfile = () => {
             <br />
             <S.UserContent>
               <S.UserDescriptionTitle>Description:</S.UserDescriptionTitle>
-
               <TextArea
                 id="description"
                 name="description"

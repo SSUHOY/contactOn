@@ -9,7 +9,7 @@ body {
   width: 100vw;
   height: 100vh;
   span {
-    color: #9f9f9f;
+    color: #f1fcf8;
   }
   ::-webkit-scrollbar {
     width: 10px;
@@ -27,26 +27,28 @@ body {
     font-size: 14px;
     font-weight: bold;
   }
-  :where(.css-dev-only-do-not-override-mik4fl)
-    .ant-carousel
-    .slick-dots
-    button {
+
+  .ant-carousel .slick-dots button {
     background: #7f9f7f;
     height: 10px;
   }
-  :where(.css-dev-only-do-not-override-mik4fl)
-    .ant-carousel
-    .slick-dots
-    li.slick-active
-    button {
+  .ant-carousel .slick-dots li.slick-active button {
     background: #8774e1;
   }
-  :where(.css-dev-only-do-not-override-mik4fl).ant-upload-wrapper
+  .ant-upload-wrapper
     .ant-upload-list.ant-upload-list-picture-card
     .ant-upload-list-item-error,
-  :where(.css-dev-only-do-not-override-mik4fl).ant-upload-wrapper
+  .ant-upload-wrapper
     .ant-upload-list.ant-upload-list-picture-circle
     .ant-upload-list-item-error {
     border-color: gray;
+  }
+  .ant-upload-wrapper.ant-upload-picture-circle-wrapper
+    .ant-upload.ant-upload-select {
+    width: 200px;
+    height: 200px;
+  }
+  .ant-message > span {
+    color: black;
   }
 }

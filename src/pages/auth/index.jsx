@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import * as S from "./authPage.styles";
 import { useNavigate } from "react-router-dom";
 import userStore from "../../store/users";
-import { App, theme } from "antd";
+import { App, Button, Input, message, theme } from "antd";
 import * as L from "../../components/Shared/Layout/index";
 import Burger from "../../components/BurgerMenu";
 
@@ -24,7 +24,7 @@ const validateMessages = {
 };
 
 const Auth = () => {
-  const [error, setError] = useState("");
+  const [messageApi, contextHolder] = message.useMessage();
   const [repeatedPassword, setRepeatedPassword] = useState("");
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,8 +34,6 @@ const Auth = () => {
     password: "",
     name: "",
   });
-
-  const { modal } = App.useApp();
 
   const navigate = useNavigate();
 
@@ -61,9 +59,11 @@ const Auth = () => {
       navigate(`/profile`, { replace: true });
       setIsLoading(false);
     } else {
-      modal.error(
-        "Error! User doesn't exist or the information you entered isn't correct"
-      );
+      messageApi.open({
+        type: "error",
+        content:
+          "Error! User doesn't exist or the information you entered isn't correct",
+      });
       setIsLoading(false);
     }
     event.preventDefault();
@@ -110,7 +110,10 @@ const Auth = () => {
       repeatedPassword !== "" &&
       repeatedPassword === userData.password
     ) {
-      modal.error("Email already exists");
+      messageApi.open({
+        type: "error",
+        content: "Email already exists",
+      });
     } else if (
       userData.name === "" ||
       userData.password === "" ||
@@ -118,13 +121,16 @@ const Auth = () => {
       repeatedPassword === "" ||
       repeatedPassword !== userData.password
     ) {
-      modal.error("Registration error");
+      messageApi.open({
+        type: "error",
+        content:
+          "Registration error",
+      });
     }
   };
 
   const handleSetIsLoginMode = (e) => {
     setIsLoginMode(false);
-    setError("");
   };
 
   const {
@@ -138,6 +144,7 @@ const Auth = () => {
 
   return (
     <>
+      {contextHolder}
       <L.SharedLayout style={{ background: colorBgContainer }}>
         <L.SharedHeader style={{ background: colorBgContainer }}>
           <Burger />
@@ -156,35 +163,38 @@ const Auth = () => {
                   onChange={(e) =>
                     setUserData({ ...userData, email: e.target.value })
                   }>
-                  <S.StyledInput type="email" placeholder="enter email" />
+                  <Input type="email" placeholder="enter email" />
                 </S.StyledFormItem>
                 <S.StyledFormItem
                   name={["password"]}
                   label={<span style={{ color: "white" }}>Password:</span>}
-                  rules={[{ required: true, type: "password" }]}
+                  rules={[
+                    {
+                      required: true,
+                      type: "password",
+                      message: "Please, enter password",
+                    },
+                  ]}
                   onChange={(e) =>
                     setUserData({ ...userData, password: e.target.value })
                   }>
-                  <S.StyledInputPassword
+                  <Input
                     autoComplete="on"
                     type="password"
                     placeholder="enter password"
                   />
                 </S.StyledFormItem>
                 <S.StyledButtonBox>
-                  <S.StyledButton
+                  <Button
                     type="primary"
                     htmlType="submit"
                     onClick={submitHandlerLogin}>
                     Log in
-                  </S.StyledButton>
-                  <S.StyledButton
-                    htmlType="submit"
-                    onClick={handleSetIsLoginMode}>
+                  </Button>
+                  <Button htmlType="submit" onClick={handleSetIsLoginMode}>
                     Register
-                  </S.StyledButton>
+                  </Button>
                 </S.StyledButtonBox>
-                <S.Error>{error}</S.Error>
               </S.StyledForm>
             </>
           ) : (
@@ -201,7 +211,7 @@ const Auth = () => {
                     setUserData({ ...userData, name: e.target.value })
                   }
                   rules={[{ required: true, type: "text" }]}>
-                  <S.StyledInput type="text" placeholder="Enter your name" />
+                  <Input type="text" placeholder="Enter your name" />
                 </S.StyledFormItem>
                 <S.StyledFormItem
                   name={["email"]}
@@ -211,7 +221,7 @@ const Auth = () => {
                     setUserData({ ...userData, email: e.target.value })
                   }
                   rules={[{ required: true, type: "email" }]}>
-                  <S.StyledInput type="email" placeholder="Enter your Email" />
+                  <Input type="email" placeholder="Enter your Email" />
                 </S.StyledFormItem>
                 <S.StyledFormItem
                   name={["password"]}
@@ -222,10 +232,16 @@ const Auth = () => {
                     setUserData({ ...userData, password: e.target.value })
                   }
                   rules={[{ required: true, type: "password" }]}>
-                  <S.StyledInputPassword
+                  <Input
                     autoComplete="on"
                     type="password"
                     placeholder="Enter your password"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please, enter password",
+                      },
+                    ]}
                   />
                 </S.StyledFormItem>
                 <S.StyledFormItem
@@ -235,24 +251,24 @@ const Auth = () => {
                   }
                   onChange={(e) => repeatPasswordHandler(e)}
                   rules={[{ required: true, type: "password" }]}>
-                  <S.StyledInputPassword
+                  <Input
                     autoComplete="on"
                     type="password"
                     placeholder="Repeat password"
                   />
                 </S.StyledFormItem>
                 <S.StyledButtonBox>
-                  <S.StyledButton
+                  <Button
                     type="primary"
                     htmlType="submit"
                     onClick={submitHandlerRegistration}>
                     Register
-                  </S.StyledButton>
-                  <S.StyledButton
+                  </Button>
+                  <Button
                     htmlType="submit"
                     onClick={() => setIsLoginMode(true)}>
                     Back
-                  </S.StyledButton>
+                  </Button>
                 </S.StyledButtonBox>
               </S.StyledForm>
             </>

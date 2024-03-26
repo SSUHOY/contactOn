@@ -8,7 +8,7 @@ import {
   PlusOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
-import { Form, Space, App, theme } from "antd";
+import { Form, Space, App, theme, Input, Select, Upload } from "antd";
 import * as L from "../../components/Shared/Layout/index";
 import Logo from "../../components/Shared/Logo";
 import DropDown from "../../components/Dropdown";
@@ -16,6 +16,7 @@ import UploadPhotos from "../../components/UploadPhotos";
 import { FileImageOutlined } from "@ant-design/icons";
 import { MailOutlined, TeamOutlined } from "@ant-design/icons";
 import AuthUserPhotoCarousel from "../../components/PhotoCarousel/authUserPhoto";
+import TextArea from "antd/es/input/TextArea";
 
 const AuthUserProfile = observer(() => {
   const isAuth = userStore.isAuth;
@@ -53,11 +54,11 @@ const AuthUserProfile = observer(() => {
   const beforeUpload = (file) => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
-      modal.error("You can only upload JPG/PNG file!");
+      modal.warning("You can only upload JPG/PNG file!");
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      modal.error("Image must smaller than 2MB!");
+      modal.warning("Image must smaller than 2MB!");
     }
     return isJpgOrPng && isLt2M;
   };
@@ -83,7 +84,7 @@ const AuthUserProfile = observer(() => {
       setNewInterest("");
       setIsSave(false);
     } else {
-      modal.error("type text");
+      modal.warning("type text");
     }
   };
 
@@ -140,7 +141,7 @@ const AuthUserProfile = observer(() => {
           <S.UserPageContainer>
             <S.LeftContentBlock>
               <S.ProfileImgContainer>
-                <S.ImgUploadWrapper
+                <Upload
                   name="photo"
                   listType="picture-circle"
                   className="avatar-uploader"
@@ -160,7 +161,7 @@ const AuthUserProfile = observer(() => {
                   ) : (
                     uploadButton
                   )}
-                </S.ImgUploadWrapper>
+                </Upload>
                 {userAuthData.photo ? (
                   <div
                     style={{
@@ -202,16 +203,18 @@ const AuthUserProfile = observer(() => {
                   <Space>
                     <Form.Item
                       style={{
+                        width: "100%",
                         marginBottom: 0,
                         color: "white",
                       }}>
                       Name:
-                      <S.StyledInput
+                      <Input
                         name="name"
                         value={userAuthData?.name || ""}
                         onChange={onChange}
                         style={{
                           marginBottom: 0,
+                          width: 150,
                         }}
                         placeholder="Your name"
                       />
@@ -220,9 +223,10 @@ const AuthUserProfile = observer(() => {
                       style={{
                         marginBottom: 0,
                         color: "white",
+                        width: 150,
                       }}>
                       Age:
-                      <S.StyledInput
+                      <Input
                         name="age"
                         placeholder="Your age"
                         value={userAuthData?.age || ""}
@@ -238,11 +242,12 @@ const AuthUserProfile = observer(() => {
                         color: "white",
                       }}>
                       City:
-                      <S.StyledInput
+                      <Input
                         name="city"
                         placeholder="City"
                         style={{
                           marginBottom: 0,
+                          width: 150,
                         }}
                         value={userAuthData?.city || ""}
                         onChange={onChange}
@@ -254,7 +259,8 @@ const AuthUserProfile = observer(() => {
                         color: "white",
                       }}>
                       Gender:
-                      <S.StyledSelect
+                      <Select
+                        style={{ width: 150, height: 22 }}
                         onChange={onChangeGenderFromSelect}
                         defaultValue={userAuthData.gender === "Male" && "Male"}
                         placeholder="Select a gender"
@@ -284,7 +290,7 @@ const AuthUserProfile = observer(() => {
                       color: "white",
                     }}>
                     Description:
-                    <S.StyledTextArea
+                    <TextArea
                       placeholder="Profile description"
                       value={userAuthData?.description || ""}
                       onChange={onChange}
@@ -301,15 +307,16 @@ const AuthUserProfile = observer(() => {
                       alignItems: "center",
                     }}>
                     Interests:
-                    <S.StyledTextArea
+                    <TextArea
                       value={userAuthData?.interests || ""}
                       readOnly
+                      placeholder="Click add to set interests..."
                       style={{ width: 410, resize: "none" }}
                     />
                   </Form.Item>
                 </Space>
                 <Space>
-                  <S.StyledInput
+                  <Input
                     value={newInterest}
                     placeholder="Add new interest"
                     onChange={handleInputChange}

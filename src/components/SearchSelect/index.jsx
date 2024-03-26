@@ -1,10 +1,11 @@
 import React from "react";
-import { StyledSelect } from "../SearchBar/searchBar.styled";
+import { Select } from "antd";
 
 const SelectSearchType = ({ typeSelection }) => {
   return (
     <>
-      <StyledSelect
+      <Select
+style={{color: 'black'}}
         placeholder="Search by"
         optionFilterProp="children"
         onChange={(e) => typeSelection(e)}

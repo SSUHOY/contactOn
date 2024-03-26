@@ -52,31 +52,6 @@ export const ProfileImgContainer = styled.div`
   height: 200px;
 `;
 
-export const ImgUploadWrapper = styled(Upload)`
-  &:where(
-      .css-dev-only-do-not-override-mik4fl
-    ).ant-upload-wrapper.ant-upload-picture-card-wrapper,
-  &:where(
-      .css-dev-only-do-not-override-mik4fl
-    ).ant-upload-wrapper.ant-upload-picture-circle-wrapper {
-    width: 100%;
-    height: 100%;
-    display: inline-block;
-  }
-  &:where(
-      .css-dev-only-do-not-override-mik4fl
-    ).ant-upload-wrapper.ant-upload-picture-circle-wrapper
-    .ant-upload.ant-upload-select {
-    width: 100%;
-    height: 100%;
-  }
-  &:where(.css-mik4fl).ant-upload-wrapper.ant-upload-picture-circle-wrapper
-    .ant-upload.ant-upload-select {
-    width: 192px;
-    height: 192px;
-  }
-`;
-
 export const ProfileImg = styled.img`
   border-radius: 100%;
   width: 100%;
@@ -113,90 +88,22 @@ export const UserPageTitle = styled.h4`
   font-size: 14px;
 `;
 
-export const StyledInput = styled(Input)`
-  background-color: #d9d9d9;
-  color: black;
-  width: 150px;
-  padding: 10px;
-  height: auto;
-  border-radius: 3px;
-  .ant-space-item {
-    .ant-input {
-      &.placeholder-shown {
-        color: "red";
-      }
-    }
-  }
-  &:where(
-      .css-dev-only-do-not-override-mik4fl
-    ).ant-input-outlined.ant-input-status-error:not(.ant-input-disabled) {
-    background-color: #d9d9d9;
-  }
-  &:focus-within {
-    background-color: #d9d9d9;
-    border-color: #8774e1;
-  }
-  &:hover {
-    background-color: #d9d9d9;
-    border-radius: 3px solid #8774e1;
-  }
-`;
-export const StyledTextArea = styled(TextArea)`
-  background-color: #d9d9d9;
-  color: black;
-  height: auto;
-  border-radius: 3px;
-  width: 150px;
-  &:where(
-      .css-dev-only-do-not-override-mik4fl
-    ).ant-input-outlined.ant-input-status-error:not(.ant-input-disabled) {
-    background-color: #d9d9d9;
-  }
-  &:focus-within {
-    background-color: #d9d9d9;
-    border-color: #8774e1;
-  }
-  &:hover {
-    background-color: #d9d9d9;
-    border-radius: 3px solid #8774e1;
-  }
-`;
-export const StyledSelect = styled(Select)`
-  &:where(
-      .css-dev-only-do-not-override-mik4fl
-    ).ant-select.ant-select-in-form-item {
-    width: 150px;
-    height: 100%;
-    .ant-select-selector {
-      background-color: #d9d9d9;
-      border-radius: 3px;
-      .ant-select-selection-item {
-        color: black;
-      }
-      .ant-select-selection-placeholder {
-        color: black;
-      }
-    }
-    .and-input {
-      height: 100%;
-    }
-  }
-`;
 export const StyledButton = styled(Button)`
-  &:where(.css-dev-only-do-not-override-mik4fl).ant-btn-default {
+  .ant-button > span {
+    color: "white";
+  }
+
+  .ant-btn-default {
     margin-bottom: 14px;
     padding: 4px;
     span {
       color: #d9d9d9;
     }
   }
-  &:where(.css-dev-only-do-not-override-mik4fl).ant-btn-primary {
+  .ant-btn-primary {
     margin-bottom: 14px;
     width: 150px;
     padding: 5px;
-    span {
-      color: white;
-    }
   }
 `;
 

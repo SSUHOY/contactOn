@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { Button, Modal, Upload } from "antd";
 import userStore from "../../store/users";
 

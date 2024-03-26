@@ -18,12 +18,12 @@ const contentStyle = {
 const AuthUserPhotoCarousel = observer(() => {
   const authUser = userStore.getAuthorizedUser();
   const user = toJS(userStore.users.find((item) => item.id === authUser.id));
-
+  console.log(user.photoGallery);
   return (
     <>
       <Carousel style={{ borderRadius: 20 }}>
-        {user.photoGallery.map((photo) => (
-          <div key={photo.id}>
+        {user.photoGallery.map((photo, index) => (
+          <div key={index}>
             <img src={photo} alt="photo_gallery" style={contentStyle}></img>
           </div>
         ))}

@@ -1,6 +1,7 @@
 import * as S from "./searchBar.styled";
 import { SearchOutlined } from "@ant-design/icons";
 import SelectSearchType from "../SearchSelect";
+import { Select } from "antd";
 
 const SearchBar = ({ onChange, typeSelection, searchType, changeGender }) => {
   return (
@@ -10,7 +11,7 @@ const SearchBar = ({ onChange, typeSelection, searchType, changeGender }) => {
 
       {searchType === "Gender" ? (
         <>
-          <S.StyledSelect
+          <Select
             placeholder="Select gender"
             onChange={changeGender}
             optionFilterProp="children"
