@@ -61,6 +61,9 @@ export const FiltersBox = styled.div`
 export const SearchAndSortContainer = styled.div`
   width: 500px;
   align-items: center;
+  background-color: #212121;
+  border-radius: 10px;
+  padding: 10px;
 `;
 
 export const PageContainer = styled.div`

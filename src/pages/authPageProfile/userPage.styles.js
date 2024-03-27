@@ -70,6 +70,11 @@ export const ImgUploadWrapper = styled(Upload)`
     width: 100%;
     height: 100%;
   }
+  &:where(.css-mik4fl).ant-upload-wrapper.ant-upload-picture-circle-wrapper
+    .ant-upload.ant-upload-select {
+    width: 192px;
+    height: 192px;
+  }
 `;
 
 export const ProfileImg = styled.img`

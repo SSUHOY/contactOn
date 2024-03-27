@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Carousel } from "antd";
 import userStore from "../../store/users";
+import { observer } from "mobx-react-lite";
 const contentStyle = {
   margin: 0,
   height: "300px",
@@ -13,7 +14,7 @@ const contentStyle = {
   paddingBottom: 20,
   border: "1px solid gray",
 };
-const PhotoCarousel = ({ userID }) => {
+const PhotoCarousel = observer(({ userID }) => {
   const [currentSlide, setCurrentSlide] = useState(1);
   const user = userStore.getUserById(Number(userID));
 
@@ -26,7 +27,7 @@ const PhotoCarousel = ({ userID }) => {
         <Carousel afterChange={onChange}>
           {user.photoGallery.map((photo) => (
             <div key={photo.id}>
-              <img src={photo} alt="gallery" style={contentStyle}></img>
+              <img src={photo} alt="photo_gallery" style={contentStyle}></img>
             </div>
           ))}
         </Carousel>
@@ -49,5 +50,5 @@ const PhotoCarousel = ({ userID }) => {
       )}
     </>
   );
-};
+});
 export default PhotoCarousel;

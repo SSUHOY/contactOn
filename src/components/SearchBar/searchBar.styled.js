@@ -4,7 +4,6 @@ import styled from "styled-components";
 export const CenterBlock = styled.div`
   width: 100%;
   height: 40px;
-  margin-bottom: 51px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

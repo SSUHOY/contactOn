@@ -18,7 +18,7 @@ import Logo from "../../components/Shared/Logo";
 import DropDown from "../../components/Dropdown";
 import PhotoCarousel from "../../components/PhotoCarousel";
 
-const UserProfile = observer(() => {
+const UserProfile = () => {
   const { id } = useParams();
 
   const user = userStore.getUserById(Number(id));
@@ -202,6 +202,6 @@ const UserProfile = observer(() => {
       </Shared.PageContent>
     </L.SharedLayout>
   );
-});
+};
 
 export default UserProfile;

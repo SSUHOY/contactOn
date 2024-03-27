@@ -58,17 +58,11 @@ const AuthUserProfile = observer(() => {
   };
 
   const handleChange = (info) => {
-    if (info.file.status === "uploading") {
-      setImgLoading(true);
-      return;
-    }
-    if (info.file.status === "done") {
-      getBase64(info.file.originFileObj, (url) => {
-        setImgLoading(false);
-        setImageUrl(url);
-        setAuthUserData({ ...userAuthData, photo: url });
-      });
-    }
+    getBase64(info.file.originFileObj, (url) => {
+      setImgLoading(false);
+      setImageUrl(url);
+      setAuthUserData({ ...userAuthData, photo: url });
+    });
   };
 
   const addInterest = () => {
