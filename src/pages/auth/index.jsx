@@ -205,6 +205,7 @@ const Auth = () => {
           ) : (
             <>
               <S.StyledForm
+                style={{ width: 410 }}
                 {...layout}
                 name="nest-messages"
                 validateMessages={validateMessages}>
