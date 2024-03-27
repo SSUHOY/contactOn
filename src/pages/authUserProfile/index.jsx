@@ -8,7 +8,7 @@ import {
   PlusOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
-import { Form, Space, theme, Input, Select, Upload, message } from "antd";
+import { theme, Upload, message } from "antd";
 import * as L from "../../components/Shared/Layout/index";
 import Logo from "../../components/Shared/Logo";
 import DropDown from "../../components/Dropdown";
