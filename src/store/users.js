@@ -208,27 +208,6 @@ class UserStore {
         "Welcome to the amazing page where dreams and reality meet! Let yourself be captivated and amazed by every corner of this page, where every element carries a piece of magic. Let's create an unforgettable experience together that will leave a mark on your heart and soul!",
       photo: "https://randomuser.me/api/portraits/men/20.jpg",
     },
-    {
-      id: 11,
-      name: "Юрий",
-      email: "Jurii@example.com",
-      age: 23,
-      gender: "male",
-      city: "Saint-Petersburg",
-      interests: ["фотография", "прогулки", "собаки"],
-      friends: [],
-      messages: [],
-      addToFriendsEvents: [],
-      photoGallery: [
-        "https://img.freepik.com/free-photo/forest-landscape_71767-127.jpg",
-        "https://source.unsplash.com/random/250x350",
-      ],
-      chats: [],
-      messagesEvents: [],
-      description:
-        "Люблю спорт и движение, всегда стараюсь двигаться вперед и желаю найти единомышленников",
-      photo: "https://randomuser.me/api/portraits/men/18.jpg",
-    },
   ];
   isAuth = false;
   alreadyFriends = false;
