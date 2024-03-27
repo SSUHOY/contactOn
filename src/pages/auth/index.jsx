@@ -123,8 +123,7 @@ const Auth = () => {
     ) {
       messageApi.open({
         type: "error",
-        content:
-          "Registration error",
+        content: "Registration error",
       });
     }
   };
@@ -188,10 +187,14 @@ const Auth = () => {
                   <Button
                     type="primary"
                     htmlType="submit"
-                    onClick={submitHandlerLogin}>
+                    onClick={submitHandlerLogin}
+                    disabled={isLoading}>
                     Log in
                   </Button>
-                  <Button htmlType="submit" onClick={handleSetIsLoginMode}>
+                  <Button
+                    htmlType="submit"
+                    onClick={handleSetIsLoginMode}
+                    disabled={isLoading}>
                     Register
                   </Button>
                 </S.StyledButtonBox>
@@ -259,6 +262,7 @@ const Auth = () => {
                 </S.StyledFormItem>
                 <S.StyledButtonBox>
                   <Button
+                    disabled={isLoading}
                     type="primary"
                     htmlType="submit"
                     onClick={submitHandlerRegistration}>

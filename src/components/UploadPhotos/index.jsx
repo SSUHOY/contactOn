@@ -27,8 +27,7 @@ const UploadPhotos = ({ userAuthData, setAuthUserData }) => {
   };
   const handleSavePhotosToGallery = () => {
     userStore.addToPhotoGallery(fileList);
-    setFileList([]);
-    setIsSaved(true);
+    setIsSaved(false);
     const imgURLs = fileList.map((image) => image.thumbUrl);
     setAuthUserData({ ...userAuthData, photoGallery: imgURLs });
     setFileList([]);

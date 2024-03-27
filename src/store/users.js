@@ -209,7 +209,7 @@ class UserStore {
       receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
-        "https://www.picsum.photos/id/237/200/300",
+        "https://img.freepik.com/free-photo/forest-landscape_71767-127.jpg",
         "https://source.unsplash.com/random/250x350",
       ],
       chats: [],
@@ -231,7 +231,7 @@ class UserStore {
       receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
-        "https://www.picsum.photos/id/237/200/300",
+        "https://img.freepik.com/free-photo/forest-landscape_71767-127.jpg",
         "https://source.unsplash.com/random/250x350",
       ],
       chats: [],

@@ -1,7 +1,7 @@
 import React from "react";
 import * as L from "../../components/Shared/Layout/index";
 import * as S from "../messagesPage/messagesPage.styles";
-import { InboxOutlined } from "@ant-design/icons";
+import { InboxOutlined, MailOutlined } from "@ant-design/icons";
 import { theme } from "antd";
 import Burger from "../../components/BurgerMenu";
 import Logo from "../../components/Shared/Logo";
@@ -36,7 +36,11 @@ const MessagesInBox = observer(() => {
       </L.SharedHeader>
       <L.PageContainer
         style={{ flexDirection: "column", alignItems: "center" }}>
-        <h2 style={{ color: "white" }}>Chats</h2>
+        <h2 style={{ color: "white" }}>
+          {" "}
+          <MailOutlined />
+          &nbsp; Chats &nbsp; {user.chats.length}
+        </h2>
         <S.BoxUi>
           {user?.chats?.length !== 0 ? (
             <div
@@ -101,6 +105,11 @@ const MessagesInBox = observer(() => {
               style={{
                 color: "gray",
                 textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
               }}>
               <InboxOutlined style={{ fontSize: 80, color: "white" }} />
               <p>Mailbox is empty</p>
