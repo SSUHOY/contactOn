@@ -5,6 +5,7 @@ import { toJS } from "mobx";
 import { observer } from "mobx-react-lite";
 const contentStyle = {
   margin: 0,
+  padding: 25,
   height: "300px",
   width: "300px",
   color: "#fff",
@@ -18,16 +19,24 @@ const contentStyle = {
 const AuthUserPhotoCarousel = observer(() => {
   const authUser = userStore.getAuthorizedUser();
   const user = toJS(userStore.users.find((item) => item.id === authUser.id));
-  console.log(user.photoGallery);
+
+
   return (
     <>
-      <Carousel style={{ borderRadius: 20 }}>
+      <Carousel
+        style={{ borderRadius: 20 }}
+        >
         {user.photoGallery.map((photo, index) => (
           <div key={index}>
-            <img src={photo} alt="photo_gallery" style={contentStyle}></img>
+            <img
+              key={photo.id}
+              src={photo}
+              alt="photo_gallery"
+              style={contentStyle}
+            />
           </div>
         ))}
-      </Carousel>{" "}
+      </Carousel>
       {user.photoGallery.length === 0 ? (
         <div
           style={{

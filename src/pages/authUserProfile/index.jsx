@@ -370,7 +370,10 @@ const AuthUserProfile = observer(() => {
                 <FileImageOutlined />
                 <span>Upload photos to photo gallery</span>
               </div>
-              <UploadPhotos />
+              <UploadPhotos
+                userAuthData={userAuthData}
+                setAuthUserData={setAuthUserData}
+              />
             </S.UserUploadPhotos>
             <S.UserUploadPhotos>
               <div

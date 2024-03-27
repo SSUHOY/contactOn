@@ -3,7 +3,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Button, Modal, Upload } from "antd";
 import userStore from "../../store/users";
 
-const UploadPhotos = () => {
+const UploadPhotos = ({ userAuthData, setAuthUserData }) => {
   const [saved, setIsSaved] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -27,6 +27,10 @@ const UploadPhotos = () => {
   };
   const handleSavePhotosToGallery = () => {
     userStore.addToPhotoGallery(fileList);
+    setFileList([]);
+    setIsSaved(true);
+    const imgURLs = fileList.map((image) => image.thumbUrl);
+    setAuthUserData({ ...userAuthData, photoGallery: imgURLs });
     setFileList([]);
     setIsSaved(true);
   };

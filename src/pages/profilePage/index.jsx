@@ -11,7 +11,7 @@ import {
 import { Button, theme } from "antd";
 import { FileImageOutlined } from "@ant-design/icons";
 import * as L from "../../components/Shared/Layout/index";
-import * as Shared from "../authPageProfile/userPage.styles";
+import * as Shared from "../authUserProfile/userPage.styles";
 import * as S from "./userProfilePage.styles";
 import TextArea from "antd/es/input/TextArea";
 import Logo from "../../components/Shared/Logo";
