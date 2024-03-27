@@ -211,7 +211,6 @@ class UserStore {
   ];
   isAuth = false;
   alreadyFriends = false;
-  isRead = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -384,10 +383,12 @@ class UserStore {
     }
   }
   updateUserMessages(userID, updatedMessages) {
-    let user = this.users.find((user) => user.id === userID);
+    let user = toJS(this.users.find((user) => user.id === userID));
 
     if (user) {
-      user.receivedMessages = updatedMessages;
+      const userIndex = this.users.findIndex((el) => el.id === userID);
+      this.users[userIndex] = { ...user, messages: updatedMessages };
+      console.log(toJS(this.users));
       this.saveUsersToLocalStorage();
       this.saveAuthUserData();
     } else {

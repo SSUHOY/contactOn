@@ -13,7 +13,6 @@ import { observer } from "mobx-react-lite";
 
 const MessagesInBox = observer(() => {
   const isAuth = userStore.isAuth;
-  const isRead = userStore.isRead;
 
   const [messageContent, setMessageContent] = useState("");
   const [isSend, setIsSend] = useState(false);
@@ -52,7 +51,6 @@ const MessagesInBox = observer(() => {
     );
     setMessageContent("");
     setIsSend(true);
-    userStore.isRead = false;
     success();
   };
 
@@ -63,6 +61,21 @@ const MessagesInBox = observer(() => {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   };
+
+  const updateReceiverMessages = () => {
+    const updatedMessages = user.messages.map((message) => {
+      if (message.receiverID === sender.id && message.unread) {
+        return { ...message, unread: false };
+      }
+      return message;
+    });
+
+    userStore.updateUserMessages(user.id, updatedMessages);
+  };
+
+  useEffect(() => {
+    updateReceiverMessages();
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
@@ -139,8 +152,6 @@ const MessagesInBox = observer(() => {
                     <S.SendMessagesBox
                       key={index}
                       style={{
-                        minWidth: 150,
-                        maxWidth: 320,
                         alignSelf:
                           message.senderID === sender.id
                             ? "flex-end"
@@ -154,36 +165,31 @@ const MessagesInBox = observer(() => {
                         <p style={{ wordWrap: "break-word" }}>
                           {message.content}
                         </p>
+                        <div>
+                          {" "}
+                          {message.unread ? (
+                            <span
+                              style={{
+                                fontSize: 11,
+                                color: "#2A3E48",
+                              }}>
+                              unread &nbsp;
+                              <CheckOutlined />
+                            </span>
+                          ) : (
+                            <span
+                              style={{
+                                fontSize: 11,
+                                color: "#9AD745",
+                              }}>
+                              read &nbsp;
+                              <CheckOutlined style={{ color: "#9AD745" }} />
+                            </span>
+                          )}
+                        </div>
                       </S.SendMessage>
                     </S.SendMessagesBox>
                   ))}
-                  <div
-                    style={{
-                      position: "relative",
-                      bottom: "12%",
-                      right: !isSend ? "66%" : "5%",
-                    }}>
-                    {" "}
-                    {!isRead ? (
-                      <span
-                        style={{
-                          fontSize: 11,
-                          color: "#323233",
-                        }}>
-                        unread &nbsp;
-                        <CheckOutlined />
-                      </span>
-                    ) : (
-                      <span
-                        style={{
-                          fontSize: 11,
-                          color: "#9AD745",
-                        }}>
-                        read &nbsp;
-                        <CheckOutlined style={{ color: "#9AD745" }} />
-                      </span>
-                    )}
-                  </div>
                 </S.MessagesAligner>
               </S.MessagesField>
               <p>Your message:</p>
