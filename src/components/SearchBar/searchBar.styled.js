@@ -1,4 +1,3 @@
-import { Select } from "antd";
 import styled from "styled-components";
 
 export const CenterBlock = styled.div`
@@ -28,7 +27,7 @@ export const SearchText = styled.input`
   line-height: 24px;
   color: #ffffff;
   &.input[type="number"] {
-    -moz-appearance: textfield; /* Для Firefox */
+    -moz-appearance: textfield;
   }
 
   &::-webkit-inner-spin-button,
@@ -37,23 +36,3 @@ export const SearchText = styled.input`
   }
 `;
 
-export const StyledSelect = styled(Select)`
-  margin-right: 20px;
-  &:where(.css-dev-only-do-not-override-mik4fl).ant-select-single {
-    width: 150px;
-    height: 100%;
-    .ant-select-selector {
-      background-color: #d9d9d9;
-      border-radius: 3px;
-      .ant-select-selection-item {
-        color: black;
-      }
-      .ant-select-selection-placeholder {
-        color: black;
-      }
-    }
-    .and-input {
-      height: 100%;
-    }
-  }
-`;

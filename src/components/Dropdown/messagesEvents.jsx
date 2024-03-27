@@ -8,8 +8,9 @@ import { Dropdown } from "antd";
 const Messages = () => {
   const authUser = userStore.getAuthorizedUser();
 
-  const clearEvents = () => {
+  const clearMessagesEvents = () => {
     userStore.clearMessagesEvents(authUser.id);
+    userStore.isRead = true;
   };
 
   const items = [
@@ -20,7 +21,7 @@ const Messages = () => {
           <p>You have {authUser.messagesEvents.length} new messages</p>
           {authUser.messagesEvents.length !== 0 ? (
             <Link to={"/messages"}>
-              <u>Click to show messages</u>
+              <u>Click to show messages and read all</u>
             </Link>
           ) : (
             ""
@@ -33,12 +34,12 @@ const Messages = () => {
   return (
     <div>
       <button
+        onClick={clearMessagesEvents}
         style={{
           background: "none",
           border: "none",
           cursor: "pointer",
-        }}
-        onClick={clearEvents}>
+        }}>
         <Dropdown
           menu={{ items }}
           trigger={["click"]}

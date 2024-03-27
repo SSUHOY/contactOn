@@ -65,6 +65,8 @@ const Burger = () => {
           "3",
           <Link to={"/friends"}>
             <TeamOutlined />
+            &nbsp;
+            {authUser.friends.length}
           </Link>
         )
       : "",
@@ -74,6 +76,8 @@ const Burger = () => {
           "4",
           <Link to={"/messages"}>
             <MailOutlined />
+            &nbsp;
+            {authUser.chats.length}
           </Link>
         )
       : "",

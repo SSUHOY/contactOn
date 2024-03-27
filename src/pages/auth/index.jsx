@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import * as S from "./authPage.styles";
 import { useNavigate } from "react-router-dom";
 import userStore from "../../store/users";
-import { message, theme } from "antd";
+import { Button, Input, message, theme } from "antd";
 import * as L from "../../components/Shared/Layout/index";
 import Burger from "../../components/BurgerMenu";
 
@@ -24,7 +24,7 @@ const validateMessages = {
 };
 
 const Auth = () => {
-  const [error, setError] = useState("");
+  const [messageApi, contextHolder] = message.useMessage();
   const [repeatedPassword, setRepeatedPassword] = useState("");
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -59,9 +59,11 @@ const Auth = () => {
       navigate(`/profile`, { replace: true });
       setIsLoading(false);
     } else {
-      message.error(
-        "Error! User doesn't exist or the information you entered isn't correct"
-      );
+      messageApi.open({
+        type: "error",
+        content:
+          "Error! User doesn't exist or the information you entered isn't correct",
+      });
       setIsLoading(false);
     }
     event.preventDefault();
@@ -108,7 +110,10 @@ const Auth = () => {
       repeatedPassword !== "" &&
       repeatedPassword === userData.password
     ) {
-      message.error("Email already exists");
+      messageApi.open({
+        type: "error",
+        content: "Email already exists",
+      });
     } else if (
       userData.name === "" ||
       userData.password === "" ||
@@ -116,13 +121,15 @@ const Auth = () => {
       repeatedPassword === "" ||
       repeatedPassword !== userData.password
     ) {
-      message.error("Registration error");
+      messageApi.open({
+        type: "error",
+        content: "Registration error",
+      });
     }
   };
 
-  const handleSetIsLoginMode = (e) => {
+  const handleSetIsLoginMode = () => {
     setIsLoginMode(false);
-    setError("");
   };
 
   const {
@@ -132,10 +139,12 @@ const Auth = () => {
   useEffect(() => {
     userStore.saveUsersToLocalStorage();
     setUserList(userStore.users);
+    setIsLoading(false);
   }, [userData, isLoading]);
 
   return (
     <>
+      {contextHolder}
       <L.SharedLayout style={{ background: colorBgContainer }}>
         <L.SharedHeader style={{ background: colorBgContainer }}>
           <Burger />
@@ -149,108 +158,125 @@ const Auth = () => {
                 validateMessages={validateMessages}>
                 <S.StyledFormItem
                   name={["email"]}
-                  label={<span style={{ color: "white" }}>Email:</span>}
+                  label={<span style={{ color: "white" }}>Email</span>}
                   rules={[{ required: true, type: "email" }]}
                   onChange={(e) =>
                     setUserData({ ...userData, email: e.target.value })
                   }>
-                  <S.StyledInput type="email" placeholder="enter email" />
+                  <Input type="email" placeholder="enter email" />
                 </S.StyledFormItem>
                 <S.StyledFormItem
                   name={["password"]}
-                  label={<span style={{ color: "white" }}>Password:</span>}
-                  rules={[{ required: true, type: "password" }]}
+                  label={<span style={{ color: "white" }}>Password</span>}
+                  rules={[
+                    {
+                      required: true,
+                      type: "password",
+                      message: "Please, enter password",
+                    },
+                  ]}
                   onChange={(e) =>
                     setUserData({ ...userData, password: e.target.value })
                   }>
-                  <S.StyledInputPassword
-                    autocomplete="on"
+                  <Input
+                    autoComplete="on"
                     type="password"
                     placeholder="enter password"
                   />
                 </S.StyledFormItem>
                 <S.StyledButtonBox>
-                  <S.StyledButton
+                  <Button
                     type="primary"
                     htmlType="submit"
-                    onClick={submitHandlerLogin}>
+                    onClick={submitHandlerLogin}
+                    disabled={isLoading}>
                     Log in
-                  </S.StyledButton>
-                  <S.StyledButton
+                  </Button>
+                  <br />
+                  <Button
                     htmlType="submit"
-                    onClick={handleSetIsLoginMode}>
+                    onClick={handleSetIsLoginMode}
+                    disabled={isLoading}>
                     Register
-                  </S.StyledButton>
+                  </Button>
                 </S.StyledButtonBox>
-                <S.Error>{error}</S.Error>
               </S.StyledForm>
             </>
           ) : (
             <>
               <S.StyledForm
+                style={{ width: 410 }}
                 {...layout}
                 name="nest-messages"
                 validateMessages={validateMessages}>
                 <S.StyledFormItem
                   name={["name"]}
-                  label={<span style={{ color: "white" }}>Name:</span>}
+                  label={<span style={{ color: "white" }}>Name</span>}
                   value={userData.name}
                   onChange={(e) =>
                     setUserData({ ...userData, name: e.target.value })
                   }
                   rules={[{ required: true, type: "text" }]}>
-                  <S.StyledInput type="text" placeholder="Enter your name" />
+                  <Input type="text" placeholder="Enter your name" />
                 </S.StyledFormItem>
                 <S.StyledFormItem
                   name={["email"]}
-                  label={<span style={{ color: "white" }}>Email:</span>}
+                  label={<span style={{ color: "white" }}>Email</span>}
                   value={userData.password}
                   onChange={(e) =>
                     setUserData({ ...userData, email: e.target.value })
                   }
                   rules={[{ required: true, type: "email" }]}>
-                  <S.StyledInput type="email" placeholder="Enter your Email" />
+                  <Input type="email" placeholder="Enter your Email" />
                 </S.StyledFormItem>
                 <S.StyledFormItem
                   name={["password"]}
-                  autocomplete="on"
-                  label={<span style={{ color: "white" }}>Password:</span>}
+                  autoComplete="on"
+                  label={<span style={{ color: "white" }}>Password</span>}
                   value={userData.password}
                   onChange={(e) =>
                     setUserData({ ...userData, password: e.target.value })
                   }
                   rules={[{ required: true, type: "password" }]}>
-                  <S.StyledInputPassword
-                    autocomplete="on"
+                  <Input
+                    autoComplete="on"
                     type="password"
                     placeholder="Enter your password"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please, enter password",
+                      },
+                    ]}
                   />
                 </S.StyledFormItem>
                 <S.StyledFormItem
                   name={["user", "repeat-password"]}
                   label={
-                    <span style={{ color: "white" }}>Repeat password:</span>
+                    <span style={{ color: "white" }}>Repeat password</span>
                   }
                   onChange={(e) => repeatPasswordHandler(e)}
                   rules={[{ required: true, type: "password" }]}>
-                  <S.StyledInputPassword
-                    autocomplete="on"
+                  <Input
+                    autoComplete="on"
                     type="password"
                     placeholder="Repeat password"
                   />
                 </S.StyledFormItem>
                 <S.StyledButtonBox>
-                  <S.StyledButton
+                  <Button
+                    disabled={isLoading}
                     type="primary"
                     htmlType="submit"
                     onClick={submitHandlerRegistration}>
                     Register
-                  </S.StyledButton>
-                  <S.StyledButton
+                  </Button>
+                  <br />
+                  <Button
                     htmlType="submit"
                     onClick={() => setIsLoginMode(true)}>
                     Back
-                  </S.StyledButton>
+                  </Button>
                 </S.StyledButtonBox>
               </S.StyledForm>
             </>

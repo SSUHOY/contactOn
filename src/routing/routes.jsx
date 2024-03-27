@@ -1,13 +1,13 @@
 import { Route, Routes } from "react-router";
 import NotFound from "../pages/notFound";
 import { ProtectedRoute } from "./protected-route";
-import AuthUserProfile from "../pages/authPageProfile";
+import AuthUserProfile from "../pages/authUserProfile";
 import UserProfile from "../pages/profilePage";
 import MessagesUI from "../pages/messagesPage";
 import MessagesInBox from "../pages/messagesInBox";
 import Friends from "../pages/friendsPage";
 import Main from "../pages/main";
-import Auth from '../pages/auth'
+import Auth from "../pages/auth";
 
 const AppRoutes = () => {
   return (

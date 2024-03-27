@@ -13,8 +13,13 @@ root.render(
         theme={{
           token: {
             colorPrimary: "#8774E1",
-            borderRadius: 2,
             colorBgContainer: "#101010",
+            colorTextBase: "#A9A9A9",
+          },
+          components: {
+            Input: {
+              colorPrimary: "#eb2f96",
+            },
           },
         }}>
         <App />

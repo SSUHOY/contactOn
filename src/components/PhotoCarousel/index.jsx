@@ -24,13 +24,16 @@ const PhotoCarousel = observer(({ userID }) => {
   return (
     <>
       <Carousel afterChange={onChange} style={{ borderRadius: 20 }}>
-        <Carousel afterChange={onChange}>
-          {user.photoGallery.map((photo) => (
-            <div key={photo.id}>
-              <img src={photo} alt="photo_gallery" style={contentStyle}></img>
-            </div>
-          ))}
-        </Carousel>
+        {user.photoGallery.map((photo, index) => (
+          <div key={index}>
+            <img
+              key={photo.id}
+              src={photo}
+              alt="photo_gallery"
+              style={contentStyle}
+            />
+          </div>
+        ))}
       </Carousel>{" "}
       {user.photoGallery.length === 0 ? (
         <div

@@ -15,7 +15,7 @@ const DropDown = () => {
   const clearEvents = () => {
     userStore.clearFriendsEvents(authUser.id);
   };
-
+ 
   const items = [
     {
       key: "1",
@@ -52,6 +52,7 @@ const DropDown = () => {
             cursor: "pointer",
           }}>
           <Dropdown
+          
             menu={{ items }}
             trigger={["click"]}
             style={{ textAlign: "center" }}>

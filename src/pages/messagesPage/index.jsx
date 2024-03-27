@@ -2,16 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import * as L from "../../components/Shared/Layout/index";
 import * as S from "./messagesPage.styles";
 import { Button, message, theme } from "antd";
+import { CheckOutlined } from "@ant-design/icons";
 import Burger from "../../components/BurgerMenu";
 import Logo from "../../components/Shared/Logo";
 import TextArea from "antd/es/input/TextArea";
 import { useParams } from "react-router-dom";
-
 import userStore from "../../store/users";
 import DropDown from "../../components/Dropdown";
+import { observer } from "mobx-react-lite";
 
-const MessagesInBox = () => {
+const MessagesInBox = observer(() => {
   const isAuth = userStore.isAuth;
+  const isRead = userStore.isRead;
 
   const [messageContent, setMessageContent] = useState("");
   const [isSend, setIsSend] = useState(false);
@@ -45,10 +47,12 @@ const MessagesInBox = () => {
       sender.photo,
       user.photo,
       sender.email,
-      user.email
+      user.email,
+      user.id
     );
     setMessageContent("");
     setIsSend(true);
+    userStore.isRead = false;
     success();
   };
 
@@ -72,7 +76,6 @@ const MessagesInBox = () => {
       content: "Message successfully  delivered!",
     });
   };
-
 
   return (
     <>
@@ -124,7 +127,6 @@ const MessagesInBox = () => {
                       <S.AvatarAltText>No photo</S.AvatarAltText>
                     </div>
                   )}
-
                   <span>Email:</span>
                   <h3>{user?.email ? user.email : "-"}</h3>
                 </S.ProfileImgContainer>
@@ -137,6 +139,8 @@ const MessagesInBox = () => {
                     <S.SendMessagesBox
                       key={index}
                       style={{
+                        minWidth: 150,
+                        maxWidth: 320,
                         alignSelf:
                           message.senderID === sender.id
                             ? "flex-end"
@@ -153,19 +157,46 @@ const MessagesInBox = () => {
                       </S.SendMessage>
                     </S.SendMessagesBox>
                   ))}
+                  <div
+                    style={{
+                      position: "relative",
+                      bottom: "12%",
+                      right: !isSend ? "66%" : "5%",
+                    }}>
+                    {" "}
+                    {!isRead ? (
+                      <span
+                        style={{
+                          fontSize: 11,
+                          color: "#323233",
+                        }}>
+                        unread &nbsp;
+                        <CheckOutlined />
+                      </span>
+                    ) : (
+                      <span
+                        style={{
+                          fontSize: 11,
+                          color: "#9AD745",
+                        }}>
+                        read &nbsp;
+                        <CheckOutlined style={{ color: "#9AD745" }} />
+                      </span>
+                    )}
+                  </div>
                 </S.MessagesAligner>
               </S.MessagesField>
-
               <p>Your message:</p>
               <TextArea
                 rows={4}
                 value={messageContent}
                 placeholder="Type your message"
-                style={{ background: "#D9D9D9", resize: "none" }}
+                style={{ resize: "none" }}
                 onChange={handleTextAreaChange}
               />
               <Button
                 type="primary"
+                disabled={messageContent === ""}
                 style={{ width: 150, marginTop: 5 }}
                 onClick={handleSendMessage}>
                 Send
@@ -176,6 +207,6 @@ const MessagesInBox = () => {
       </L.SharedLayout>
     </>
   );
-};
+});
 
 export default MessagesInBox;

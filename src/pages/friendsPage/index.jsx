@@ -4,7 +4,7 @@ import Burger from "../../components/BurgerMenu";
 import Logo from "../../components/Shared/Logo";
 import { theme } from "antd";
 import { Link } from "react-router-dom";
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, TeamOutlined } from "@ant-design/icons";
 import { BoxUi, Item } from "../messagesPage/messagesPage.styles";
 import userStore from "../../store/users";
 
@@ -24,8 +24,14 @@ const Friends = () => {
         <Burger />
         <Logo />
       </L.SharedHeader>
-      <L.PageContainer>
-        <BoxUi>
+      <L.PageContainer
+        style={{ flexDirection: "column", alignItems: "center" }}>
+        <h2 style={{ color: "white" }}>
+          {" "}
+          <TeamOutlined />
+          &nbsp; Friends &nbsp; {user.friends.length}
+        </h2>
+        <BoxUi style={{ width: 600 }}>
           {user.friends.length !== 0 ? (
             <div
               style={{
@@ -35,8 +41,8 @@ const Friends = () => {
                 overflowY: "auto",
                 maxHeight: "400px",
               }}>
-              {user?.friends?.map((friends) => (
-                <Link to={`/users/${friends.id}`}>
+              {user?.friends?.map((friends, index) => (
+                <Link to={`/users/${friends.id}`} key={index}>
                   <Item key={friends.receiverID}>
                     <div
                       style={{

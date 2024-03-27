@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Carousel } from "antd";
 import userStore from "../../store/users";
 import { toJS } from "mobx";
 import { observer } from "mobx-react-lite";
 const contentStyle = {
   margin: 0,
+  padding: 25,
   height: "300px",
   width: "300px",
   color: "#fff",
@@ -19,17 +20,23 @@ const AuthUserPhotoCarousel = observer(() => {
   const authUser = userStore.getAuthorizedUser();
   const user = toJS(userStore.users.find((item) => item.id === authUser.id));
 
+
   return (
     <>
-      <Carousel style={{ borderRadius: 20 }}>
-        <Carousel>
-          {user.photoGallery.map((photo, index) => (
-            <div key={index}>
-              <img src={photo} alt="photo_gallery" style={contentStyle}></img>
-            </div>
-          ))}
-        </Carousel>
-      </Carousel>{" "}
+      <Carousel
+        style={{ borderRadius: 20 }}
+        >
+        {user.photoGallery.map((photo, index) => (
+          <div key={index}>
+            <img
+              key={photo.id}
+              src={photo}
+              alt="photo_gallery"
+              style={contentStyle}
+            />
+          </div>
+        ))}
+      </Carousel>
       {user.photoGallery.length === 0 ? (
         <div
           style={{

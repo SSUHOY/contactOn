@@ -12,7 +12,6 @@ class UserStore {
       interests: ["traveling", "reading", "hiking"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://cdn.britannica.com/34/235834-050-C5843610/two-different-breeds-of-cats-side-by-side-outdoors-in-the-garden.jpg",
@@ -34,7 +33,6 @@ class UserStore {
       interests: ["cooking", "music", "fitness"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://static.scientificamerican.com/sciam/cache/file/2AE14CDD-1265-470C-9B15F49024186C10_source.jpg?w=600",
@@ -56,7 +54,6 @@ class UserStore {
       interests: ["art", "photography", "yoga"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRjiOWJ_qJAuXSC1pAWGJcqunLp2_noXM3vPQDq6xvxRsA5o1zRe_l_xhG5_ZT7WZKTKM&usqp=CAU",
@@ -78,7 +75,6 @@ class UserStore {
       interests: ["walking", "codding", "films"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://media.gettyimages.com/id/1361767161/photo/cat-meowing-yawning-laughing-with-rose-gold-pink-background.jpg?s=612x612&w=gi&k=20&c=DvDSx7PekVWKtfvjuW1NuBn8MhXx_IrHGrKLwXAMG_I=",
@@ -100,7 +96,6 @@ class UserStore {
       interests: ["cats", "skiis", "skate"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://static01.nyt.com/images/2023/12/12/climate/12cli-cats/12cli-cats-articleLarge.jpg?quality=75&auto=webp&disable=upscale",
@@ -122,7 +117,6 @@ class UserStore {
       interests: ["wine tasting", "traveling", "film"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://www.placebear.com/400/500",
@@ -143,7 +137,6 @@ class UserStore {
       interests: ["food", "traveling", "snowboarding"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://www.picsum.photos/id/237/200/300",
@@ -164,7 +157,6 @@ class UserStore {
       interests: ["wine tasting", "traveling", "film"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://www.picsum.photos/id/237/200/300",
@@ -185,7 +177,6 @@ class UserStore {
       interests: ["wine tasting", "traveling", "film"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://www.picsum.photos/id/237/200/300",
@@ -206,10 +197,9 @@ class UserStore {
       interests: ["wine tasting", "traveling", "film"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
-        "https://www.picsum.photos/id/237/200/300",
+        "https://img.freepik.com/free-photo/forest-landscape_71767-127.jpg",
         "https://source.unsplash.com/random/250x350",
       ],
       chats: [],
@@ -218,31 +208,10 @@ class UserStore {
         "Welcome to the amazing page where dreams and reality meet! Let yourself be captivated and amazed by every corner of this page, where every element carries a piece of magic. Let's create an unforgettable experience together that will leave a mark on your heart and soul!",
       photo: "https://randomuser.me/api/portraits/men/20.jpg",
     },
-    {
-      id: 11,
-      name: "Юрий",
-      email: "Jurii@example.com",
-      age: 23,
-      gender: "male",
-      city: "Saint-Petersburg",
-      interests: ["фотография", "прогулки", "собаки"],
-      friends: [],
-      messages: [],
-      receivedMessages: [],
-      addToFriendsEvents: [],
-      photoGallery: [
-        "https://www.picsum.photos/id/237/200/300",
-        "https://source.unsplash.com/random/250x350",
-      ],
-      chats: [],
-      messagesEvents: [],
-      description:
-        "Люблю спорт и движение, всегда стараюсь двигаться вперед и желаю найти единомышленников",
-      photo: "https://randomuser.me/api/portraits/men/18.jpg",
-    },
   ];
   isAuth = false;
   alreadyFriends = false;
+  isRead = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -264,7 +233,6 @@ class UserStore {
     this.saveUsersToLocalStorage();
   }
   saveAuthUserData() {
-    console.log("object");
     let users = JSON.parse(localStorage.getItem("users")) || [];
     let authorizedUser = JSON.parse(localStorage.getItem("authorizedUser"));
     let authorizedUserData = users.find(
@@ -283,7 +251,7 @@ class UserStore {
   loadUsersFromLocalStorage() {
     const usersFromStorage = localStorage.getItem("users");
     if (usersFromStorage) {
-      this.users = JSON.parse(usersFromStorage);
+      return (this.users = JSON.parse(usersFromStorage));
     }
   }
   addFriend(userID, friendID) {
@@ -309,6 +277,7 @@ class UserStore {
     } else {
       this.alreadyFriends = false;
     }
+    return isFriend;
   }
   deleteFriend(userID, friendID) {
     let user = this.users.find((user) => user.id === userID);
@@ -339,7 +308,8 @@ class UserStore {
     senderPhoto,
     receiverPhoto,
     senderEmail,
-    receiverEmail
+    receiverEmail,
+    userID
   ) {
     let sender = this.users.find((user) => user.id === senderID);
     let receiver = this.users.find((user) => user.id === receiverID);
@@ -362,44 +332,49 @@ class UserStore {
           senderPhoto: senderPhoto,
           receiverPhoto: receiverPhoto,
           content: messageContent,
+          unread: true,
         };
         sender.messages.push(message);
         receiver.messages.push(message);
         receiver.messagesEvents.push(sender.id);
-        receiver.receivedMessages.push(message);
         localStorage.setItem("users", JSON.stringify(this.users));
         this.saveUsersToLocalStorage();
         this.saveAuthUserData();
       } else {
         let newReceiverChat = {
+          chatID: receiver.chats.length + 1,
           receiverID: receiverID,
           senderID: senderID,
           name: senderName,
           photo: senderPhoto,
           email: senderEmail,
+          userID: userID,
         };
         let newSenderChat = {
+          chatID: sender.chats.length + 1,
           senderID: senderID,
           receiverID: receiverID,
           name: receiverName,
           photo: receiverPhoto,
           email: receiverEmail,
+          userID: userID,
         };
         let message = {
           senderID: senderID,
           receiverID: receiverID,
+          userID: userID,
           senderName: senderName,
           receiverName: receiverName,
           senderPhoto: senderPhoto,
           receiverPhoto: receiverPhoto,
           content: messageContent,
+          unread: true,
         };
         receiver.chats.push(newReceiverChat);
         sender.chats.push(newSenderChat);
         sender.messages.push(message);
         receiver.messages.push(message);
         receiver.messagesEvents.push(sender.id);
-        receiver.receivedMessages.push(message);
         localStorage.setItem("users", JSON.stringify(this.users));
         this.saveUsersToLocalStorage();
         this.saveAuthUserData();
@@ -408,6 +383,18 @@ class UserStore {
       return "Error! Message isn't sent.";
     }
   }
+  updateUserMessages(userID, updatedMessages) {
+    let user = this.users.find((user) => user.id === userID);
+
+    if (user) {
+      user.receivedMessages = updatedMessages;
+      this.saveUsersToLocalStorage();
+      this.saveAuthUserData();
+    } else {
+      console.error("User not found!");
+    }
+  }
+
   getAuthorizedUser() {
     const authUser = JSON.parse(localStorage.getItem("authorizedUser"));
     return authUser;
@@ -441,6 +428,19 @@ class UserStore {
     this.saveAuthUserData();
     localStorage.setItem("users", JSON.stringify(this.users));
   }
+  // // clearMessagesEvents(userID) {
+  // //   const authUser = this.getAuthorizedUser();
+  // //   let user = authUser.messagesEvents.find((user) => user.id === userID);
+  // //   const deleteUser = user.messagesEvents.filter((item) => item !== 13);
+  // //   console.log(
+  // //     "🚀 ~ UserStore ~ clearMessagesEvents ~ deleteUser:",
+  // //     deleteUser
+  // //   );
+
+  //   this.saveUsersToLocalStorage();
+  //   this.saveAuthUserData();
+  //   localStorage.setItem("users", JSON.stringify(this.users));
+  // }
   setAuthUserData(user) {
     localStorage.setItem("authorizedUser", JSON.stringify(user));
   }

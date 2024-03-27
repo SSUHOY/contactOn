@@ -2,14 +2,8 @@ import React, { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Modal, Upload } from "antd";
 import userStore from "../../store/users";
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-const UploadPhotos = () => {
+
+const UploadPhotos = ({ userAuthData, setAuthUserData, setIsSaveAll }) => {
   const [saved, setIsSaved] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -19,7 +13,7 @@ const UploadPhotos = () => {
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+      file.preview = previewImage;
     }
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
@@ -29,12 +23,22 @@ const UploadPhotos = () => {
   };
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
+    setIsSaveAll(false);
     setIsSaved(false);
   };
   const handleSavePhotosToGallery = () => {
     userStore.addToPhotoGallery(fileList);
+    setIsSaved(false);
+    const imgURLs = fileList.map((image) => image.thumbUrl);
+    setAuthUserData({ ...userAuthData, photoGallery: imgURLs });
     setFileList([]);
     setIsSaved(true);
+  };
+
+  const emptyRequest = ({ onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
   };
 
   const uploadButton = (
@@ -57,6 +61,7 @@ const UploadPhotos = () => {
   return (
     <>
       <Upload
+        customRequest={emptyRequest}
         listType="picture-card"
         fileList={fileList}
         onPreview={handlePreview}

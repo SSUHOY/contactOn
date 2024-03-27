@@ -1,6 +1,8 @@
 body {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
@@ -8,14 +10,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
   width: 100vw;
   height: 100vh;
-  span {
-    color: #9f9f9f;
-  }
   ::-webkit-scrollbar {
     width: 10px;
     padding: 20px;
   }
-
+  span {
+    color: white;
+  }
   ::-webkit-scrollbar-thumb {
     background-color: #888;
   }
@@ -27,18 +28,43 @@ body {
     font-size: 14px;
     font-weight: bold;
   }
-  :where(.css-dev-only-do-not-override-mik4fl)
-    .ant-carousel
-    .slick-dots
-    button {
+
+  .ant-carousel .slick-dots button {
     background: #7f9f7f;
     height: 10px;
   }
-  :where(.css-dev-only-do-not-override-mik4fl)
-    .ant-carousel
-    .slick-dots
-    li.slick-active
-    button {
+  .ant-carousel .slick-dots li.slick-active button {
     background: #8774e1;
+  }
+  .ant-upload-wrapper
+    .ant-upload-list.ant-upload-list-picture-card
+    .ant-upload-list-item-error,
+  .ant-upload-wrapper
+    .ant-upload-list.ant-upload-list-picture-circle
+    .ant-upload-list-item-error {
+    border-color: gray;
+  }
+  .ant-upload-wrapper.ant-upload-picture-circle-wrapper
+    .ant-upload.ant-upload-select {
+    width: 200px;
+    height: 200px;
+  }
+  .ant-message {
+    span {
+      color: black;
+    }
+  }
+  .ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item,
+  .ant-dropdown-menu-submenu .ant-dropdown-menu .ant-dropdown-menu-item,
+  .ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-submenu-title,
+  .ant-dropdown-menu-submenu
+    .ant-dropdown-menu
+    .ant-dropdown-menu-submenu-title {
+    span {
+      color: black;
+    }
+  }
+  .ant-select-open {
+    color: black;
   }
 }
