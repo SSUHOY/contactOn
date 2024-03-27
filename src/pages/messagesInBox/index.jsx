@@ -16,6 +16,7 @@ const MessagesInBox = observer(() => {
     token: { colorBgContainer },
   } = theme.useToken();
 
+
   const user = userStore.getAuthorizedUser();
 
   return (

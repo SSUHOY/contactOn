@@ -12,7 +12,6 @@ class UserStore {
       interests: ["traveling", "reading", "hiking"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://cdn.britannica.com/34/235834-050-C5843610/two-different-breeds-of-cats-side-by-side-outdoors-in-the-garden.jpg",
@@ -34,7 +33,6 @@ class UserStore {
       interests: ["cooking", "music", "fitness"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://static.scientificamerican.com/sciam/cache/file/2AE14CDD-1265-470C-9B15F49024186C10_source.jpg?w=600",
@@ -56,7 +54,6 @@ class UserStore {
       interests: ["art", "photography", "yoga"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRjiOWJ_qJAuXSC1pAWGJcqunLp2_noXM3vPQDq6xvxRsA5o1zRe_l_xhG5_ZT7WZKTKM&usqp=CAU",
@@ -78,7 +75,6 @@ class UserStore {
       interests: ["walking", "codding", "films"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://media.gettyimages.com/id/1361767161/photo/cat-meowing-yawning-laughing-with-rose-gold-pink-background.jpg?s=612x612&w=gi&k=20&c=DvDSx7PekVWKtfvjuW1NuBn8MhXx_IrHGrKLwXAMG_I=",
@@ -100,7 +96,6 @@ class UserStore {
       interests: ["cats", "skiis", "skate"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://static01.nyt.com/images/2023/12/12/climate/12cli-cats/12cli-cats-articleLarge.jpg?quality=75&auto=webp&disable=upscale",
@@ -122,7 +117,6 @@ class UserStore {
       interests: ["wine tasting", "traveling", "film"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://www.placebear.com/400/500",
@@ -143,7 +137,6 @@ class UserStore {
       interests: ["food", "traveling", "snowboarding"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://www.picsum.photos/id/237/200/300",
@@ -164,7 +157,6 @@ class UserStore {
       interests: ["wine tasting", "traveling", "film"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://www.picsum.photos/id/237/200/300",
@@ -185,7 +177,6 @@ class UserStore {
       interests: ["wine tasting", "traveling", "film"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://www.picsum.photos/id/237/200/300",
@@ -206,7 +197,6 @@ class UserStore {
       interests: ["wine tasting", "traveling", "film"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://img.freepik.com/free-photo/forest-landscape_71767-127.jpg",
@@ -228,7 +218,6 @@ class UserStore {
       interests: ["фотография", "прогулки", "собаки"],
       friends: [],
       messages: [],
-      receivedMessages: [],
       addToFriendsEvents: [],
       photoGallery: [
         "https://img.freepik.com/free-photo/forest-landscape_71767-127.jpg",
@@ -243,6 +232,7 @@ class UserStore {
   ];
   isAuth = false;
   alreadyFriends = false;
+  isRead = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -363,11 +353,11 @@ class UserStore {
           senderPhoto: senderPhoto,
           receiverPhoto: receiverPhoto,
           content: messageContent,
+          unread: true,
         };
         sender.messages.push(message);
         receiver.messages.push(message);
         receiver.messagesEvents.push(sender.id);
-        receiver.receivedMessages.push(message);
         localStorage.setItem("users", JSON.stringify(this.users));
         this.saveUsersToLocalStorage();
         this.saveAuthUserData();
@@ -399,19 +389,30 @@ class UserStore {
           senderPhoto: senderPhoto,
           receiverPhoto: receiverPhoto,
           content: messageContent,
+          unread: true,
         };
         receiver.chats.push(newReceiverChat);
         sender.chats.push(newSenderChat);
         sender.messages.push(message);
         receiver.messages.push(message);
         receiver.messagesEvents.push(sender.id);
-        receiver.receivedMessages.push(message);
         localStorage.setItem("users", JSON.stringify(this.users));
         this.saveUsersToLocalStorage();
         this.saveAuthUserData();
       }
     } else {
       return "Error! Message isn't sent.";
+    }
+  }
+  updateUserMessages(userID, updatedMessages) {
+    let user = this.users.find((user) => user.id === userID);
+
+    if (user) {
+      user.receivedMessages = updatedMessages;
+      this.saveUsersToLocalStorage();
+      this.saveAuthUserData();
+    } else {
+      console.error("User not found!");
     }
   }
 

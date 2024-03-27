@@ -2,18 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import * as L from "../../components/Shared/Layout/index";
 import * as S from "./messagesPage.styles";
 import { Button, message, theme } from "antd";
+import { CheckOutlined } from "@ant-design/icons";
 import Burger from "../../components/BurgerMenu";
 import Logo from "../../components/Shared/Logo";
 import TextArea from "antd/es/input/TextArea";
 import { useParams } from "react-router-dom";
-
 import userStore from "../../store/users";
 import DropDown from "../../components/Dropdown";
 import { observer } from "mobx-react-lite";
 
 const MessagesInBox = observer(() => {
   const isAuth = userStore.isAuth;
-  const unRead = userStore.unRead;
+  const isRead = userStore.isRead;
 
   const [messageContent, setMessageContent] = useState("");
   const [isSend, setIsSend] = useState(false);
@@ -52,6 +52,7 @@ const MessagesInBox = observer(() => {
     );
     setMessageContent("");
     setIsSend(true);
+    userStore.isRead = false;
     success();
   };
 
@@ -63,13 +64,8 @@ const MessagesInBox = observer(() => {
     }
   };
 
-  // const handleClearEvents = () => {
-  //   userStore.clearMessagesEvents(user.id);
-  // };
-
   useEffect(() => {
     scrollToBottom();
-    // handleClearEvents();
   }, [isSend]);
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -131,7 +127,6 @@ const MessagesInBox = observer(() => {
                       <S.AvatarAltText>No photo</S.AvatarAltText>
                     </div>
                   )}
-
                   <span>Email:</span>
                   <h3>{user?.email ? user.email : "-"}</h3>
                 </S.ProfileImgContainer>
@@ -144,6 +139,8 @@ const MessagesInBox = observer(() => {
                     <S.SendMessagesBox
                       key={index}
                       style={{
+                        minWidth: 150,
+                        maxWidth: 320,
                         alignSelf:
                           message.senderID === sender.id
                             ? "flex-end"
@@ -157,16 +154,36 @@ const MessagesInBox = observer(() => {
                         <p style={{ wordWrap: "break-word" }}>
                           {message.content}
                         </p>
-                        {unRead && message.senderID === sender.id ? (
-                          <span style={{ wordWrap: "break-word" }}>
-                            {unRead ? `unread` : "read"}
-                          </span>
-                        ) : (
-                          ""
-                        )}
                       </S.SendMessage>
                     </S.SendMessagesBox>
                   ))}
+                  <div
+                    style={{
+                      position: "relative",
+                      bottom: "12%",
+                      right: !isSend ? "66%" : "5%",
+                    }}>
+                    {" "}
+                    {!isRead ? (
+                      <span
+                        style={{
+                          fontSize: 11,
+                          color: "#323233",
+                        }}>
+                        unread &nbsp;
+                        <CheckOutlined />
+                      </span>
+                    ) : (
+                      <span
+                        style={{
+                          fontSize: 11,
+                          color: "#9AD745",
+                        }}>
+                        read &nbsp;
+                        <CheckOutlined style={{ color: "#9AD745" }} />
+                      </span>
+                    )}
+                  </div>
                 </S.MessagesAligner>
               </S.MessagesField>
               <p>Your message:</p>

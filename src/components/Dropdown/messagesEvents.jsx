@@ -10,6 +10,7 @@ const Messages = () => {
 
   const clearMessagesEvents = () => {
     userStore.clearMessagesEvents(authUser.id);
+    userStore.isRead = true;
   };
 
   const items = [
@@ -20,7 +21,7 @@ const Messages = () => {
           <p>You have {authUser.messagesEvents.length} new messages</p>
           {authUser.messagesEvents.length !== 0 ? (
             <Link to={"/messages"}>
-              <u>Click to show messages</u>
+              <u>Click to show messages and read all</u>
             </Link>
           ) : (
             ""

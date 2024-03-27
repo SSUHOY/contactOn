@@ -16,7 +16,7 @@ import UploadPhotos from "../../components/UploadPhotos";
 import { FileImageOutlined } from "@ant-design/icons";
 import { MailOutlined, TeamOutlined } from "@ant-design/icons";
 import AuthUserPhotoCarousel from "../../components/PhotoCarousel/authUserPhoto";
-import TextArea from "antd/es/input/TextArea";
+import UserForm from "../../components/Form/authUserForm";
 
 const AuthUserProfile = observer(() => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -34,7 +34,7 @@ const AuthUserProfile = observer(() => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const onChange = (e) => {
+  const onChangeHandler = (e) => {
     setIsSave(false);
     setAuthUserData({ ...userAuthData, [e.target.name]: e.target.value });
   };
@@ -82,7 +82,7 @@ const AuthUserProfile = observer(() => {
     setAuthUserData({ ...userAuthData, photo: "" });
   };
 
-  const addInterest = () => {
+  const addInterestHandler = () => {
     if (newInterest) {
       setAuthUserData({
         ...userAuthData,
@@ -119,6 +119,12 @@ const AuthUserProfile = observer(() => {
     </button>
   );
 
+  const emptyRequest = ({ onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
+  };
+
   useEffect(() => {
     const authProfileUserData = JSON.parse(
       localStorage.getItem("authorizedUser")
@@ -136,7 +142,6 @@ const AuthUserProfile = observer(() => {
             background: colorBgContainer,
           }}>
           <Burger />
-
           {isAuth ? (
             <L.UsersUI>
               <DropDown />
@@ -154,6 +159,7 @@ const AuthUserProfile = observer(() => {
               <S.LeftContentBlock>
                 <S.ProfileImgContainer>
                   <Upload
+                    customRequest={emptyRequest}
                     name="photo"
                     listType="picture-circle"
                     className="avatar-uploader"
@@ -210,142 +216,14 @@ const AuthUserProfile = observer(() => {
                 </div>
               </S.LeftContentBlock>
               <S.ContentBlock>
-                <Form
-                  wrapperCol={{
-                    span: 18,
-                  }}>
-                  <Form.Item>
-                    <Space>
-                      <Form.Item
-                        style={{
-                          width: "100%",
-                          marginBottom: 0,
-                          color: "white",
-                        }}>
-                        Name:
-                        <Input
-                          name="name"
-                          value={userAuthData?.name || ""}
-                          onChange={onChange}
-                          style={{
-                            marginBottom: 0,
-                            width: 150,
-                          }}
-                          placeholder="Your name"
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        style={{
-                          marginBottom: 0,
-                          color: "white",
-                          width: 150,
-                        }}>
-                        Age:
-                        <Input
-                          name="age"
-                          placeholder="Your age"
-                          value={userAuthData?.age || ""}
-                          onChange={onChange}
-                        />
-                      </Form.Item>
-                    </Space>
-                  </Form.Item>
-                  <Form.Item>
-                    <Space>
-                      <Form.Item
-                        style={{
-                          color: "white",
-                        }}>
-                        City:
-                        <Input
-                          name="city"
-                          placeholder="City"
-                          style={{
-                            marginBottom: 0,
-                            width: 150,
-                          }}
-                          value={userAuthData?.city || ""}
-                          onChange={onChange}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        style={{
-                          marginTop: -10,
-                          color: "white",
-                        }}>
-                        Gender:
-                        <Select
-                          style={{ width: 150, height: 22 }}
-                          onChange={onChangeGenderFromSelect}
-                          defaultValue={
-                            userAuthData.gender === "Male" && "Male"
-                          }
-                          placeholder="Select a gender"
-                          optionFilterProp="children"
-                          options={[
-                            {
-                              value: "male",
-                              label: "Male",
-                            },
-                            {
-                              value: "female",
-                              label: "Female",
-                            },
-                            {
-                              value: "Not mentioned",
-                              label: "Not mentioned",
-                            },
-                          ]}
-                        />
-                      </Form.Item>
-                    </Space>
-                  </Form.Item>
-                  <Space>
-                    <Form.Item
-                      style={{
-                        display: "flex",
-                        color: "white",
-                      }}>
-                      Description:
-                      <TextArea
-                        placeholder="Profile description"
-                        value={userAuthData?.description || ""}
-                        onChange={onChange}
-                        style={{ width: 410, resize: "none", height: 80 }}
-                        name="description"
-                      />
-                    </Form.Item>
-                  </Space>
-                  <Space>
-                    <Form.Item
-                      style={{
-                        display: "flex",
-                        color: "white",
-                        alignItems: "center",
-                      }}>
-                      Interests:
-                      <TextArea
-                        value={userAuthData?.interests || ""}
-                        readOnly
-                        placeholder="Click add to set interests..."
-                        style={{ width: 410, resize: "none" }}
-                      />
-                    </Form.Item>
-                  </Space>
-                  <Space>
-                    <Input
-                      value={newInterest}
-                      placeholder="Add new interest"
-                      onChange={handleInputChange}
-                      name="interests"
-                    />
-                    <S.StyledButton
-                      onClick={addInterest}
-                      style={{ height: 40, margin: 4 }}>
-                      Add
-                    </S.StyledButton>
-                  </Space>
-                </Form>
+                <UserForm
+                  userAuthData={userAuthData}
+                  onChangeHandler={onChangeHandler}
+                  onChangeGenderFromSelect={onChangeGenderFromSelect}
+                  newInterest={newInterest}
+                  handleInputChange={handleInputChange}
+                  addInterestHandler={addInterestHandler}
+                />
                 <S.StyledButton
                   type="primary"
                   style={{
@@ -372,6 +250,7 @@ const AuthUserProfile = observer(() => {
               </div>
               <UploadPhotos
                 userAuthData={userAuthData}
+                setIsSaveAll={setIsSave}
                 setAuthUserData={setAuthUserData}
               />
             </S.UserUploadPhotos>

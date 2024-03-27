@@ -128,7 +128,7 @@ const Auth = () => {
     }
   };
 
-  const handleSetIsLoginMode = (e) => {
+  const handleSetIsLoginMode = () => {
     setIsLoginMode(false);
   };
 
@@ -139,6 +139,7 @@ const Auth = () => {
   useEffect(() => {
     userStore.saveUsersToLocalStorage();
     setUserList(userStore.users);
+    setIsLoading(false);
   }, [userData, isLoading]);
 
   return (
@@ -191,6 +192,7 @@ const Auth = () => {
                     disabled={isLoading}>
                     Log in
                   </Button>
+                  <br />
                   <Button
                     htmlType="submit"
                     onClick={handleSetIsLoginMode}
@@ -268,6 +270,7 @@ const Auth = () => {
                     onClick={submitHandlerRegistration}>
                     Register
                   </Button>
+                  <br />
                   <Button
                     htmlType="submit"
                     onClick={() => setIsLoginMode(true)}>

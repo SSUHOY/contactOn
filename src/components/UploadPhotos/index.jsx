@@ -3,7 +3,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Button, Modal, Upload } from "antd";
 import userStore from "../../store/users";
 
-const UploadPhotos = ({ userAuthData, setAuthUserData }) => {
+const UploadPhotos = ({ userAuthData, setAuthUserData, setIsSaveAll }) => {
   const [saved, setIsSaved] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -23,6 +23,7 @@ const UploadPhotos = ({ userAuthData, setAuthUserData }) => {
   };
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
+    setIsSaveAll(false);
     setIsSaved(false);
   };
   const handleSavePhotosToGallery = () => {
@@ -32,6 +33,12 @@ const UploadPhotos = ({ userAuthData, setAuthUserData }) => {
     setAuthUserData({ ...userAuthData, photoGallery: imgURLs });
     setFileList([]);
     setIsSaved(true);
+  };
+
+  const emptyRequest = ({ onSuccess }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 0);
   };
 
   const uploadButton = (
@@ -54,6 +61,7 @@ const UploadPhotos = ({ userAuthData, setAuthUserData }) => {
   return (
     <>
       <Upload
+        customRequest={emptyRequest}
         listType="picture-card"
         fileList={fileList}
         onPreview={handlePreview}

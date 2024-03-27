@@ -62,4 +62,7 @@ body {
       color: black;
     }
   }
+  .ant-select-open {
+    color: black;
+  }
 }
