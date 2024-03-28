@@ -40,6 +40,7 @@ const Burger = () => {
     if (e.key === "6") {
       window.location.reload();
       userStore.clearStorage();
+      navigate("/");
     }
     toggleCollapsed();
   };
@@ -93,12 +94,13 @@ const Burger = () => {
           </Link>
         )
       : "",
-    getItem(
-      "Clear Storage",
-      "6",
-
-      <UserOutlined />
-    ),
+    !isAuth
+      ? getItem(
+          "Clear Storage",
+          "6",
+          <UserOutlined />
+        )
+      : "",
   ];
 
   const toggleCollapsed = () => {
