@@ -8,6 +8,7 @@ import {
   HomeOutlined,
   TeamOutlined,
   MailOutlined,
+  BellOutlined,
 } from "@ant-design/icons";
 
 import { Link, useNavigate } from "react-router-dom";
@@ -67,6 +68,8 @@ const Burger = () => {
             <TeamOutlined />
             &nbsp;
             {authUser.friends.length}
+            <BellOutlined />
+            {authUser.inFriendRequest.length}
           </Link>
         )
       : "",

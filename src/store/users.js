@@ -232,6 +232,7 @@ class UserStore {
   isAuth = false;
   alreadyFriends = false;
   friendRequest = false;
+  isFriendOutRequest = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -290,11 +291,9 @@ class UserStore {
   };
   isFriendsRequest(authUserID, userID) {
     let user = toJS(this.users.find((user) => user.id === userID));
-    console.log(user);
     let isFriend = user.inFriendRequest.some(
       (friend) => friend.id === authUserID
     );
-    console.log("🚀 ~ UserStore ~ isFriendsRequest ~ isFriend:", isFriend);
     if (isFriend) {
       this.friendRequest = true;
     } else {
@@ -302,16 +301,46 @@ class UserStore {
     }
     return isFriend;
   }
-  removeRequest(authUserID, userID) {
+  isInFriendsRequest(authUserID, userID) {
+    let user = toJS(this.users.find((user) => user.id === userID));
+    console.log(user);
+    let isFriendOutReq = user.outFriendRequest.some(
+      (friend) => friend.id === authUserID
+    );
+    if (isFriendOutReq) {
+      this.friendOutRequest = true;
+    } else {
+      this.friendOutRequest = false;
+    }
+    return isFriendOutReq;
+  }
+  removeRequest(userID, authUserID) {
     let authUser = this.users.find((user) => user.id === authUserID);
     let user = this.users.find((user) => user.id === userID);
 
     if (user && authUser) {
-      user.outFriendRequest.splice(user.outFriendRequest.indexOf(user), 1);
-      authUser.inFriendRequest.splice(
-        user.inFriendRequest.indexOf(authUser),
+      user.outFriendRequest.splice(user.outFriendRequest.indexOf(authUser), 1);
+      authUser.inFriendRequest.splice(user.inFriendRequest.indexOf(user), 1);
+      authUser.addToFriendsEvents.splice(
+        user.addToFriendsEvents.indexOf(user.id),
         1
       );
+      this.saveUsersToLocalStorage();
+      this.saveAuthUserData();
+      localStorage.setItem("users", JSON.stringify(this.users));
+      this.alreadyFriends = false;
+      console.log(`${authUser.name} and ${user.name} are not friends now!`);
+    } else {
+      this.alreadyFriends = true;
+    }
+  }
+  removeOutRequest(userID, authUserID) {
+    let authUser = this.users.find((user) => user.id === authUserID);
+    let user = this.users.find((user) => user.id === userID);
+
+    if (user && authUser) {
+      authUser.outFriendRequest.splice(user.outFriendRequest.indexOf(user), 1);
+      user.inFriendRequest.splice(user.inFriendRequest.indexOf(authUser), 1);
       authUser.addToFriendsEvents.splice(
         user.addToFriendsEvents.indexOf(user.id),
         1
@@ -335,10 +364,13 @@ class UserStore {
       friend.addToFriendsEvents.push(toJS(user.id));
       user.outFriendRequest.splice(user.outFriendRequest.indexOf(user), 1);
       user.inFriendRequest.splice(user.inFriendRequest.indexOf(friend), 1);
+      friend.outFriendRequest.splice(friend.outFriendRequest.indexOf(user), 1);
+      friend.inFriendRequest.splice(friend.inFriendRequest.indexOf(friend), 1);
       this.saveUsersToLocalStorage();
       this.saveAuthUserData();
       localStorage.setItem("users", JSON.stringify(this.users));
       this.alreadyFriends = true;
+      this.friendOutRequest = false;
     } else {
       this.alreadyFriends = false;
     }
@@ -361,6 +393,12 @@ class UserStore {
       friend.friends.splice(user.friends.indexOf(user), 1);
       friend.addToFriendsEvents.splice(
         friend.addToFriendsEvents.indexOf(user.id),
+        1
+      );
+      friend.outFriendRequest.splice(user.outFriendRequest.indexOf(user), 1);
+      user.inFriendRequest.splice(user.inFriendRequest.indexOf(user), 1);
+      user.addToFriendsEvents.splice(
+        user.addToFriendsEvents.indexOf(user.id),
         1
       );
       this.saveUsersToLocalStorage();
@@ -503,19 +541,7 @@ class UserStore {
     this.saveAuthUserData();
     localStorage.setItem("users", JSON.stringify(this.users));
   }
-  // // clearMessagesEvents(userID) {
-  // //   const authUser = this.getAuthorizedUser();
-  // //   let user = authUser.messagesEvents.find((user) => user.id === userID);
-  // //   const deleteUser = user.messagesEvents.filter((item) => item !== 13);
-  // //   console.log(
-  // //     "🚀 ~ UserStore ~ clearMessagesEvents ~ deleteUser:",
-  // //     deleteUser
-  // //   );
 
-  //   this.saveUsersToLocalStorage();
-  //   this.saveAuthUserData();
-  //   localStorage.setItem("users", JSON.stringify(this.users));
-  // }
   setAuthUserData(user) {
     localStorage.setItem("authorizedUser", JSON.stringify(user));
   }

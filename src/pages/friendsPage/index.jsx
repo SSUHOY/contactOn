@@ -32,7 +32,11 @@ const Friends = () => {
         <Logo />
       </L.SharedHeader>
       {requestsPage ? (
-        <Requests requestsPage={requestsPage} setRequestPage={setRequestPage} />
+        <Requests
+          requestsPage={requestsPage}
+          setRequestPage={setRequestPage}
+          user={user}
+        />
       ) : (
         <L.PageContainer
           style={{ flexDirection: "column", alignItems: "center" }}>
@@ -41,9 +45,11 @@ const Friends = () => {
               <TeamOutlined />
               &nbsp; Friends &nbsp; {user.friends.length}
             </h2>
-            <Button onClick={handleRequestPage}>Requests</Button>
+            <Button onClick={handleRequestPage}>
+              Requests: {user.inFriendRequest.length}
+            </Button>
           </L.FriendsBlock>{" "}
-          <BoxUi style={{ width: 600 }}>
+          <BoxUi style={{ width: 700 }}>
             {user.friends.length !== 0 ? (
               <div
                 style={{

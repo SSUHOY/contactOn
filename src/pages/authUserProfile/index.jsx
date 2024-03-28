@@ -80,6 +80,7 @@ const AuthUserProfile = observer(() => {
   const handleDeleteAvatar = () => {
     setImageUrl("");
     setAuthUserData({ ...userAuthData, photo: "" });
+    setIsSave(false);
   };
 
   const addInterestHandler = () => {
