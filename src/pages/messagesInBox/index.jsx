@@ -40,7 +40,7 @@ const MessagesInBox = observer(() => {
         <h2 style={{ color: "white" }}>
           {" "}
           <MailOutlined />
-          &nbsp; Chats &nbsp; {user.chats.length}
+          &nbsp; Chats &nbsp; {user?.chats?.length}
         </h2>
         <S.BoxUi>
           {user?.chats?.length !== 0 ? (
@@ -67,9 +67,9 @@ const MessagesInBox = observer(() => {
                         alignItems: "center",
                       }}>
                       <div style={{ marginRight: 50 }}>
-                        {chats.photo ? (
+                        {chats?.photo ? (
                           <img
-                            src={chats.photo}
+                            src={chats?.photo}
                             alt="avatar"
                             style={{
                               borderRadius: "50%",
@@ -93,8 +93,8 @@ const MessagesInBox = observer(() => {
                         )}
                       </div>
                       <div>
-                        <p>{chats.name}</p>
-                        <span>{chats.email}</span>
+                        <p>{chats?.name}</p>
+                        <span>{chats?.email}</span>
                       </div>
                     </div>
                   </Link>

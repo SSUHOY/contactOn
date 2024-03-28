@@ -3,10 +3,7 @@ import userStore from "../../store/users";
 import { Link, useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import Burger from "../../components/BurgerMenu";
-import {
-  TeamOutlined,
-  ArrowRightOutlined,
-} from "@ant-design/icons";
+import { TeamOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { Button, theme } from "antd";
 import { FileImageOutlined } from "@ant-design/icons";
 import * as L from "../../components/Shared/Layout/index";
@@ -24,8 +21,7 @@ const UserProfile = observer(() => {
   const authUser = userStore.getAuthorizedUser();
   const alreadyFriends = userStore.alreadyFriends;
   const friendsSentRequest = userStore.friendRequest;
-  const friendOutRequest = userStore.isInFriendsRequest(authUser.id, user.id);
- 
+  const friendOutRequest = userStore.isInFriendsRequest(authUser?.id, user?.id);
 
   const isAuth = userStore.isAuth;
 
@@ -39,7 +35,7 @@ const UserProfile = observer(() => {
     userStore.deleteFriend(authUser?.id, user?.id);
   };
 
-  const handleRemoveRequest = (friend, e) => {
+  const handleRemoveRequest = () => {
     userStore.removeRequest(user.id, authUser.id);
   };
 
@@ -49,8 +45,8 @@ const UserProfile = observer(() => {
 
   useEffect(() => {
     if (isAuth) {
-      userStore.isFriends(authUser.id, user);
-      userStore.isFriendsRequest(authUser.id, user.id);
+      userStore.isFriends(authUser?.id, user);
+      userStore.isFriendsRequest(authUser?.id, user?.id);
     }
   }, [user, authUser, isAuth]);
 
@@ -77,7 +73,7 @@ const UserProfile = observer(() => {
             <Shared.ProfileImgContainer>
               {user.photo ? (
                 <img
-                  src={!user.photo ? "" : user.photo}
+                  src={!user?.photo ? "" : user?.photo}
                   alt="avatar"
                   style={{
                     width: 200,
@@ -92,14 +88,14 @@ const UserProfile = observer(() => {
             <S.UserFriendsBox>
               <S.UserFriendsCount>
                 <TeamOutlined style={{ marginRight: 10 }} />
-                {user.name} has {!user.friends ? "" : user.friends.length}{" "}
-                {user.friends.length > 1 || user.friends.length === 0
+                {user?.name} has {!user?.friends ? "" : user?.friends.length}{" "}
+                {user?.friends.length > 1 || user?.friends.length === 0
                   ? "friends"
                   : "friend"}
               </S.UserFriendsCount>
               {isAuth ? (
                 <div>
-                  {authUser.id === user.id ? (
+                  {authUser?.id === user?.id ? (
                     ""
                   ) : (
                     <div>
@@ -116,7 +112,7 @@ const UserProfile = observer(() => {
                             disabled={friendsSentRequest}
                             style={{ borderRadius: 20 }}>
                             <ArrowRightOutlined />
-                            Request to {user.name} was sent
+                            Request to {user?.name} was sent
                           </Button>
                         </>
                       )}
@@ -127,7 +123,7 @@ const UserProfile = observer(() => {
                             <Button
                               onClick={handleAddToFriends}
                               style={{ borderRadius: 20 }}>
-                              Add {user.name} to friends
+                              Add {user?.name} to friends
                             </Button>
                           </>
                         )}
@@ -136,14 +132,14 @@ const UserProfile = observer(() => {
                           <Button
                             onClick={handleDeleteFromFriends}
                             style={{ borderRadius: 20 }}>
-                            Delete {user.name} from friends
+                            Delete {user?.name} from friends
                           </Button>
                         </>
                       )}
                       {!alreadyFriends &&
                         !friendsSentRequest &&
                         friendOutRequest &&
-                        user.id !== authUser.id && (
+                        user?.id !== authUser?.id && (
                           <div
                             style={{
                               display: "flex",
@@ -155,14 +151,14 @@ const UserProfile = observer(() => {
                               <Button
                                 onClick={handleAddToFriendsAll}
                                 style={{ borderRadius: 20 }}>
-                                Confirm {user.name}'s request
+                                Confirm {user?.name}'s request
                               </Button>
                             </>
                             <>
                               <Button
                                 onClick={handleRemoveRequest}
                                 style={{ borderRadius: 20 }}>
-                                Remove {user.name}'s request
+                                Remove {user?.name}'s request
                               </Button>
                             </>
                           </div>
@@ -183,10 +179,10 @@ const UserProfile = observer(() => {
             </S.UserFriendsBox>
           </Shared.LeftContentBlock>
           <Shared.ContentBlock>
-            <S.UserName>{user.name}</S.UserName>
-            <S.UserInformation>Age: {user.age}</S.UserInformation>
-            <S.UserInformation>City: {user.city}</S.UserInformation>
-            <S.UserInformation>Gender: {user.gender}</S.UserInformation>
+            <S.UserName>{user?.name}</S.UserName>
+            <S.UserInformation>Age: {user?.age}</S.UserInformation>
+            <S.UserInformation>City: {user?.city}</S.UserInformation>
+            <S.UserInformation>Gender: {user?.gender}</S.UserInformation>
             <br />
             <S.UserContent>
               <S.UserDescriptionTitle>Description:</S.UserDescriptionTitle>
@@ -201,7 +197,7 @@ const UserProfile = observer(() => {
                   borderBottomLeftRadius: 10,
                   borderTopLeftRadius: 10,
                 }}
-                value={user.description || "no description yet"}
+                value={user?.description || "no description yet"}
                 readOnly></TextArea>
 
               <S.UserDescriptionTitle>Interests:</S.UserDescriptionTitle>
@@ -213,7 +209,7 @@ const UserProfile = observer(() => {
                   resize: "none",
                   color: "white",
                 }}
-                value={user.interests || "no interests yet"}
+                value={user?.interests || "no interests yet"}
                 readOnly></TextArea>
             </S.UserContent>
           </Shared.ContentBlock>
@@ -226,7 +222,7 @@ const UserProfile = observer(() => {
               marginBottom: 10,
             }}>
             <FileImageOutlined />
-            <span>{user.name}'s photo gallery</span>
+            <span>{user?.name}'s photo gallery</span>
           </div>
           <PhotoCarousel userID={id} />
         </Shared.RightContentBlock>
