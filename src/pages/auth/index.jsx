@@ -93,6 +93,8 @@ const Auth = () => {
         chats: [],
         receivedMessages: [],
         addToFriendsEvents: [],
+        inFriendRequest: [],
+        outFriendRequest: [],
         messagesEvents: [],
         photoGallery: [],
         description: "",

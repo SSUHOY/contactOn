@@ -6,7 +6,7 @@ import Burger from "../../components/BurgerMenu";
 import {
   PlusOutlined,
   TeamOutlined,
-  UserDeleteOutlined,
+  ArrowRightOutlined,
 } from "@ant-design/icons";
 import { Button, theme } from "antd";
 import { FileImageOutlined } from "@ant-design/icons";
@@ -24,11 +24,12 @@ const UserProfile = observer(() => {
   const user = userStore.getUserById(Number(id));
   const authUser = userStore.getAuthorizedUser();
   const alreadyFriends = userStore.alreadyFriends;
+  const friendsSentRequest = userStore.friendRequest;
 
   const isAuth = userStore.isAuth;
 
   const handleAddToFriends = () => {
-    userStore.addFriend(authUser?.id, user?.id);
+    userStore.addFriendRequest(authUser, user);
   };
   const handleDeleteFromFriends = () => {
     userStore.deleteFriend(authUser?.id, user?.id);
@@ -41,6 +42,7 @@ const UserProfile = observer(() => {
   useEffect(() => {
     if (isAuth) {
       userStore.isFriends(authUser.id, user);
+      userStore.isFriendsRequest(authUser.id, user.id);
     }
   }, [user, authUser, isAuth]);
 
@@ -93,7 +95,7 @@ const UserProfile = observer(() => {
                     ""
                   ) : (
                     <div>
-                      {alreadyFriends ? (
+                      {friendsSentRequest ? (
                         <>
                           <Link to={`/message/${id}`}>
                             <S.UserMessageBox>
@@ -103,10 +105,11 @@ const UserProfile = observer(() => {
                             </S.UserMessageBox>
                           </Link>
                           <Button
+                            disabled={friendsSentRequest}
                             onClick={handleDeleteFromFriends}
                             style={{ borderRadius: 20 }}>
-                            <UserDeleteOutlined style={{ color: "white" }} />
-                            Remove {user.name} from friends
+                            <ArrowRightOutlined />
+                            Request to {user.name} was sent
                           </Button>
                         </>
                       ) : (
@@ -119,10 +122,9 @@ const UserProfile = observer(() => {
                             </S.UserMessageBox>
                           </Link>
                           <Button
-                            onClick={handleAddToFriends}
+                            onClick={handleDeleteFromFriends}
                             style={{ borderRadius: 20 }}>
-                            <PlusOutlined style={{ color: "white" }} />
-                            Add {user.name} to friends
+                            - Remove {user.name} from friends
                           </Button>
                         </>
                       )}
