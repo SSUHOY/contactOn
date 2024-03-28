@@ -304,9 +304,9 @@ class UserStore {
       (friend) => friend.id === authUserID
     );
     if (isFriendOutReq) {
-      this.friendOutRequest = true;
+      this.isFriendOutRequest = true;
     } else {
-      this.friendOutRequest = false;
+      this.isFriendOutRequest = false;
     }
     return isFriendOutReq;
   }
@@ -364,7 +364,7 @@ class UserStore {
       this.saveAuthUserData();
       localStorage.setItem("users", JSON.stringify(this.users));
       this.alreadyFriends = true;
-      this.friendOutRequest = false;
+      this.isFriendOutRequest = false;
     } else {
       this.alreadyFriends = false;
     }
