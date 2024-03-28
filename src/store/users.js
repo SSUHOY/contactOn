@@ -303,7 +303,6 @@ class UserStore {
   }
   isInFriendsRequest(authUserID, userID) {
     let user = toJS(this.users.find((user) => user.id === userID));
-    console.log(user);
     let isFriendOutReq = user.outFriendRequest.some(
       (friend) => friend.id === authUserID
     );

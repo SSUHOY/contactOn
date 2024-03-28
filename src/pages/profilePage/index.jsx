@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import userStore from "../../store/users";
 import { Link, useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
@@ -15,13 +15,16 @@ import DropDown from "../../components/Dropdown";
 import PhotoCarousel from "../../components/PhotoCarousel";
 
 const UserProfile = observer(() => {
+const [friendOutRequest, setFriendsOutRequest] = useState()
+console.log("🚀 ~ UserProfile ~ friendOutRequest:", friendOutRequest)
+
   const { id } = useParams();
 
   const user = userStore.getUserById(Number(id));
   const authUser = userStore.getAuthorizedUser();
   const alreadyFriends = userStore.alreadyFriends;
   const friendsSentRequest = userStore.friendRequest;
-  const friendOutRequest = userStore.isInFriendsRequest(authUser?.id, user?.id);
+
 
   const isAuth = userStore.isAuth;
 
@@ -47,6 +50,8 @@ const UserProfile = observer(() => {
     if (isAuth) {
       userStore.isFriends(authUser?.id, user);
       userStore.isFriendsRequest(authUser?.id, user?.id);
+      const friendOutRequest = userStore.isInFriendsRequest(authUser?.id, user?.id);
+      setFriendsOutRequest(friendOutRequest);
     }
   }, [user, authUser, isAuth]);
 
