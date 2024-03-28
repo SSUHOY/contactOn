@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import userStore from "../../store/users";
 import { Link, useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
