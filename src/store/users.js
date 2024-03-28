@@ -278,10 +278,7 @@ class UserStore {
   addFriendRequest = (authUser, userFriend) => {
     let user = this.users.find((el) => el.id === authUser.id);
     let friend = this.users.find((el) => el.id === userFriend.id);
-    console.log("🚀 ~ UserStore ~ friend:", friend);
-    console.log("🚀 ~ UserStore ~ user:", user);
     if (user && friend) {
-      console.log("object");
       friend.inFriendRequest.push(toJS(user));
       user.outFriendRequest.push(toJS(friend));
       this.saveUsersToLocalStorage();
@@ -328,7 +325,6 @@ class UserStore {
       this.saveAuthUserData();
       localStorage.setItem("users", JSON.stringify(this.users));
       this.alreadyFriends = false;
-      console.log(`${authUser.name} and ${user.name} are not friends now!`);
     } else {
       this.alreadyFriends = true;
     }
@@ -348,7 +344,6 @@ class UserStore {
       this.saveAuthUserData();
       localStorage.setItem("users", JSON.stringify(this.users));
       this.alreadyFriends = false;
-      console.log(`${authUser.name} and ${user.name} are not friends now!`);
     } else {
       this.alreadyFriends = true;
     }
@@ -404,7 +399,6 @@ class UserStore {
       this.saveAuthUserData();
       localStorage.setItem("users", JSON.stringify(this.users));
       this.alreadyFriends = false;
-      console.log(`${user.name} and ${friend.name} are not friends now!`);
     } else {
       this.alreadyFriends = true;
     }
@@ -499,7 +493,6 @@ class UserStore {
     if (user) {
       const userIndex = this.users.findIndex((el) => el.id === userID);
       this.users[userIndex] = { ...user, messages: updatedMessages };
-      console.log(toJS(this.users));
       this.saveUsersToLocalStorage();
       this.saveAuthUserData();
     } else {

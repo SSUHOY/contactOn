@@ -16,8 +16,6 @@ import PhotoCarousel from "../../components/PhotoCarousel";
 
 const UserProfile = observer(() => {
 const [friendOutRequest, setFriendsOutRequest] = useState()
-console.log("🚀 ~ UserProfile ~ friendOutRequest:", friendOutRequest)
-
   const { id } = useParams();
 
   const user = userStore.getUserById(Number(id));
