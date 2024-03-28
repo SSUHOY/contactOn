@@ -59,7 +59,6 @@ const Main = observer(() => {
       return items;
     }
     if (searchType === "Gender" && gender !== "") {
-      console.log("gender");
       const options = {
         keys: ["gender"],
       };
