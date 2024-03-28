@@ -15,14 +15,13 @@ import DropDown from "../../components/Dropdown";
 import PhotoCarousel from "../../components/PhotoCarousel";
 
 const UserProfile = observer(() => {
-const [friendOutRequest, setFriendsOutRequest] = useState()
   const { id } = useParams();
 
   const user = userStore.getUserById(Number(id));
   const authUser = userStore.getAuthorizedUser();
   const alreadyFriends = userStore.alreadyFriends;
   const friendsSentRequest = userStore.friendRequest;
-
+  const friendOutRequest = userStore.isFriendOutRequest;
 
   const isAuth = userStore.isAuth;
 
@@ -48,8 +47,7 @@ const [friendOutRequest, setFriendsOutRequest] = useState()
     if (isAuth) {
       userStore.isFriends(authUser?.id, user);
       userStore.isFriendsRequest(authUser?.id, user?.id);
-      const friendOutRequest = userStore.isInFriendsRequest(authUser?.id, user?.id);
-      setFriendsOutRequest(friendOutRequest);
+      userStore.isInFriendsRequest(authUser?.id, user?.id);
     }
   }, [user, authUser, isAuth]);
 
