@@ -4,9 +4,8 @@ import { Link, useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import Burger from "../../components/BurgerMenu";
 import {
-  PlusOutlined,
   TeamOutlined,
-  UserDeleteOutlined,
+  ArrowRightOutlined,
 } from "@ant-design/icons";
 import { Button, theme } from "antd";
 import { FileImageOutlined } from "@ant-design/icons";
@@ -24,14 +23,24 @@ const UserProfile = observer(() => {
   const user = userStore.getUserById(Number(id));
   const authUser = userStore.getAuthorizedUser();
   const alreadyFriends = userStore.alreadyFriends;
+  const friendsSentRequest = userStore.friendRequest;
+  const friendOutRequest = userStore.isInFriendsRequest(authUser.id, user.id);
+ 
 
   const isAuth = userStore.isAuth;
 
   const handleAddToFriends = () => {
-    userStore.addFriend(authUser?.id, user?.id);
+    userStore.addFriendRequest(authUser, user);
+  };
+  const handleAddToFriendsAll = () => {
+    userStore.addFriend(authUser.id, user.id);
   };
   const handleDeleteFromFriends = () => {
     userStore.deleteFriend(authUser?.id, user?.id);
+  };
+
+  const handleRemoveRequest = (friend, e) => {
+    userStore.removeRequest(user.id, authUser.id);
   };
 
   const {
@@ -41,6 +50,7 @@ const UserProfile = observer(() => {
   useEffect(() => {
     if (isAuth) {
       userStore.isFriends(authUser.id, user);
+      userStore.isFriendsRequest(authUser.id, user.id);
     }
   }, [user, authUser, isAuth]);
 
@@ -93,39 +103,70 @@ const UserProfile = observer(() => {
                     ""
                   ) : (
                     <div>
-                      {alreadyFriends ? (
-                        <>
-                          <Link to={`/message/${id}`}>
-                            <S.UserMessageBox>
-                              <Button style={{ borderRadius: 20 }}>
-                                Send a message
-                              </Button>
-                            </S.UserMessageBox>
-                          </Link>
-                          <Button
-                            onClick={handleDeleteFromFriends}
-                            style={{ borderRadius: 20 }}>
-                            <UserDeleteOutlined style={{ color: "white" }} />
-                            Remove {user.name} from friends
+                      <Link to={`/message/${id}`}>
+                        <S.UserMessageBox>
+                          <Button style={{ borderRadius: 20 }}>
+                            Send a message
                           </Button>
-                        </>
-                      ) : (
+                        </S.UserMessageBox>
+                      </Link>
+                      {friendsSentRequest && !friendOutRequest && (
                         <>
-                          <Link to={`/message/${id}`}>
-                            <S.UserMessageBox>
-                              <Button style={{ borderRadius: 20 }}>
-                                Send a message
-                              </Button>
-                            </S.UserMessageBox>
-                          </Link>
                           <Button
-                            onClick={handleAddToFriends}
+                            disabled={friendsSentRequest}
                             style={{ borderRadius: 20 }}>
-                            <PlusOutlined style={{ color: "white" }} />
-                            Add {user.name} to friends
+                            <ArrowRightOutlined />
+                            Request to {user.name} was sent
                           </Button>
                         </>
                       )}
+                      {!friendsSentRequest &&
+                        !alreadyFriends &&
+                        !friendOutRequest && (
+                          <>
+                            <Button
+                              onClick={handleAddToFriends}
+                              style={{ borderRadius: 20 }}>
+                              Add {user.name} to friends
+                            </Button>
+                          </>
+                        )}
+                      {alreadyFriends && (
+                        <>
+                          <Button
+                            onClick={handleDeleteFromFriends}
+                            style={{ borderRadius: 20 }}>
+                            Delete {user.name} from friends
+                          </Button>
+                        </>
+                      )}
+                      {!alreadyFriends &&
+                        !friendsSentRequest &&
+                        friendOutRequest &&
+                        user.id !== authUser.id && (
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 10,
+                              flexDirection: "column",
+                            }}>
+                            <>
+                              <Button
+                                onClick={handleAddToFriendsAll}
+                                style={{ borderRadius: 20 }}>
+                                Confirm {user.name}'s request
+                              </Button>
+                            </>
+                            <>
+                              <Button
+                                onClick={handleRemoveRequest}
+                                style={{ borderRadius: 20 }}>
+                                Remove {user.name}'s request
+                              </Button>
+                            </>
+                          </div>
+                        )}
                     </div>
                   )}
                 </div>

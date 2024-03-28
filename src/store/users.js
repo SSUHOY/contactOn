@@ -13,6 +13,8 @@ class UserStore {
       friends: [],
       messages: [],
       addToFriendsEvents: [],
+      inFriendRequest: [],
+      outFriendRequest: [],
       photoGallery: [
         "https://cdn.britannica.com/34/235834-050-C5843610/two-different-breeds-of-cats-side-by-side-outdoors-in-the-garden.jpg",
         "https://cdn.britannica.com/70/234870-050-D4D024BB/Orange-colored-cat-yawns-displaying-teeth.jpg",
@@ -34,6 +36,8 @@ class UserStore {
       friends: [],
       messages: [],
       addToFriendsEvents: [],
+      inFriendRequest: [],
+      outFriendRequest: [],
       photoGallery: [
         "https://static.scientificamerican.com/sciam/cache/file/2AE14CDD-1265-470C-9B15F49024186C10_source.jpg?w=600",
         "https://source.unsplash.com/random/350x450",
@@ -55,6 +59,8 @@ class UserStore {
       friends: [],
       messages: [],
       addToFriendsEvents: [],
+      inFriendRequest: [],
+      outFriendRequest: [],
       photoGallery: [
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRjiOWJ_qJAuXSC1pAWGJcqunLp2_noXM3vPQDq6xvxRsA5o1zRe_l_xhG5_ZT7WZKTKM&usqp=CAU",
         "https://media.4-paws.org/c/f/0/6/cf065689b6f82a397b40846d88b622ba5068de84/VIER%20PFOTEN_2016-07-08_011-4993x3455.jpg",
@@ -76,6 +82,8 @@ class UserStore {
       friends: [],
       messages: [],
       addToFriendsEvents: [],
+      inFriendRequest: [],
+      outFriendRequest: [],
       photoGallery: [
         "https://media.gettyimages.com/id/1361767161/photo/cat-meowing-yawning-laughing-with-rose-gold-pink-background.jpg?s=612x612&w=gi&k=20&c=DvDSx7PekVWKtfvjuW1NuBn8MhXx_IrHGrKLwXAMG_I=",
         "https://baconmockup.com/300/400",
@@ -97,6 +105,8 @@ class UserStore {
       friends: [],
       messages: [],
       addToFriendsEvents: [],
+      inFriendRequest: [],
+      outFriendRequest: [],
       photoGallery: [
         "https://static01.nyt.com/images/2023/12/12/climate/12cli-cats/12cli-cats-articleLarge.jpg?quality=75&auto=webp&disable=upscale",
         "https://www.placebear.com/400/500",
@@ -118,6 +128,8 @@ class UserStore {
       friends: [],
       messages: [],
       addToFriendsEvents: [],
+      inFriendRequest: [],
+      outFriendRequest: [],
       photoGallery: [
         "https://www.placebear.com/400/500",
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTGE1GmDUNwA0CPIQ_EaUHRfurrS8QVIx9l4UNKCnZQqXRPfxNafdnEeTq_j03htpMptY&usqp=CAU",
@@ -138,6 +150,8 @@ class UserStore {
       friends: [],
       messages: [],
       addToFriendsEvents: [],
+      inFriendRequest: [],
+      outFriendRequest: [],
       photoGallery: [
         "https://www.picsum.photos/id/237/200/300",
         "https://source.unsplash.com/random/250x350",
@@ -158,6 +172,8 @@ class UserStore {
       friends: [],
       messages: [],
       addToFriendsEvents: [],
+      inFriendRequest: [],
+      outFriendRequest: [],
       photoGallery: [
         "https://www.picsum.photos/id/237/200/300",
         "https://source.unsplash.com/random/250x350",
@@ -178,6 +194,8 @@ class UserStore {
       friends: [],
       messages: [],
       addToFriendsEvents: [],
+      inFriendRequest: [],
+      outFriendRequest: [],
       photoGallery: [
         "https://www.picsum.photos/id/237/200/300",
         "https://source.unsplash.com/random/250x350",
@@ -198,6 +216,8 @@ class UserStore {
       friends: [],
       messages: [],
       addToFriendsEvents: [],
+      inFriendRequest: [],
+      outFriendRequest: [],
       photoGallery: [
         "https://img.freepik.com/free-photo/forest-landscape_71767-127.jpg",
         "https://source.unsplash.com/random/250x350",
@@ -211,6 +231,8 @@ class UserStore {
   ];
   isAuth = false;
   alreadyFriends = false;
+  friendRequest = false;
+  isFriendOutRequest = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -253,18 +275,102 @@ class UserStore {
       return (this.users = JSON.parse(usersFromStorage));
     }
   }
+  addFriendRequest = (authUser, userFriend) => {
+    let user = this.users.find((el) => el.id === authUser.id);
+    let friend = this.users.find((el) => el.id === userFriend.id);
+    console.log("🚀 ~ UserStore ~ friend:", friend);
+    console.log("🚀 ~ UserStore ~ user:", user);
+    if (user && friend) {
+      console.log("object");
+      friend.inFriendRequest.push(toJS(user));
+      user.outFriendRequest.push(toJS(friend));
+      this.saveUsersToLocalStorage();
+      this.saveAuthUserData();
+      localStorage.setItem("users", JSON.stringify(this.users));
+    }
+  };
+  isFriendsRequest(authUserID, userID) {
+    let user = toJS(this.users.find((user) => user.id === userID));
+    let isFriend = user.inFriendRequest.some(
+      (friend) => friend.id === authUserID
+    );
+    if (isFriend) {
+      this.friendRequest = true;
+    } else {
+      this.friendRequest = false;
+    }
+    return isFriend;
+  }
+  isInFriendsRequest(authUserID, userID) {
+    let user = toJS(this.users.find((user) => user.id === userID));
+    console.log(user);
+    let isFriendOutReq = user.outFriendRequest.some(
+      (friend) => friend.id === authUserID
+    );
+    if (isFriendOutReq) {
+      this.friendOutRequest = true;
+    } else {
+      this.friendOutRequest = false;
+    }
+    return isFriendOutReq;
+  }
+  removeRequest(userID, authUserID) {
+    let authUser = this.users.find((user) => user.id === authUserID);
+    let user = this.users.find((user) => user.id === userID);
+
+    if (user && authUser) {
+      user.outFriendRequest.splice(user.outFriendRequest.indexOf(authUser), 1);
+      authUser.inFriendRequest.splice(user.inFriendRequest.indexOf(user), 1);
+      authUser.addToFriendsEvents.splice(
+        user.addToFriendsEvents.indexOf(user.id),
+        1
+      );
+      this.saveUsersToLocalStorage();
+      this.saveAuthUserData();
+      localStorage.setItem("users", JSON.stringify(this.users));
+      this.alreadyFriends = false;
+      console.log(`${authUser.name} and ${user.name} are not friends now!`);
+    } else {
+      this.alreadyFriends = true;
+    }
+  }
+  removeOutRequest(userID, authUserID) {
+    let authUser = this.users.find((user) => user.id === authUserID);
+    let user = this.users.find((user) => user.id === userID);
+
+    if (user && authUser) {
+      authUser.outFriendRequest.splice(user.outFriendRequest.indexOf(user), 1);
+      user.inFriendRequest.splice(user.inFriendRequest.indexOf(authUser), 1);
+      authUser.addToFriendsEvents.splice(
+        user.addToFriendsEvents.indexOf(user.id),
+        1
+      );
+      this.saveUsersToLocalStorage();
+      this.saveAuthUserData();
+      localStorage.setItem("users", JSON.stringify(this.users));
+      this.alreadyFriends = false;
+      console.log(`${authUser.name} and ${user.name} are not friends now!`);
+    } else {
+      this.alreadyFriends = true;
+    }
+  }
+
   addFriend(userID, friendID) {
     let user = this.users.find((user) => user.id === userID);
     let friend = this.users.find((user) => user.id === friendID);
-
     if (user && friend) {
       user.friends.push(toJS(friend));
       friend.friends.push(toJS(user));
       friend.addToFriendsEvents.push(toJS(user.id));
+      user.outFriendRequest.splice(user.outFriendRequest.indexOf(user), 1);
+      user.inFriendRequest.splice(user.inFriendRequest.indexOf(friend), 1);
+      friend.outFriendRequest.splice(friend.outFriendRequest.indexOf(user), 1);
+      friend.inFriendRequest.splice(friend.inFriendRequest.indexOf(friend), 1);
       this.saveUsersToLocalStorage();
       this.saveAuthUserData();
       localStorage.setItem("users", JSON.stringify(this.users));
       this.alreadyFriends = true;
+      this.friendOutRequest = false;
     } else {
       this.alreadyFriends = false;
     }
@@ -287,6 +393,12 @@ class UserStore {
       friend.friends.splice(user.friends.indexOf(user), 1);
       friend.addToFriendsEvents.splice(
         friend.addToFriendsEvents.indexOf(user.id),
+        1
+      );
+      friend.outFriendRequest.splice(user.outFriendRequest.indexOf(user), 1);
+      user.inFriendRequest.splice(user.inFriendRequest.indexOf(user), 1);
+      user.addToFriendsEvents.splice(
+        user.addToFriendsEvents.indexOf(user.id),
         1
       );
       this.saveUsersToLocalStorage();
@@ -429,19 +541,7 @@ class UserStore {
     this.saveAuthUserData();
     localStorage.setItem("users", JSON.stringify(this.users));
   }
-  // // clearMessagesEvents(userID) {
-  // //   const authUser = this.getAuthorizedUser();
-  // //   let user = authUser.messagesEvents.find((user) => user.id === userID);
-  // //   const deleteUser = user.messagesEvents.filter((item) => item !== 13);
-  // //   console.log(
-  // //     "🚀 ~ UserStore ~ clearMessagesEvents ~ deleteUser:",
-  // //     deleteUser
-  // //   );
 
-  //   this.saveUsersToLocalStorage();
-  //   this.saveAuthUserData();
-  //   localStorage.setItem("users", JSON.stringify(this.users));
-  // }
   setAuthUserData(user) {
     localStorage.setItem("authorizedUser", JSON.stringify(user));
   }

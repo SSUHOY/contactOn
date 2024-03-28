@@ -15,7 +15,7 @@ const DropDown = () => {
   const clearEvents = () => {
     userStore.clearFriendsEvents(authUser.id);
   };
- 
+
   const items = [
     {
       key: "1",
@@ -24,8 +24,8 @@ const DropDown = () => {
           {isAuth ? (
             <>
               {" "}
-              <p>You have {authUser.addToFriendsEvents.length} new friends</p>
-              {authUser.addToFriendsEvents.length !== 0 ? (
+              <p>You have {authUser.inFriendRequest.length} new friend request</p>
+              {authUser.inFriendRequest.length !== 0 ? (
                 <Link to={"/friends"}>
                   <u>Click to show friends</u>
                 </Link>
@@ -52,7 +52,6 @@ const DropDown = () => {
             cursor: "pointer",
           }}>
           <Dropdown
-          
             menu={{ items }}
             trigger={["click"]}
             style={{ textAlign: "center" }}>
@@ -64,10 +63,10 @@ const DropDown = () => {
               }}
             />
           </Dropdown>
-          {authUser?.addToFriendsEvents.length !== 0 ? (
+          {authUser?.inFriendRequest.length !== 0 ? (
             <S.AddToFriendsEvents>
               <div style={{ width: 50, textAlign: "center" }}>
-                {authUser?.addToFriendsEvents.length}
+                {authUser?.inFriendRequest.length}
               </div>
             </S.AddToFriendsEvents>
           ) : (

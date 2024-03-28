@@ -72,3 +72,29 @@ export const PageContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
+
+export const NoFriendsAlertBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  color: white;
+`;
+
+export const FriendsBlock = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+  margin-bottom: 10px;
+`;
+
+export const RequestsHandlers = styled.div`
+  width: 220px;
+  display: flex;
+  margin-left: 10px;
+  flex-direction: row;
+  padding: 10px;
+  border-left: 1px solid gray;
+  justify-content: space-between;
+`;
