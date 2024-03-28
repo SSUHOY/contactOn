@@ -55,7 +55,7 @@ const Main = observer(() => {
       };
       const fuse = new Fuse(toJS(userList), options);
       const result = fuse.search(searchText);
-      const items = result.map((result) => result.item);
+      const items = result.map((result) => result?.item);
       return items;
     }
     if (searchType === "Gender" && gender !== "") {
@@ -65,7 +65,7 @@ const Main = observer(() => {
       };
       const fuse = new Fuse(toJS(userList), options);
       const result = fuse.search(gender);
-      const items = result.map((result) => result.item);
+      const items = result.map((result) => result?.item);
       return items;
     }
     return result;

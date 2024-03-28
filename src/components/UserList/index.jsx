@@ -19,7 +19,7 @@ const UserList = ({ users }) => {
       <Row gutter={[16, 24]}>
         {users.map((user) => (
           <Col className="gutter-row" span={6} key={user.id}>
-            <Link to={`/users/${user.id}`}>
+            <Link to={`/users/${user?.id}`}>
               <UserCard>
                 <UserImageBlock>
                   {user.photo ? (
@@ -29,23 +29,23 @@ const UserList = ({ users }) => {
                   )}
                 </UserImageBlock>
                 <UserInformation>
-                  <UserName>{user.name}</UserName>
+                  <UserName>{user?.name}</UserName>
                   <UserAge>
                     <span style={{ color: " #9F9F9F", fontSize: 16 }}>
                       age:
                     </span>
                     &nbsp;
-                    {user.age ? user.age : "-"}
+                    {user?.age ? user?.age : "-"}
                   </UserAge>
                   <UserCity>
                     <span style={{ color: " #9F9F9F", fontSize: 16 }}>
                       city:
                     </span>
                     &nbsp;
-                    {user.city ? user.city : "-"}
+                    {user?.city ? user?.city : "-"}
                   </UserCity>
                   <UserDescription>
-                    <p>{user.description}</p>
+                    <p>{user?.description}</p>
                   </UserDescription>
                   <div
                     style={{
@@ -55,7 +55,7 @@ const UserList = ({ users }) => {
                     }}>
                     <p>
                       {" "}
-                      <TeamOutlined /> Friends: {user.friends.length}
+                      <TeamOutlined /> Friends: {user?.friends.length}
                     </p>
                   </div>
                 </UserInformation>
